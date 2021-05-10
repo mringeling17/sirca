@@ -57,11 +57,11 @@ def sign_up():
             flash('La contraseña debe contener un minimo de 7 caracteres', category='error')
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1, method='sha256'),game_level, type="User")
+                password1, method='sha256'),game_level)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('Account created!', category='success')
+            flash('Registrado Correctamente', category='success')
             return redirect(url_for('views.home'))
 
     return render_template("sign_up.html", user=current_user)

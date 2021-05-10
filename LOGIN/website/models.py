@@ -15,5 +15,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
-    game_level = db.Columb(sb.String(10))
+    game_level = db.Column(db.String(10))
+    user_type = db.Column(db.String(10))
     notes = db.relationship('Note')
