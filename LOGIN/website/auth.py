@@ -3,11 +3,9 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-import re
 
 auth = Blueprint('auth', __name__)
 
-regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -48,8 +46,8 @@ def sign_up():
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Ya se encuentra registrado con el correo electronico', category='error')
-        elif re.search(regex, email):
-            flash('El correo debe seguir un formato valido', category='error')
+        elif len(email)<2:
+            flash('El correo debe seguir un formato valido', category='error')  
         elif len(first_name) < 2:
             flash('First name must be greater than 1 character.', category='error')
         elif password1 != password2:
@@ -58,7 +56,7 @@ def sign_up():
             flash('La contraseña debe contener un minimo de 7 caracteres', category='error')
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1, method='sha256'), game_level = game_level, user_type = user_type)
+                password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
