@@ -13,7 +13,7 @@ def home():
 	if not 'username' in session:
 		return redirect("/login")
 	else:
-		return "hola holi"
+		return "<h1>Estás loggeado yey</h1>"
 
 
 @app.route('/login', methods=['GET', 'POST'])
