@@ -16,6 +16,21 @@ CREATE TABLE usuarios
 
 cur.execute(sql)
 
+sql = """
+CREATE TABLE reservas
+            (id serial PRIMARY KEY, disponible bool, dia integer, mes integer, anno integer, bloque integer, jugador1 integer, jugador2 integer, invitado1 varchar(160), invitado2 varchar(160), cancha integer, tx1 integer, tx2 integer, tipo_reserva integer, pago integer, fecha_reserva timestamp);
+"""
+
+cur.execute(sql)
+
+sql = """
+CREATE TABLE transacciones
+            (id serial PRIMARY KEY, id_usuario integer, url varchar(255), fecha timestamp)
+"""
+
+cur.execute(sql)
+
+
 conn.commit()
 cur.close()
 conn.close()
