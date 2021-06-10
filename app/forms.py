@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Email
 
 class EmailForm(Form):
-    email = TextField('Email', validators= [DataRequired(), Email()])
+    email = StringField('Email', validators= [DataRequired(), Email()])
 
 class PasswordForm(Form):
-    email = TextField('Email', validators=[DataRequired(), Email()])
+    email = PasswordField('Email', validators=[DataRequired(), Email()])
