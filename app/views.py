@@ -138,7 +138,7 @@ def add_reserva():
 
 
 
-'''app.config['MAIL_SERVER'] = 'sirca.cuy.cl'
+app.config['MAIL_SERVER'] = 'sirca.cuy.cl'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'sirca@cuy.cl'
 app.config['EMAIL_PASSWORD'] = 'OXurpKj708'
@@ -149,7 +149,13 @@ mail = Mail(app)
 
 @app.route("/confirmation")
 def confirmation():
-    msg = Message('Hola', sender='sirca@cuy.cl', recipients='mringeling1@gmail.com')
+	sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
+	sql2 = "select correo from Usuarios where id = id_jugador_loggeado"
+	cur.execute(sql1)
+	nombre = cur.fetchall()
+	cur.execute(sql2)
+	correo = cur.fetchall()
+    msg = Message('Hola, ' + nombre, sender='sirca@cuy.cl', recipients=correo)
     msg.body = "Reserva creada exitosamente"
     mail.send(msg)
     return "Enviado"
@@ -173,4 +179,4 @@ def reset_with_token(token):
         db.session.commit()
         
         return redirect(url_for('signin'))
-    return render_template('reset_with_token.html', form = form, token = token)'''
+    return render_template('reset_with_token.html', form = form, token = token)
