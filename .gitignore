@@ -1,3 +1,6 @@
 .vscode
-website/__pycache__
+__pycache__
 website/database.db
+*.py[cod]
+*$py.class
+**/.DS_Store
