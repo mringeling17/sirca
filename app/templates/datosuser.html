@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!---formulario con autocompletar--->
+{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+<form action = "{{ url_for('realizar_reserva') }}" method="POST">
+  <h3 align="center">Hacer reserva para:</h3>
+
+  <div class="form-group">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="nombre" value={{nombre}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="apellido">Apellido</label>
+    <input type="text" class="form-control" id="apellido" name="apellido" value={{apellido}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Correo Electronico</label>
+    <input type="text" class="form-control" id="email" name="email" value={{email}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="nivelfinal">Nivel de juego</label>
+    <input type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="tipo_reserva">Tipo de reserva:</label>
+    <select class="form-control" name = "tipo_reserva"  id="tipo_reserva">
+      <option value= "2" >Reserva Completa - $10.000</option>
+      <option value= "1" >Reserva Parcial - $5.000</option>
+    </select>
+  </div>
+
+  <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="opcionespag" id="ponline" value="1">
+  <label class="form-check-label" for="ponline">Pago Online</label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="opcionespag" id="pmanual" value="2">
+  <label class="form-check-label" for="pmanual">Pago Manual</label>
+</div>
+  <br/>
+  <button type="submit" class="btn btn-primary" name="idreserva" value={{idrec}}>Confirmar Reserva</button>
+</form>
+{% endblock %}

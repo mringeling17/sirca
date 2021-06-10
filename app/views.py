@@ -45,7 +45,7 @@ def login():
 def sign_up():
 	if request.method == 'POST':
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,%s,now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
-		
+
 		cur.execute(sql)
 		conn.commit()
 		return redirect("/login")
@@ -130,11 +130,141 @@ def disponibilidad():
 	cancha2 = cur.fetchall()
 
 	return render_template("tabla_reserva.html", dia_id=dia_id, dias=dias,cancha1=cancha1, cancha2=cancha2)
-	
 
 @app.route('/add_reserva', methods = ['POST','GET'])
 def add_reserva():
-	return "Hay que implementarlo :("
+	if request.method == 'POST':
+		idrec = int(request.form.get("idreserva",""))
+		sql = """SELECT disponible,tipo_reserva from reservas where id = %s"""%(idrec)
+		cur.execute(sql)
+		tiporeserva = cur.fetchone()
+		disponibilidad = tiporeserva[0]
+		tiporeserva1 = tiporeserva[1]#tenemos el numero para saber si es parcial o no
+		if disponibilidad == True: #esta vacia(disponible totalmente)
+			if not 'username' in session: #si no es usuario
+				output = {"status": "-1", "msg": "No logged in"}
+				return jsonify(output)
+			else:
+				if session['tipo']!=2: #si es usuario normal
+					sql = """SELECT nombre, apellido, nivel FROM usuarios WHERE id = %s;"""%(session['user_id'])
+					cur.execute(sql)
+					datosusuario = cur.fetchall()
+					nombre = datosusuario[0][0]
+					apellido = datosusuario[0][1]
+					nivelint = int(datosusuario[0][2])
+					email = session['username']
+					if nivelint == 1:
+						nivelfinal = "Nivel básico"
+					elif nivelint == 2:
+						nivelfinal = "Nivel Intermedio"
+					else:
+						nivelfinal = "Nivel Alto"
+					return render_template("datosuser.html",idrec=idrec,nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+				else: #si es admin
+					return render_template("datosres.html",idrec=idrec) #para completar
+		else: #ya tiene una parcial
+			if not 'username' in session: #si no es usuario
+				output = {"status": "-1", "msg": "No logged in"}
+				return jsonify(output)
+			else:
+				if session['tipo'] != 2: #usuario normal
+					sql = """SELECT jugador1 FROM reservas WHERE id = %s"""%(idrec)#id del jugador que tiene la reserva parcial
+					cur.execute(sql)
+					idjugador1 = cur.fetchone()
+					idjugador = idjugador1[0]
+					sql = """SELECT nombre,apellido,nivel FROM usuarios WHERE id = %s;"""%(idjugador)#datos del jugador con la reserva parcial
+					cur.execute(sql)
+					datosusuario = cur.fetchall()
+					nombre = datosusuario[0][0]
+					apellido = datosusuario[0][1]
+					nivelint = int(datosusuario[0][2])
+					if nivelint == 1:
+						nivelfinal = "Nivel básico"
+					elif nivelint == 2:
+						nivelfinal = "Nivel Intermedio"
+					else:
+						nivelfinal = "Nivel Alto"
+					sql = """SELECT nombre, apellido FROM usuarios WHERE id = %s;"""%(session['user_id'])
+					cur.execute(sql)
+					datosusuario = cur.fetchall()
+					nombreses = datosusuario[0][0]
+					apellidoses = datosusuario[0][1]
+					emailses = session['username']
+					return render_template("datosuser_p.html",idrec=idrec,nombre = nombre,apellido=apellido,nivelfinal=nivelfinal,nombreses=nombreses,apellidoses=apellidoses,emailses=emailses)
+				else: #admin realiza reserva parcial
+					sql = """SELECT jugador1 FROM reservas WHERE id = %s"""%(idrec)#id del jugador que tiene la reserva parcial
+					cur.execute(sql)
+					idjugador1 = cur.fetchone()
+					idjugador = idjugador1[0]
+					sql = """SELECT nombre,apellido,nivel FROM usuarios WHERE id = %s;"""%(idjugador)#datos del jugador con la reserva parcial
+					cur.execute(sql)
+					datosusuario = cur.fetchall()
+					nombre = datosusuario[0][0]
+					apellido = datosusuario[0][1]
+					nivelint = int(datosusuario[0][2])
+					if nivelint == 1:
+						nivelfinal = "Nivel básico"
+					elif nivelint == 2:
+						nivelfinal = "Nivel Intermedio"
+					else:
+						nivelfinal = "Nivel Alto"
+					return render_template("datosres_p.html",idrec=idrec,nombre=nombre,apellido=apellido,nivelfinal=nivelfinal)
+
+@app.route('/realizar_reserva', methods = ['POST','GET']) #completar la reserva y gurdarla en la base
+def realizar_reserva():
+	if request.method == 'POST':
+		if not 'username' in session: #si no es usuario
+			output = {"status": "-1", "msg": "No logged in"}
+			return jsonify(output)
+		else:
+			if session['tipo']!=2: #si es usuario normal
+				idrec = int(request.form.get("idreserva",""))
+				idusuario = int(session['user_id'])
+				pago = request.form['opcionespag']
+				tipo = int(request.form.get("tipo_reserva"))
+				if tipo == 1: #reserva parcial, falta ver lo del pago
+					sql = """UPDATE reservas SET disponible = False, jugador1 = %s , tipo_reserva = 1 WHERE id = %s"""%(idusuario,idrec)
+					cur.execute(sql)
+					cur.commit() #reserva parcial jugador registrado
+					return render_template("") #falta html para confirmar que se hizo la reserva
+				else: #reserva completa
+					sql = """UPDATE reservas SET disponible = False, jugador1 = %s, tipo_reserva = 2 WHERE id = %s"""%(idusuario,idrec)
+					cur.execute(sql)
+					cur.commit() #reserva completa jugador registrado
+					return render_template("") #falta html para confirmar que se hizo la reserva
+			else: #admin, reserva completa
+				idrec = int(request.form.get("idreserva",""))
+				nombre = request.form['nombrer']
+				apellido = request.form['apellr']
+				invitado1 = nombre + " " + apellido
+				sql = """UPDATE reservas SET disponible = False, invitado1 = %s,tipo_reserva = 2,pago = 3 WHERE id = %s"""%(invitado1,idrec)
+				cur.execute(sql)
+				cur.commit() #reserva completa invitado1
+				return render_template("") #falta html para confirmar que se hizo la reserva
+
+@app.route('/realizar_reserva_parcial', methods = ['POST','GET']) #completar la reserva parcial y guardarla en la base
+def realizar_reserva_parcial():
+	if request.method == 'POST':
+		if not 'username' in session: #si no es usuario
+			output = {"status": "-1", "msg": "No logged in"}
+			return jsonify(output)
+		else:
+			if session['tipo']!=2: #si es usuario normal
+				idrec = int(request.form.get("idreserva",""))
+				jugador2 = int(session['user_id']) #falta setear lo del pago
+				sql = """UPDATE reservas SET jugador2 = %s,tipo_reserva = 2 WHERE id = %s"""%(jugador2,idrec)
+				cur.execute(sql)
+				cur.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+				return render_template("") #falta html para confirmar que se hizo la reserva
+			else: #admin
+				idrec = int(request.form.get("idreserva",""))
+				nombre = request.form['nombrer']
+				apellido = request.form['apellr']
+				invitado1 = nombre + " " + apellido  #falta setear lo del pago
+				sql = """UPDATE reservas SET invitado1 = %s,tipo_reserva = 2 WHERE id = %s"""(invitado1,idrec)
+				cur.execute(sql)
+				cur.commit() #completar reserva parcial con un invitado, registrado/invitado
+				return render_template("") #falta html para confirmar que se hizo la reserva
 
 
 
@@ -169,7 +299,7 @@ def reset_with_token(token):
         abort(404)
 
     form = PasswordForm()
-    
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first_or_404()
 
@@ -177,6 +307,6 @@ def reset_with_token(token):
 
         db.session.add(user)
         db.session.commit()
-        
+
         return redirect(url_for('signin'))
     return render_template('reset_with_token.html', form = form, token = token)

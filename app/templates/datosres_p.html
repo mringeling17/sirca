@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!---formulario para completar por parte del admin--->
+{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+<form action = "{{ url_for('realizar_reserva_parcial') }}" method="POST">
+  <h3 align="center">Hacer reserva para:</h3>
+
+  <div class="form-group">
+    <label for="nombre1">Nombre del jugador 1:</label>
+    <input type="text" class="form-control" id="nombre1" name="nombre1" value={{nombre}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="apell1">Apellido del otro jugador:</label>
+    <input type="text" class="form-control" id="apell1" name="apell1" value={{apellido}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="nivel1">Nivel de juego:</label>
+    <input type="text" class="form-control" id="nivel1" name="nivel1" value={{nivelfinal}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="nombrer">Nombre del jugador 2:</label>
+    <input type="text" class="form-control" id="nombrer" name="nombrer" placeholder="Nombre">
+  </div>
+
+  <div class="form-group">
+    <label for="apellr">Apellido del jugador 2:</label>
+    <input type="text" class="form-control" id="apellr" name="apellr" placeholder="Apellido">
+  </div>
+
+<!---  <div class="form-group">
+    <label for="email">Correo Electronico:</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="ejemplo@dominio.com">
+  </div>
+--->
+  <div class="form-group">
+     <label for="tipo_reserva">Tipo de reserva:</label>
+     <select class="form-control" name = "tipo_reserva" id="tipo_reserva">
+       <option value= "2" disabled>Reserva Completa</option>
+       <option value= "1">Reserva Parcial</option>
+     </select>
+   </div>
+
+<!---  <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="opcionespag" id="ponline" value="option1">
+  <label class="form-check-label" for="ponline">Pago Online</label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="opcionespag" id="pmanual" value="option2">
+  <label class="form-check-label" for="pmanual">Pago Manual</label>
+</div>--->
+  <br/>
+  <button type="submit" class="btn btn-primary" name="idreserva" value={{idrec}}>Confirmar Reserva</button>
+</form>
+{% endblock %}
