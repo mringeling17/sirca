@@ -142,8 +142,7 @@ def add_reserva():
 		tiporeserva1 = tiporeserva[1]#tenemos el numero para saber si es parcial o no
 		if disponibilidad == True: #esta vacia(disponible totalmente)
 			if not 'username' in session: #si no es usuario
-				output = {"status": "-1", "msg": "No logged in"}
-				return jsonify(output)
+				return redirect("/login")
 			else:
 				if session['tipo']!=2: #si es usuario normal
 					sql = """SELECT nombre, apellido, nivel FROM usuarios WHERE id = %s;"""%(session['user_id'])
@@ -164,8 +163,7 @@ def add_reserva():
 					return render_template("datosres.html",idrec=idrec) #para completar
 		else: #ya tiene una parcial
 			if not 'username' in session: #si no es usuario
-				output = {"status": "-1", "msg": "No logged in"}
-				return jsonify(output)
+				return redirect("/login")
 			else:
 				if session['tipo'] != 2: #usuario normal
 					sql = """SELECT jugador1 FROM reservas WHERE id = %s"""%(idrec)#id del jugador que tiene la reserva parcial
@@ -214,8 +212,7 @@ def add_reserva():
 def realizar_reserva():
 	if request.method == 'POST':
 		if not 'username' in session: #si no es usuario
-			output = {"status": "-1", "msg": "No logged in"}
-			return jsonify(output)
+			return redirect("/login")
 		else:
 			if session['tipo']!=2: #si es usuario normal
 				idrec = int(request.form.get("idreserva",""))
@@ -246,8 +243,7 @@ def realizar_reserva():
 def realizar_reserva_parcial():
 	if request.method == 'POST':
 		if not 'username' in session: #si no es usuario
-			output = {"status": "-1", "msg": "No logged in"}
-			return jsonify(output)
+			return redirect("/login")
 		else:
 			if session['tipo']!=2: #si es usuario normal
 				idrec = int(request.form.get("idreserva",""))
