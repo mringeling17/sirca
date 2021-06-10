@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block title %}Disponibilidad{% endblock %} 
+{% block content %}
+    <div class="container">
+      <div class="card">
+        <div class="card-body mx-auto text-center">
+            <div class="form-group">
+            <form action = "" method = "POST">
+                Fecha: 
+                <select id="dia" name="dia" class="form-control">
+                    {% for i in dias %}
+                    {% if dia_id == loop.index %}
+                    <option selected>{{i}}</option>
+                    {% else %}
+                    <option value="{{loop.index}}">{{i}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </form>
+            <br>
+            <form action = "{{ url_for('add_reserva') }}" method = "POST">
+                <table  class="table table-responsive table-bordered">
+                    <tr>
+                      <th class="text-center">Hora</th>
+                      <th class="text-center">Cancha 1</th>
+                      <th class="text-center">Cancha 2</th>
+                    </tr>
+                    
+                    {% for n in range(cancha1| length) %}
+                    <tr>
+                        <td class="text-center">Bloque {{n+1}}</td>
+                        {% if cancha1[n]["disponible"] == true %}
+                        <td><button type="submit" class="btn btn-success btn-block" name="idreserva" value={{cancha1[n]["id"]}}>Disponible</button></td>
+                        {% elif cancha1[n]["disponible"] == false and cancha1[n]["tipo_reseva"] == 1 %}
+                        <td><button type="submit" class="btn btn-info btn-block" name="idreserva" value={{cancha1[n]["id"]}}>Parcial</button></td>
+                        {% else %}
+                        <td><button type="submit" class="btn btn-dark btn-block" name="idreserva" value={{cancha1[n]["id"]}} disabled>Ocupada</button></td>
+                        {% endif %}
+
+                        {% if cancha2[n]["disponible"] == true %}
+                        <td><button type="submit" class="btn btn-success btn-block" name="idreserva" value={{cancha2[n]["id"]}}>Disponible</button></td>
+                        {% elif cancha2[n]["disponible"] == false and cancha2[n]["tipo_reseva"] == 1 %}
+                        <td><button type="submit" class="btn btn-info btn-block" name="idreserva" value={{cancha2[n]["id"]}}>Parcial</button></td>
+                        {% else %}
+                        <td><button type="submit" class="btn btn-dark btn-block" name="idreserva" value={{cancha2[n]["id"]}} disabled>Ocupada</button></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+    
+                </table>
+
+            </form>
+        </div>
+
+        </div>
+        </div>
+    </div>
+    <script>
+            jQuery(function() {
+        jQuery('#dia').change(function() {
+            this.form.submit();
+        });
+    });
+    </script>
+
+    {% endblock %}

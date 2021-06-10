@@ -5,7 +5,9 @@ conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(db_data
 
 cur = conn.cursor()
 sql ="""DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;"""
+CREATE SCHEMA public;
+CREATE EXTENSION pgcrypto;
+"""
 
 cur.execute(sql)
 
@@ -16,9 +18,15 @@ CREATE TABLE usuarios
 
 cur.execute(sql)
 
+sql ="""
+insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('admin@cuy.cl',crypt('admin', gen_salt('bf')),'Super','Administrador',2,0,now());
+"""
+
+cur.execute(sql)
+
 sql = """
 CREATE TABLE reservas
-            (id serial PRIMARY KEY, disponible bool, dia integer, mes integer, anno integer, bloque integer, jugador1 integer, jugador2 integer, invitado1 varchar(160), invitado2 varchar(160), cancha integer, tx1 integer, tx2 integer, tipo_reserva integer, pago integer, fecha_reserva timestamp);
+            (id serial PRIMARY KEY, disponible bool, fecha date, bloque integer, jugador1 integer, jugador2 integer, invitado1 varchar(160), invitado2 varchar(160), cancha integer, tx1 integer, tx2 integer, tipo_reserva integer, pago integer, fecha_reserva timestamp);
 """
 
 cur.execute(sql)
