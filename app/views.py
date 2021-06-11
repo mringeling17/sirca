@@ -127,10 +127,10 @@ def disponibilidad():
 		dia_id = 1
 		fecha = dias[0]
 
-	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s;"""%(fecha,1)
+	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s ORDER BY bloque DESC;"""%(fecha,1)
 	cur.execute(sql)
 	cancha1 = cur.fetchall()
-	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s;"""%(fecha,2)
+	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s ORDER BY bloque DESC;"""%(fecha,2)
 	cur.execute(sql)
 	cancha2 = cur.fetchall()
 
