@@ -7,7 +7,6 @@ from psycopg2.extras import RealDictCursor
 from datetime import date, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
-from .util import ts
 
 
 
@@ -279,7 +278,7 @@ def confirmation():
 @app.route('/reset/<token>', methods = ["GET", "POST"])
 def reset_with_token(token):
     try:
-        email = ts.loads(token, salt="recover-key", max_age = 86400)
+        email = 'ts.loads(token, salt="recover-key", max_age = 86400)'
     except:
         abort(404)
 
