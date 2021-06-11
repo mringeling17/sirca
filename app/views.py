@@ -283,7 +283,6 @@ def reset1():
 	sql ="select email from usuarios where correo = '%s' " %correo
 	cur2.execute(sql)
 	correo2 = cur.fetchall()
-	render_template("reset1.html")
 	if request.method == 'POST':
 		if(correo == correo2):
 			key = generator()
@@ -296,7 +295,8 @@ def reset1():
 			return redirect(url_for('/'))
 		else:
 			print( "Correo electronico no registrado") #hacer con un flash de js
-			return redirect(url_for('/'))
+		render_template("reset1.html")
+
 
 @app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
