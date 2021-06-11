@@ -7,7 +7,7 @@ from psycopg2.extras import RealDictCursor
 from datetime import date, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
-
+from .__init__ import mail
 
 
 conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
@@ -268,10 +268,9 @@ def realizar_reserva_parcial():
 
 @app.route("/confirmation")
 def confirmation():
-	
-	msg = Message('Hola, ', sender='sirca@cuy.cl', recipients=['mringeling1@gmail.com'])
+	msg = Message('Hola, ', sender='sirca@mail.cuy.cl', recipients=['mringeling1@gmail.com'])
 	msg.body = "Reserva creada exitosamente"
-	Mail.send(msg)
+	mail.send(msg)
 	return "Enviado"
 
 
