@@ -280,7 +280,7 @@ def confirmation(asunto,mensaje,correo):
 @app.route("/reset1",methods=["GET","POST"])
 def reset1():
 	correo = request.form.get('email',False)
-	sql ="select correo from usuarios where correo = '%s' " %correo
+	sql ="select email from usuarios where correo = '%s' " %correo
 	cur2.execute(sql)
 	correo2 = cur.fetchall()
 	render_template("reset1.html")
