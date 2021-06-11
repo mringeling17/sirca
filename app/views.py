@@ -264,23 +264,23 @@ def realizar_reserva_parcial():
 
 
 
-app.config['MAIL_SERVER'] = 'sirca.cuy.cl'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'sirca@cuy.cl'
-app.config['EMAIL_PASSWORD'] = 'OXurpKj708'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
-mail = Mail(app)
 
 @app.route("/confirmation")
 def confirmation():
-	'''sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
-	sql2 = "select correo from Usuarios where id = id_jugador_loggeado"
-	cur.execute(sql1)
-	nombre = cur.fetchall()
-	cur.execute(sql2)
-	correo = cur.fetchall()'''
+	app.config['MAIL_SERVER'] = 'sirca.cuy.cl'
+	app.config['MAIL_PORT'] = 465
+	app.config['MAIL_USERNAME'] = 'sirca@cuy.cl'
+	app.config['EMAIL_PASSWORD'] = 'OXurpKj708'
+	app.config['MAIL_USE_TLS'] = False
+	app.config['MAIL_USE_SSL'] = True
+	mail = Mail(app)
+
+	#sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
+	#sql2 = "select correo from Usuarios where id = id_jugador_loggeado"
+	#cur.execute(sql1)
+	#nombre = cur.fetchall()
+	#cur.execute(sql2)
+	#correo = cur.fetchall()
     msg = Message('Hola, ', sender='sirca@cuy.cl', recipients='correo@dominio.cl')
     msg.body = "Reserva creada exitosamente"
     mail.send(msg)
