@@ -282,7 +282,7 @@ def reset1():
 	correo = request.form.get('email')
 	sql ="select email from usuarios where email = '%s' " %correo
 	cur2.execute(sql)
-	correo2 = cur.fetchall()
+	correo2 = cur2.fetchall()
 	if request.method == 'POST':
 		if(correo == correo2):
 			key = generator()
