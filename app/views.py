@@ -282,7 +282,7 @@ def reset1():
 	correo = request.form.get('email')
 	sql ="select email from usuarios where email = '%s' " %correo
 	cur2.execute(sql)
-	correo2 = cur2.fetchall()
+	correo2 = cur2.fetchone()
 	if request.method == 'POST':
 		if(correo == correo2):
 			key = generator()
@@ -301,8 +301,8 @@ def reset1():
 @app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
 	validate = "select * from token where token = '%s'"%id
-	cur.execute(validate)
-	validado = cur.fetchall()
+	cur2.execute(validate)
+	validado = cur2.fetchone()
 	if len(validado) == 0:
 		print("token invalido")
 		return redirect(url_for('/'))
@@ -317,8 +317,8 @@ def recover(id):
 @app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
 	sql = "select email from token where '%s' = token_id"%id
-	cur.execute(sql)
-	correo = cur.fetchall()
+	cur2.execute(sql)
+	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
 		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
 		return redirect(url_for('reset2', id=id))
