@@ -1,4 +1,5 @@
 from os import abort
+import re
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
 import psycopg2
@@ -290,7 +291,7 @@ def reset1():
 		conn.commit()
 		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
 		confirmation("Restablecer contraseña",mensaje ,correo)
-		return redirect('/')
+		return render_template("reset1.html")
 	else:
 		return "Correo electronico no registrado" #hacer con un flash de js
 
@@ -312,7 +313,6 @@ def recover(id):
 
 @app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
-	#leer correo de la tabla
 	sql = "select email from token where '%s' = token_id"%id
 	cur.execute(sql)
 	correo = cur.fetchall()
@@ -331,5 +331,6 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return redirect(url_for('/'))
+	return 	render_template("reset2")
+
 	
