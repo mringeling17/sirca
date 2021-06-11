@@ -236,7 +236,7 @@ def realizar_reserva():
 					datos_reserva = cur.fetchone()
 					fecha = datos_reserva['fecha']
 					bloque = datos_reserva['bloque']
-					mensaje = "Su reserva fue realizada con exito para el dia %s a las %s."%(fecha,bloque)
+					mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 					asunto = "Reserva realizada con exito"
 					correo = session['username']
 
@@ -274,7 +274,7 @@ def realizar_reserva_parcial():
 				datos_reserva = cur.fetchone()
 				fecha = datos_reserva['fecha']
 				bloque = datos_reserva['bloque']
-				mensaje = "Su reserva parcial fue realizada con exito para el dia %s a las %s."%(fecha,bloque)
+				mensaje = "Su reserva parcial fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 				asunto = "Reserva realizada con exito"
 				correo = session['username']
 
@@ -291,7 +291,7 @@ def realizar_reserva_parcial():
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
 def confirmation(asunto,mensaje):
-	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=['mringeling1@gmail.com'])
+	msg = Message(asunto, sender='sirca@cuy.cl', recipients=['cristobal.leon1@mail.udp.cl'])
 	msg.body = mensaje
 	mail.send(msg)
 	
