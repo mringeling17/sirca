@@ -144,7 +144,7 @@ def add_reserva():
 		tiporeserva = cur.fetchone()
 		disponibilidad = tiporeserva[0]
 		tiporeserva1 = tiporeserva[1]#tenemos el numero para saber si es parcial o no
-		if len(disponibilidad) == 0: #esta vacia(disponible totalmente)
+		if disponibilidad == True: #esta vacia(disponible totalmente)
 			if not 'username' in session: #si no es usuario
 				return redirect("/login")
 			else:
@@ -291,7 +291,7 @@ def reset_with_token(token):
 
         cur.session.add(user)
         cur.session.commit()
-
+		
 
         return redirect(url_for('/signin'))
     return render_template('reset_with_token.html', form = form, token = token)
