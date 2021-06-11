@@ -8,6 +8,8 @@ from datetime import date, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
 from .__init__ import mail
+from .keygen import generator
+from app import keygen
 
 
 conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
@@ -268,31 +270,53 @@ def realizar_reserva_parcial():
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
 @app.route("/confirmation")
-def confirmation():
-	msg = Message('Hola, ', sender=('Sirca','sirca@cuy.cl'), recipients='mringeling1@gmail.com')
-	msg = Message('Hola, ', sender='sirca@mail.cuy.cl', recipients=['mringeling1@gmail.com'])
-	msg.body = "Reserva creada exitosamente"
+def confirmation(asunto,mensaje,correo):
+	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=[correo])
+	msg.body = mensaje
 	mail.send(msg)
-	return "Enviado"
+	return "Enviado" #render template-->index
 
 
-@app.route('/reset/<token>', methods = ["GET", "POST"])
-def reset_with_token(token):
-    try:
-        email = 'ts.loads(token, salt="recover-key", max_age = 86400)'
-    except:
-        abort(404)
+@app.route("/reset1",methods=["POST"])
+def reset1():
+	correo = request.from["email"]
+	sql ="select correo from usuarios where correo = %s " %correo
+	cur2.execute(sql)
+	correo2 = cur.fetchall()
+	if(correo == correo2):
+		key = generator()
+		user_reset = "Ingresar en base de datos( reset_key = key, user_id = user.id"
+		conn.add(user_reset)
+		conn.commit()
+		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
+		email = user.id
+		confirmation("Restablecer contraseña",mensaje ,email)
+		return redirect('/')
+	else:
+		return "Correo electronico no registrado" #hacer con un flash de js
 
-    form = PasswordForm()
+@app.route("/recover/<id>", methods = ["GET"])
+def recover(id):
+	#if toquen ya usado break
+	#if token expirado break
+	return render_template('reset2.html')
 
-    if form.validate_on_submit():
-        user = email.query.filter_by(email=email).first_or_404()
-
-        user.password = form.password.data
-
-        cur.session.add(user)
-        cur.session.commit()
-		
-
-        return redirect(url_for('/signin'))
-    return render_template('reset_with_token.html', form = form, token = token)
+@app.route("reset2/<id>", methods=["POST"])
+def reset2(id):
+	if request.form["password"] != request.form["password2"]:
+		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
+		return redirect(url_for('reset2', id=id))
+	if len(request.form["password"])<8:
+		print("la contraseña debe tener al menos 8 caracteres")
+		return redirect(url_for('reset2',id = id))
+	pwd = request.form["password"]
+	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf')) "%pwd
+	try:
+		cur.execute(user_reset)
+		conn.commit()
+	except:
+		print("hubo un error al realizar la solicitud")
+		return redirect(url_for('/'))
+	print("Contraseña actualizada con exito")
+	return redirect(url_for('/'))
+	
