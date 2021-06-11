@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, timedelta
 from app import configuraciones
-from flask_mail import Mail
+from flask_mail import Mail, Message
 
 conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
@@ -262,29 +262,13 @@ def realizar_reserva_parcial():
 				cur.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("") #falta html para confirmar que se hizo la reserva
 
-
-
-
 @app.route("/confirmation")
 def confirmation():
-	app.config['MAIL_SERVER'] = 'sirca.cuy.cl'
-	app.config['MAIL_PORT'] = 465
-	app.config['MAIL_USERNAME'] = 'sirca@cuy.cl'
-	app.config['EMAIL_PASSWORD'] = 'OXurpKj708'
-	app.config['MAIL_USE_TLS'] = False
-	app.config['MAIL_USE_SSL'] = True
-	mail = Mail(app)
-
-	#sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
-	#sql2 = "select correo from Usuarios where id = id_jugador_loggeado"
-	#cur.execute(sql1)
-	#nombre = cur.fetchall()
-	#cur.execute(sql2)
-	#correo = cur.fetchall()
-    msg = Message('Hola, ', sender='sirca@cuy.cl', recipients='correo@dominio.cl')
-    msg.body = "Reserva creada exitosamente"
-    mail.send(msg)
-    return "Enviado"
+	
+	msg = Message('Hola, ', sender=('Sirca','sirca@cuy.cl'), recipients='mringeling1@gmail.com')
+	msg.body = "Reserva creada exitosamente"
+	Mail.send(msg)
+	return "Enviado"
 
 
 @app.route('/reset/<token>', methods = ["GET", "POST"])
