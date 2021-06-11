@@ -283,6 +283,7 @@ def reset1():
 	sql ="select correo from usuarios where correo = '%s' " %correo
 	cur2.execute(sql)
 	correo2 = cur.fetchall()
+	render_template("reset1.html")
 	if(correo == correo2):
 		key = generator()
 		creacion = datetime.now()
@@ -291,7 +292,6 @@ def reset1():
 		conn.commit()
 		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
 		confirmation("Restablecer contraseña",mensaje ,correo)
-		return render_template("reset1.html")
 	else:
 		print( "Correo electronico no registrado") #hacer con un flash de js
 		return redirect(url_for('/'))
