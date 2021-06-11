@@ -103,10 +103,10 @@ def get_disp(date):
 		output = {"status": "-1", "msg": "No logged in"}
 		return jsonify(output)
 	else:
-		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s;"""%(date,1)
+		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s ORDER BY bloque DESC;"""%(date,1)
 		cur.execute(sql)
 		array1 = cur.fetchall()
-		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s;"""%(date,2)
+		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = %s ORDER BY bloque DESC;"""%(date,2)
 		cur.execute(sql)
 		array2 = cur.fetchall()
 		json_array = []
