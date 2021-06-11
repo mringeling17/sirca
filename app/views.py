@@ -1,10 +1,13 @@
+from app.forms import PasswordForm
+from os import abort
 from app import app
-from flask import render_template,request,redirect,session, jsonify
+from flask import render_template,request,redirect,session, jsonify, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
+
 
 conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
@@ -281,12 +284,12 @@ def reset_with_token(token):
     form = PasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email).first_or_404()
+        user = email.query.filter_by(email=email).first_or_404()
 
         user.password = form.password.data
 
-        db.session.add(user)
-        db.session.commit()
+        cur.session.add(user)
+        cur.session.commit()
 
         return redirect(url_for('/signin'))
     return render_template('reset_with_token.html', form = form, token = token)
