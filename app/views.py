@@ -34,7 +34,7 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'POST':
-		sql = """select id,email,tipo from usuarios where email = ''%s'' and password = crypt(''%s'', password);"""%(request.form['email'],request.form['password'])
+		sql = """select id,email,tipo from usuarios where email = '%s' and password = crypt('%s', password);"""%(request.form['email'],request.form['password'])
 		cur.execute(sql)
 		print(sql)
 		array = cur.fetchone()
@@ -51,7 +51,7 @@ def login():
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
 	if request.method == 'POST':
-		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values (''%s'',crypt(''%s'', gen_salt('bf')),''%s'',''%s'',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
+		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
 		conn.commit()
@@ -86,15 +86,15 @@ def init_day(date):
 			output = {"status": "-1", "msg": "Not admin"}
 			return jsonify(output)
 		else:
-			sql = """delete from reservas where fecha = ''%s''"""%(date)
+			sql = """delete from reservas where fecha = '%s'"""%(date)
 			cur.execute(sql)
 			for i in range(1,7):
 				cancha = 1
-				sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,''%s'','%s','%s');"""%(date,i,cancha)
+				sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
 				cur.execute(sql)
 			for i in range(1,7):
 				cancha = 2
-				sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,''%s'','%s','%s');"""%(date,i,cancha)
+				sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
 				cur.execute(sql)
 			output = {"status": "1", "msg": "Executed"}
 			return jsonify(output)
@@ -105,10 +105,10 @@ def get_disp(date):
 		output = {"status": "-1", "msg": "No logged in"}
 		return jsonify(output)
 	else:
-		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = ''%s'' and cancha = '%s' ORDER BY bloque DESC;"""%(date,1)
+		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = '%s' ORDER BY bloque DESC;"""%(date,1)
 		cur.execute(sql)
 		array1 = cur.fetchall()
-		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = ''%s'' and cancha = '%s' ORDER BY bloque DESC;"""%(date,2)
+		sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = '%s' ORDER BY bloque DESC;"""%(date,2)
 		cur.execute(sql)
 		array2 = cur.fetchall()
 		json_array = []
@@ -129,10 +129,10 @@ def disponibilidad():
 		dia_id = 1
 		fecha = dias[0]
 
-	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = ''%s'' and cancha = '%s' ORDER BY bloque DESC;"""%(fecha,1)
+	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = '%s' ORDER BY bloque DESC;"""%(fecha,1)
 	cur.execute(sql)
 	cancha1 = cur.fetchall()
-	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = ''%s'' and cancha = '%s' ORDER BY bloque DESC;"""%(fecha,2)
+	sql = """select id, cancha, bloque, disponible, tipo_reserva from reservas where fecha = '%s' and cancha = '%s' ORDER BY bloque DESC;"""%(fecha,2)
 	cur.execute(sql)
 	cancha2 = cur.fetchall()
 
