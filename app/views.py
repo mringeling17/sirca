@@ -297,6 +297,7 @@ def reset1():
 
 @app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
+	#if toquen valido
 	#if toquen ya usado break
 	#if token expirado break
 	return render_template('reset2.html')
