@@ -310,7 +310,7 @@ def recover(id):
 	#if token expirado break //hacer diferencia de horas
 	return render_template('reset2.html')
 
-@app.route("reset2/<id>", methods=["POST"])
+@app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
 	#leer correo de la tabla
 	sql = "select email from token where '%s' = token_id"%id
