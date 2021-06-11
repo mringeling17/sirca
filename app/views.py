@@ -149,13 +149,13 @@ mail = Mail(app)
 
 @app.route("/confirmation")
 def confirmation():
-	sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
+	'''sql1 = "select nombre from Usuarios where id = id_jugador_loggeado"
 	sql2 = "select correo from Usuarios where id = id_jugador_loggeado"
 	cur.execute(sql1)
 	nombre = cur.fetchall()
 	cur.execute(sql2)
-	correo = cur.fetchall()
-    msg = Message('Hola, ' + nombre, sender='sirca@cuy.cl', recipients=correo)
+	correo = cur.fetchall()'''
+    msg = Message('Hola, ', sender='sirca@cuy.cl', recipients='correo@dominio.cl')
     msg.body = "Reserva creada exitosamente"
     mail.send(msg)
     return "Enviado"
