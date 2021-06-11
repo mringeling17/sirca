@@ -291,6 +291,7 @@ def reset_with_token(token):
 
         cur.session.add(user)
         cur.session.commit()
+		
 
         return redirect(url_for('/signin'))
     return render_template('reset_with_token.html', form = form, token = token)
