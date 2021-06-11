@@ -291,7 +291,7 @@ def realizar_reserva_parcial():
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
 def confirmation(asunto,mensaje):
-	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=['mringeling1'])
+	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=['mringeling1@gmail.com'])
 	msg.body = mensaje
 	mail.send(msg)
 	
