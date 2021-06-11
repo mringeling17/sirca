@@ -269,7 +269,7 @@ def realizar_reserva_parcial():
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
-@app.route("/confirmation")
+@app.route("/confirmation/<asunto,mensaje,correo>")
 def confirmation(asunto,mensaje,correo):
 
 	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=[correo])
