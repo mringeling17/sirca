@@ -7,6 +7,8 @@ from psycopg2.extras import RealDictCursor
 from datetime import date, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
+from .util import ts
+
 
 
 conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
