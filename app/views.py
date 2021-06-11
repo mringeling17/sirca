@@ -1,4 +1,4 @@
-from app.forms import PasswordForm
+from app .forms import PasswordForm
 from os import abort
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
