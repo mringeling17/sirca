@@ -279,7 +279,7 @@ def confirmation(asunto,mensaje,correo):
 
 @app.route("/reset1",methods=["GET","POST"])
 def reset1():
-	correo = request.form["email"]
+	correo = request.form['email']
 	sql ="select correo from usuarios where correo = '%s' " %correo
 	cur2.execute(sql)
 	correo2 = cur.fetchall()
@@ -292,6 +292,7 @@ def reset1():
 		conn.commit()
 		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
 		confirmation("Restablecer contraseña",mensaje ,correo)
+		return redirect(url_for('/'))
 	else:
 		print( "Correo electronico no registrado") #hacer con un flash de js
 		return redirect(url_for('/'))
