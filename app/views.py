@@ -240,7 +240,7 @@ def realizar_reserva():
 					asunto = "Reserva realizada con exito"
 					correo = session['username']
 
-					confirmation(asunto, mensaje, correo)
+					confirmation(asunto, mensaje)
 					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 				else: #reserva completa
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
@@ -278,7 +278,7 @@ def realizar_reserva_parcial():
 				asunto = "Reserva realizada con exito"
 				correo = session['username']
 
-				confirmation(asunto, mensaje, correo)
+				confirmation(asunto, mensaje)
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
@@ -290,8 +290,8 @@ def realizar_reserva_parcial():
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
-def confirmation(asunto,mensaje,correo):
-	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=[correo])
+def confirmation(asunto,mensaje):
+	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=['mringeling1'])
 	msg.body = mensaje
 	mail.send(msg)
 	
@@ -312,7 +312,7 @@ def reset1():
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
-			return render_template("confirmation.html")
+			return render_template("login-html")
 		else:
 			print( "Correo electronico no registrado") #hacer con un flash de js
 	return render_template("reset1.html")
