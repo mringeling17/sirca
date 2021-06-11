@@ -292,7 +292,6 @@ def reset1():
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
-			return redirect(url_for('/'))
 		else:
 			print( "Correo electronico no registrado") #hacer con un flash de js
 		return render_template("reset1.html")
