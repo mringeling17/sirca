@@ -227,13 +227,13 @@ def realizar_reserva():
 				if tipo == 1: #reserva parcial, falta ver lo del pago
 					sql = """UPDATE reservas SET disponible = False, jugador1 = %s , tipo_reserva = 1 WHERE id = %s"""%(idusuario,idrec)
 					cur2.execute(sql)
-					cur2.commit() #reserva parcial jugador registrado
-					return render_template("") #falta html para confirmar que se hizo la reserva
+					conn.commit() #reserva parcial jugador registrado
+					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 				else: #reserva completa
 					sql = """UPDATE reservas SET disponible = False, jugador1 = %s, tipo_reserva = 2 WHERE id = %s"""%(idusuario,idrec)
 					cur2.execute(sql)
-					cur2.commit() #reserva completa jugador registrado
-					return render_template("") #falta html para confirmar que se hizo la reserva
+					conn.commit() #reserva completa jugador registrado
+					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -241,8 +241,8 @@ def realizar_reserva():
 				invitado1 = nombre + " " + apellido
 				sql = """UPDATE reservas SET disponible = False, invitado1 = %s,tipo_reserva = 2,pago = 3 WHERE id = %s"""%(invitado1,idrec)
 				cur2.execute(sql)
-				cur2.commit() #reserva completa invitado1
-				return render_template("") #falta html para confirmar que se hizo la reserva
+				conn.commit() #reserva completa invitado1
+				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
 @app.route('/realizar_reserva_parcial', methods = ['POST','GET']) #completar la reserva parcial y guardarla en la base
 def realizar_reserva_parcial():
@@ -255,8 +255,8 @@ def realizar_reserva_parcial():
 				jugador2 = int(session['user_id']) #falta setear lo del pago
 				sql = """UPDATE reservas SET jugador2 = %s,tipo_reserva = 2 WHERE id = %s"""%(jugador2,idrec)
 				cur2.execute(sql)
-				cur2.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
-				return render_template("") #falta html para confirmar que se hizo la reserva
+				conn.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -264,13 +264,13 @@ def realizar_reserva_parcial():
 				invitado1 = nombre + " " + apellido  #falta setear lo del pago
 				sql = """UPDATE reservas SET invitado1 = %s,tipo_reserva = 2 WHERE id = %s"""(invitado1,idrec)
 				cur2.execute(sql)
-				cur2.commit() #completar reserva parcial con un invitado, registrado/invitado
-				return render_template("") #falta html para confirmar que se hizo la reserva
+				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
+				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
 @app.route("/confirmation")
 def confirmation():
 	
-	msg = Message('Hola, ', sender='sirca@cuy.cl', recipients=['mringeling1@gmail.com'])
+	msg = Message('Hola, ', sender=('Sirca','sirca@cuy.cl'), recipients='mringeling1@gmail.com')
 	msg.body = "Reserva creada exitosamente"
 	Mail.send(msg)
 	return "Enviado"
