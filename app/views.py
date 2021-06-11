@@ -270,7 +270,7 @@ def realizar_reserva_parcial():
 @app.route("/confirmation")
 def confirmation():
 	
-	msg = Message('Hola, ', sender=('Sirca','sirca@cuy.cl'), recipients='mringeling1@gmail.com')
+	msg = Message('Hola, ', sender='sirca@cuy.cl', recipients=['mringeling1@gmail.com'])
 	msg.body = "Reserva creada exitosamente"
 	Mail.send(msg)
 	return "Enviado"
