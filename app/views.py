@@ -277,7 +277,7 @@ def confirmation(asunto,mensaje,correo):
 	return "Enviado" #render template-->index
 
 
-@app.route("/reset1",methods=["POST"])
+@app.route("/reset1",methods=["GET","POST"])
 def reset1():
 	correo = request.form["email"]
 	sql ="select correo from usuarios where correo = '%s' " %correo
