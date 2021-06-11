@@ -230,6 +230,17 @@ def realizar_reserva():
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
 					cur2.execute(sql)
 					conn.commit() #reserva parcial jugador registrado
+					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+					cur.execute(sql)
+
+					datos_reserva = cur.fetchone()
+					fecha = datos_reserva['fecha']
+					bloque = datos_reserva['bloque']
+					mensaje = "Su reserva fue realizada con exito para el dia %s a las %s."%(fecha,bloque)
+					asunto = "Reserva realizada con exito"
+					correo = session['username']
+
+					confirmation(asunto, mensaje, correo)
 					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 				else: #reserva completa
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
@@ -258,6 +269,16 @@ def realizar_reserva_parcial():
 				sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2 WHERE id = '%s'"""%(jugador2,idrec)
 				cur2.execute(sql)
 				conn.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+				sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+				cur.execute(sql)
+				datos_reserva = cur.fetchone()
+				fecha = datos_reserva['fecha']
+				bloque = datos_reserva['bloque']
+				mensaje = "Su reserva parcial fue realizada con exito para el dia %s a las %s."%(fecha,bloque)
+				asunto = "Reserva realizada con exito"
+				correo = session['username']
+
+				confirmation(asunto, mensaje, correo)
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
@@ -269,13 +290,11 @@ def realizar_reserva_parcial():
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
-@app.route("/confirmatio")
 def confirmation(asunto,mensaje,correo):
-
 	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
-	return render_template("confirmation.html")
+	
 
 
 @app.route("/reset1",methods=["GET","POST"])
