@@ -4,7 +4,7 @@ from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from app import configuraciones
 from flask_mail import Mail, Message
 from .__init__ import mail
@@ -285,21 +285,30 @@ def reset1():
 	correo2 = cur.fetchall()
 	if(correo == correo2):
 		key = generator()
-		user_reset = "Ingresar en base de datos( reset_key = key, user_id = user.id"
+		creacion = datetime.now()
+		user_reset = "INSERT INTO token (email,token_id,creacion, used) values (%s,%s,%s,%s"%s(correo, key,creacion ,False)
 		conn.add(user_reset)
 		conn.commit()
 		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
-		email = user.id
-		confirmation("Restablecer contraseña",mensaje ,email)
+		confirmation("Restablecer contraseña",mensaje ,correo)
 		return redirect('/')
 	else:
 		return "Correo electronico no registrado" #hacer con un flash de js
 
 @app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
-	#if toquen valido
-	#if toquen ya usado break
-	#if token expirado break
+	validate = "select * from token where token = %s"%id
+	cur.execute(validate)
+	validado = cur.fetchall()
+	if len(validado) == 0:
+		print("token invalido")
+		return redirect(url_for('/'))
+
+	used = "select used from token where token_id = %s"%id
+	if used:
+		print("token ya usado")
+		return redirect(url_for('/'))
+	#if token expirado break //hacer diferencia de horas
 	return render_template('reset2.html')
 
 @app.route("reset2/<id>", methods=["POST"])

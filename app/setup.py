@@ -38,6 +38,9 @@ CREATE TABLE transacciones
 
 cur.execute(sql)
 
+sql = "CREATE TABLE token (email varchar(100), token_id varchar(50), creacion timestamp, used boolean"
+cur.execute(sql)
+
 
 conn.commit()
 cur.close()
