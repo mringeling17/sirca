@@ -284,18 +284,19 @@ def reset1():
 	cur2.execute(sql)
 	correo2 = cur.fetchall()
 	render_template("reset1.html")
-	if(correo == correo2):
-		key = generator()
-		creacion = datetime.now()
-		user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
-		conn.add(user_reset)
-		conn.commit()
-		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
-		confirmation("Restablecer contraseña",mensaje ,correo)
-		return redirect(url_for('/'))
-	else:
-		print( "Correo electronico no registrado") #hacer con un flash de js
-		return redirect(url_for('/'))
+	if request.method == 'POST':
+		if(correo == correo2):
+			key = generator()
+			creacion = datetime.now()
+			user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
+			conn.add(user_reset)
+			conn.commit()
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
+			confirmation("Restablecer contraseña",mensaje ,correo)
+			return redirect(url_for('/'))
+		else:
+			print( "Correo electronico no registrado") #hacer con un flash de js
+			return redirect(url_for('/'))
 
 @app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
