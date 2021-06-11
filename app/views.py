@@ -271,10 +271,11 @@ def realizar_reserva_parcial():
 
 @app.route("/confirmation")
 def confirmation(asunto,mensaje,correo):
+
 	msg = Message(asunto, sender='sirca@mail.cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
-	return "Enviado" #render template-->index
+	return render_template("confirmation.html")
 
 
 @app.route("/reset1",methods=["GET","POST"])
