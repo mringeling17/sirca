@@ -286,7 +286,7 @@ def reset1():
 	if(correo == correo2):
 		key = generator()
 		creacion = datetime.now()
-		user_reset = "INSERT INTO token (email,token_id,creacion, used) values (%s,%s,%s,%s"%s(correo, key,creacion ,False)
+		user_reset = "INSERT INTO token (email,token_id,creacion, used) values (%s,%s,%s,%s"%(correo, key,creacion ,False)
 		conn.add(user_reset)
 		conn.commit()
 		mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
