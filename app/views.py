@@ -309,7 +309,7 @@ def recover(id):
 		print("token ya usado")
 		return redirect(url_for('/'))
 	#if token expirado break //hacer diferencia de horas
-	return render_template('reset2.html')
+	return redirect('reset2.html', id = id)
 
 @app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
@@ -331,6 +331,6 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return 	render_template("reset2")
+	return 	render_template("reset2", id =id )
 
 	
