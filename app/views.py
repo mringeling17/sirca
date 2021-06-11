@@ -294,7 +294,7 @@ def reset1():
 			confirmation("Restablecer contraseña",mensaje ,correo)
 		else:
 			print( "Correo electronico no registrado") #hacer con un flash de js
-		return render_template("reset1.html")
+	return render_template("reset1.html")
 
 
 @app.route("/recover/<id>", methods = ["GET"])
