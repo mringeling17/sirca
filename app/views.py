@@ -295,7 +295,7 @@ def reset1():
 			return redirect(url_for('/'))
 		else:
 			print( "Correo electronico no registrado") #hacer con un flash de js
-		render_template("reset1.html")
+		return render_template("reset1.html")
 
 
 @app.route("/recover/<id>", methods = ["GET"])
