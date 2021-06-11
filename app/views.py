@@ -14,6 +14,7 @@ conn = psycopg2.connect("dbname=%s user=%s password=%s host=%s port=%s"%(configu
 conn.autocommit = True
 #cur = conn.cursor()
 cur = conn.cursor(cursor_factory=RealDictCursor)
+cur2 = conn.cursor()
 
 app.secret_key = configuraciones.session_key
 
@@ -140,8 +141,8 @@ def add_reserva():
 	if request.method == 'POST':
 		idrec = int(request.form.get("idreserva",""))
 		sql = """SELECT disponible,tipo_reserva from reservas where id = %s"""%(idrec)
-		cur.execute(sql)
-		tiporeserva = cur.fetchone()
+		cur2.execute(sql)
+		tiporeserva = cur2.fetchone()
 		disponibilidad = tiporeserva[0]
 		tiporeserva1 = tiporeserva[1]#tenemos el numero para saber si es parcial o no
 		if disponibilidad == True: #esta vacia(disponible totalmente)
@@ -150,8 +151,8 @@ def add_reserva():
 			else:
 				if session['tipo']!=2: #si es usuario normal
 					sql = """SELECT nombre, apellido, nivel FROM usuarios WHERE id = %s;"""%(session['user_id'])
-					cur.execute(sql)
-					datosusuario = cur.fetchall()
+					cur2.execute(sql)
+					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
 					nivelint = int(datosusuario[0][2])
@@ -171,12 +172,12 @@ def add_reserva():
 			else:
 				if session['tipo'] != 2: #usuario normal
 					sql = """SELECT jugador1 FROM reservas WHERE id = %s"""%(idrec)#id del jugador que tiene la reserva parcial
-					cur.execute(sql)
-					idjugador1 = cur.fetchone()
+					cur2.execute(sql)
+					idjugador1 = cur2.fetchone()
 					idjugador = idjugador1[0]
 					sql = """SELECT nombre,apellido,nivel FROM usuarios WHERE id = %s;"""%(idjugador)#datos del jugador con la reserva parcial
-					cur.execute(sql)
-					datosusuario = cur.fetchall()
+					cur2.execute(sql)
+					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
 					nivelint = int(datosusuario[0][2])
@@ -187,20 +188,20 @@ def add_reserva():
 					else:
 						nivelfinal = "Nivel Alto"
 					sql = """SELECT nombre, apellido FROM usuarios WHERE id = %s;"""%(session['user_id'])
-					cur.execute(sql)
-					datosusuario = cur.fetchall()
+					cur2.execute(sql)
+					datosusuario = cur2.fetchall()
 					nombreses = datosusuario[0][0]
 					apellidoses = datosusuario[0][1]
 					emailses = session['username']
 					return render_template("datosuser_p.html",idrec=idrec,nombre = nombre,apellido=apellido,nivelfinal=nivelfinal,nombreses=nombreses,apellidoses=apellidoses,emailses=emailses)
 				else: #admin realiza reserva parcial
 					sql = """SELECT jugador1 FROM reservas WHERE id = %s"""%(idrec)#id del jugador que tiene la reserva parcial
-					cur.execute(sql)
-					idjugador1 = cur.fetchone()
+					cur2.execute(sql)
+					idjugador1 = cur2.fetchone()
 					idjugador = idjugador1[0]
 					sql = """SELECT nombre,apellido,nivel FROM usuarios WHERE id = %s;"""%(idjugador)#datos del jugador con la reserva parcial
-					cur.execute(sql)
-					datosusuario = cur.fetchall()
+					cur2.execute(sql)
+					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
 					nivelint = int(datosusuario[0][2])
@@ -225,13 +226,13 @@ def realizar_reserva():
 				tipo = int(request.form.get("tipo_reserva"))
 				if tipo == 1: #reserva parcial, falta ver lo del pago
 					sql = """UPDATE reservas SET disponible = False, jugador1 = %s , tipo_reserva = 1 WHERE id = %s"""%(idusuario,idrec)
-					cur.execute(sql)
-					cur.commit() #reserva parcial jugador registrado
+					cur2.execute(sql)
+					cur2.commit() #reserva parcial jugador registrado
 					return render_template("") #falta html para confirmar que se hizo la reserva
 				else: #reserva completa
 					sql = """UPDATE reservas SET disponible = False, jugador1 = %s, tipo_reserva = 2 WHERE id = %s"""%(idusuario,idrec)
-					cur.execute(sql)
-					cur.commit() #reserva completa jugador registrado
+					cur2.execute(sql)
+					cur2.commit() #reserva completa jugador registrado
 					return render_template("") #falta html para confirmar que se hizo la reserva
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
@@ -239,8 +240,8 @@ def realizar_reserva():
 				apellido = request.form['apellr']
 				invitado1 = nombre + " " + apellido
 				sql = """UPDATE reservas SET disponible = False, invitado1 = %s,tipo_reserva = 2,pago = 3 WHERE id = %s"""%(invitado1,idrec)
-				cur.execute(sql)
-				cur.commit() #reserva completa invitado1
+				cur2.execute(sql)
+				cur2.commit() #reserva completa invitado1
 				return render_template("") #falta html para confirmar que se hizo la reserva
 
 @app.route('/realizar_reserva_parcial', methods = ['POST','GET']) #completar la reserva parcial y guardarla en la base
@@ -253,8 +254,8 @@ def realizar_reserva_parcial():
 				idrec = int(request.form.get("idreserva",""))
 				jugador2 = int(session['user_id']) #falta setear lo del pago
 				sql = """UPDATE reservas SET jugador2 = %s,tipo_reserva = 2 WHERE id = %s"""%(jugador2,idrec)
-				cur.execute(sql)
-				cur.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+				cur2.execute(sql)
+				cur2.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
 				return render_template("") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
@@ -262,8 +263,8 @@ def realizar_reserva_parcial():
 				apellido = request.form['apellr']
 				invitado1 = nombre + " " + apellido  #falta setear lo del pago
 				sql = """UPDATE reservas SET invitado1 = %s,tipo_reserva = 2 WHERE id = %s"""(invitado1,idrec)
-				cur.execute(sql)
-				cur.commit() #completar reserva parcial con un invitado, registrado/invitado
+				cur2.execute(sql)
+				cur2.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("") #falta html para confirmar que se hizo la reserva
 
 @app.route("/confirmation")
