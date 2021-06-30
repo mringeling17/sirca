@@ -323,7 +323,7 @@ def forgot():
 			return render_template("login.html")
 		else:
 			print("Correo electronico no registrado")
-			return render_template("/")
+			return render_template("/login")
 	else:
 		print("Hubo un error con su solicitud")
 	return render_template("forgot.html")
