@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+{% block content %}
+<form action = "{{ url_for('myuser') }}" method="POST">
+  <h3 align="center">Datos del Usuario</h3>
+
+  <div class="form-group">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" name="nombre" value={{nombre}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="apellido">Apellido</label>
+    <input type="text" class="form-control" id="apellido" name="apellido" value={{apellido}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Correo Electronico</label>
+    <input type="text" class="form-control" id="email" name="email" value={{email}} readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="nivelfinal">Nivel de juego</label>
+    <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
+      <option value= "3" >3</option>
+      <option value= "2" >2</option>
+      <option value= "1" >1</option>
+     </select>
+  </div>
+
+
+  <div class="form-group">
+    <label for="password1">Contraseña</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      name="password"
+      placeholder="Contraseña"
+    />
+  </div>
+  <div class="form-group">
+    <label for="password2">Confirma tu Contraseña</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password2"
+      name="password2"
+      placeholder="Confirma tu Contraseña"
+    />
+  </div>
+  <br/>
+  <button type="submit" class="btn btn-primary" name="idreserva" value={{idrec}}>Actualizar Datos</button>
+</form>
+{% endblock %}

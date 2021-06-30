@@ -246,6 +246,13 @@ def realizar_reserva():
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
 					cur2.execute(sql)
 					conn.commit() #reserva completa jugador registrado
+					datos_reserva = cur.fetchone()
+					fecha = datos_reserva['fecha']
+					bloque = datos_reserva['bloque']
+					mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+					asunto = "Reserva realizada con exito"
+					correo = session['username']
+					confirmation(asunto, mensaje)
 					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
@@ -357,3 +364,10 @@ def reset2(id):
 	return 	render_template("reset2", id =id )
 
 	
+@app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
+def myuser():
+	if request.method == 'POST':
+		#en proceso
+		return render_template("profile.html")
+		
+	return render_template("home.html")
