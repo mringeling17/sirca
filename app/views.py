@@ -85,6 +85,16 @@ def admin():
 		else:
 			return render_template("home.html")
 
+@app.route('/admin1')
+def admin1():
+	if not 'username' in session:
+		return redirect("/login")
+	else:
+		if session['tipo']!=2:
+			return redirect("/")
+		else:
+			return render_template("generarfecha.html")
+
 @app.route('/init_day/<date>/', methods=['GET'])
 def init_day(date):
 	if not 'username' in session:

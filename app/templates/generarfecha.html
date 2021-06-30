@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!---formulario para completar por el admin--->
+{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+{% block content %}
+<form action = "{{ url_for('') }}" method="POST">
+  <h3 align="center">Hacer reserva para:</h3>
+
+  <div class="form-group">
+    <label for="diar">Dia</label>
+    <input type="number" min="0" max="32"class="form-control" id="diar" name="diar">
+  </div>
+
+  <div class="form-group">
+    <label for="mesr">Mes</label>
+    <input type="number" min="0" max="12" class="form-control" id="mesr" name="mesr">
+  </div>
+
+  <div class="form-group">
+    <label for="anior">Correo Electronico</label>
+    <input type="number" min="2020" max="2040"class="form-control" id="email" name="email" placeholder="ejemplo@dominio.com">
+  </div>
+
+
+  <br/>
+  <button type="submit" class="btn btn-primary" name="idreserva">Confirmar Reserva</button>
+</form>
+{% endblock %}
