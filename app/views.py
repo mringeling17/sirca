@@ -333,12 +333,8 @@ def forgot():
 		else:
 			print("Correo electronico no registrado")
 	else:
-		print("Hubo un error cono su solicitud")
-	return render_template("reset1.html")
-			return render_template("/login")
-	else:
 		print("Hubo un error con su solicitud")
-	return render_template("forgot.html")
+		return render_template("forgot.html")
 
 @app.route("/recover/<id>")
 def recover(id):
