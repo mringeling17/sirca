@@ -59,7 +59,7 @@ def sign_up():
 			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
 		if request.form['password'] != request.form['password2']:
 			flash('Las contraseñas no coinciden',category="error")
-	
+
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
@@ -342,7 +342,7 @@ def realizar_reserva_parcial():
 				nombre = request.form['nombrer']
 				apellido = request.form['apellr']
 				invitado1 = nombre + " " + apellido  #falta setear lo del pago
-				sql = """UPDATE reservas SET invitado1 = '%s',tipo_reserva = 2 WHERE id = '%s'"""(invitado1,idrec)
+				sql = """UPDATE reservas SET invitado1 = '%s',tipo_reserva = 2 WHERE id = '%s'"""%(invitado1,idrec)
 				cur2.execute(sql)
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
