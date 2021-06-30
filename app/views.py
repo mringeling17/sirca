@@ -392,6 +392,7 @@ def validate_token(id):
 		validation = False
 		return validation
 	print("3")
+
 	
 	return validation
 
@@ -409,7 +410,7 @@ def reset2(id):
 		if request.form["password"] < 8:
 			print("la contraseña debe tener un minimo de 8 caracteres")'''
 		pwd = request.form["password"]
-		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
+		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo[0])
 		try:
 			cur.execute(user_reset)
 			conn.commit()
