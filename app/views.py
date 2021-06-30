@@ -12,7 +12,7 @@ from .keygen import generator
 from app import keygen
 from .flow import *
 
-sirca_url = "http://sirca.cuy.cl:5050"
+sirca_url = "https://sirca.cuy.cl"
 
 conn = psycopg2.connect("dbname='%s' user='%s' password='%s' host='%s' port='%s'"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
