@@ -411,15 +411,15 @@ def reset2(id):
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
-		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
+		#user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
 		print(user_reset)
-		#token_used = """update token set used = True"""
+		token_used = """update token set used = True"""
 
-		cur.execute(user_reset)
-		conn.commit()
-
-		#cur.execute(token_used)
+		#cur.execute(user_reset)
 		#conn.commit()
+
+		cur.execute(token_used)
+		conn.commit()
 
 		print("Contraseña actualizada con exito")
 		return 	render_template("/login")
