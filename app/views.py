@@ -12,7 +12,9 @@ from flask_mail import Mail, Message
 from .__init__ import mail
 from .keygen import generator
 from app import keygen
+from .flow import *
 
+sirca_url = "https://sirca.cuy.cl:5050"
 
 conn = psycopg2.connect("dbname='%s' user='%s' password='%s' host='%s' port='%s'"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
@@ -226,37 +228,43 @@ def realizar_reserva():
 				idusuario = int(session['user_id'])
 				pago = request.form['opcionespag']
 				tipo = int(request.form.get("tipo_reserva"))
-				if tipo == 1: #reserva parcial, falta ver lo del pago
-					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
-					cur2.execute(sql)
-					conn.commit() #reserva parcial jugador registrado
 
-					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
-					cur.execute(sql)
-					datos_reserva = cur.fetchone()
-					fecha = datos_reserva['fecha']
-					bloque = datos_reserva['bloque']
-					mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
-					asunto = "Reserva realizada con exito"
-					correo = session['username']
+				if pago == 1:
+					asdfasdf = 1321
+					#URL Confirmation: https://asdfasdf/
+				else:
+					if tipo == 1: #reserva parcial
+						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
+						cur2.execute(sql)
+						conn.commit() #reserva parcial jugador registrado
 
-					confirmation(asunto, mensaje,correo)
-					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
-				else: #reserva completa
-					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
-					cur2.execute(sql)
-					conn.commit() #reserva completa jugador registrado
+						sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+						cur.execute(sql)
+						datos_reserva = cur.fetchone()
+						fecha = datos_reserva['fecha']
+						bloque = datos_reserva['bloque']
+						mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+						asunto = "Reserva realizada con exito"
+						correo = session['username']
 
-					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
-					cur.execute(sql)
-					datos_reserva = cur.fetchone()
-					fecha = datos_reserva['fecha']
-					bloque = datos_reserva['bloque']
-					mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
-					asunto = "Reserva realizada con exito"
-					correo = session['username']
-					confirmation(asunto, mensaje,correo)
-					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+						confirmation(asunto, mensaje,correo)
+						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+					else: #reserva completa
+						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
+						cur2.execute(sql)
+						conn.commit() #reserva completa jugador registrado
+
+						sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+						cur.execute(sql)
+						datos_reserva = cur.fetchone()
+						fecha = datos_reserva['fecha']
+						bloque = datos_reserva['bloque']
+						mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+						asunto = "Reserva realizada con exito"
+						correo = session['username']
+						confirmation(asunto, mensaje,correo)
+						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+			
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -305,12 +313,12 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-@app.route("/forgot",methods=["GET","POST"])
+'''@app.route("/forgot",methods=["GET","POST"])
 def forgot():
 
 	if request.method == 'POST':
 		correo = request.form('email')
-		sql ="select email from usuarios where email = '%s'" %correo
+		sql ="select email from usuarios where email = '%s' " %correo
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
 		if(correo == correo2):
@@ -320,20 +328,18 @@ def forgot():
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
-			print("Revise su correo electronico para continuar")
 			return render_template("login.html")
 		else:
 			print("Correo electronico no registrado")
-			return render_template("/")
 	else:
 		print("Hubo un error cono su solicitud")
-	return render_template("forgot.html")
+	return render_template("reset1.html")
 
-@app.route("/recover/<id>",methods=["GET"]) #se entra desde el link del correo
+@app.route("/recover/<id>")
 def recover(id):
-	validate = "select * from token where token = '%s'" %id
+	validate = "select * from token where token = '%s'"%id
 	cur2.execute(validate)
-	validado = cur2.fetchone() ###
+	validado = cur2.fetchone()
 	if len(validado) == 0:
 		print("token invalido")
 		return redirect(url_for('/'))
@@ -344,13 +350,15 @@ def recover(id):
 		return redirect(url_for('/'))
 	return redirect('reset2.html', id = id)
 
-@app.route("/reset2/<id>", methods=["GET","POST"])
+@app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
 	sql = "select email from token where '%s' = token_id"%id
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
-		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print	
+		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
+	if len(request.form["password"])<8:
+		print("la contraseña debe tener al menos 8 caracteres")
 	pwd = request.form["password"]
 	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
 	try:
@@ -360,7 +368,7 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return 	render_template("/")
+	return 	render_template("/")'''
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
