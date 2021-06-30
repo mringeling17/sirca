@@ -396,32 +396,24 @@ def validate_token(id):
 
 @app.route("/reset2", methods=['GET','POST']) #error logico
 def reset2():
-	id = True
-	if id:
-		'''sql = """select email from token where token_id = '%s'"""%id
-		cur2.execute(sql)
-		correo = cur2.fetchone()
-		print(id)
-		#correo = validate_token(id)'''
-		correo = 'mringeling1@gmail.com'
-		if request.method == 'POST':
-			if request.form["password"] != request.form["password2"]:
-				print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
-			if len(request.form["password"])<8:
-					print("la contraseña debe tener al menos 8 caracteres")
-			pwd = request.form["password"]
-			user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
-			try:
-				cur.execute(user_reset)
-				conn.commit()
-			except:
-				print("hubo un error al realizar la solicitud")
-				return redirect(url_for('/'))
-			print("Contraseña actualizada con exito")
-			return 	render_template("/reset2")
-	else:
-		print("token invalido")
-		render_template("/login")
+	'''sql = """select email from token where token_id = '%s'"""%id #hacer funcion a parte, hacer validaciones
+	cur2.execute(sql)
+	correo = cur2.fetchone()
+	print(id)
+	#correo = validate_token(id)'''
+	correo = 'mringeling1@gmail.com'
+	if request.method == 'POST':
+		pwd = request.form["password"]
+		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
+		try:
+			cur.execute(user_reset)
+			conn.commit()
+		except:
+			print("hubo un error al realizar la solicitud")
+			return redirect(url_for('/'))
+		print("Contraseña actualizada con exito")
+		return 	render_template("/reset2")
+	
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
