@@ -412,7 +412,7 @@ def reset2(id):
 		print(pwd)
 		print(correo[0])
 		#user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
-		print(user_reset)
+		#print(user_reset)
 		token_used = """update token set used = True"""
 
 		#cur.execute(user_reset)
