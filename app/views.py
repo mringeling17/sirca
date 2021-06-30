@@ -313,7 +313,7 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-'''@app.route("/forgot",methods=["GET","POST"])
+@app.route("/forgot",methods=["GET","POST"])
 def forgot():
 	if request.method == 'POST':
 		correo = request.form('email')
@@ -373,7 +373,7 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return 	render_template("/")'''
+	return 	render_template("/")
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
