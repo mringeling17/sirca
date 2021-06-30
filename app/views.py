@@ -327,7 +327,7 @@ def forgot():
 			return render_template("/")
 	else:
 		print("Hubo un error cono su solicitud")
-	return render_template("reset1.html")
+	return render_template("forgot.html")
 
 @app.route("/recover/<id>",methods=["GET"]) #se entra desde el link del correo
 def recover(id):
