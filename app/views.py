@@ -11,6 +11,7 @@ from .__init__ import mail
 from .keygen import generator
 from app import keygen
 from .flow import *
+import secrets
 
 sirca_url = "https://sirca.cuy.cl"
 
@@ -355,12 +356,11 @@ def forgot():
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
 		if(correo2):
-			key = generator()
-			key2 = str(key)
-			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key2 ,'FALSE')
+			key = secrets.token_hex(nbytes=16)
+			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
 			cur2.execute(user_reset)
 			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + key2
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + key
 			confirmation("Restablecer contraseña",mensaje ,correo)
 			print("Correo enviado")
 			return render_template("login.html")
@@ -388,19 +388,20 @@ def validate_token(id):
 		validation = False
 		return validation
 	print("3")
+	
 	return validation
 
 
 @app.route("/reset2/<id>", methods=['GET','POST']) #error logico
 def reset2(id):
 	if id:
-		id2 = str(id)
-		print(id2)
+		sql = "select email from token where '%s' = token_id"%id
+		cur2.execute(sql)
+		correo = cur2.fetchone()
+		print(id)
+		correo = validate_token(id)
 		a = True
-		if a: #validate_token(id)
-			sql = "select email from token where '%s' = token_id"%id2
-			cur2.execute(sql)
-			correo = cur2.fetchone()
+		if a: #correo
 			return render_template("/reset2")
 		if request.form["password"] != request.form["password2"]:
 			print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
