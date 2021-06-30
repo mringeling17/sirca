@@ -337,19 +337,22 @@ def forgot():
 
 @app.route("/recover/<id>")
 def recover(id):
+	print("0")
 	validate = "select * from token where token = '%s'"%id
 	cur2.execute(validate)
 	validado = cur2.fetchone()
+	print("1")
 	if len(validado) == 0:
 		print("token invalido")
 		return redirect(url_for('/'))
-
+	print("2")
 	used = "select used from token where token_id = '%s'"%id
 	if used:
 		print("token ya usado")
 		return redirect(url_for('/'))
-	return redirect('reset2.html', id = id)
+	print("3")
 
+	return redirect('reset2.html', id = id)
 @app.route("/reset2/<id>", methods=["POST"])
 def reset2(id):
 	sql = "select email from token where '%s' = token_id"%id
