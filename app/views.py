@@ -394,15 +394,17 @@ def validate_token(id):
 	return validation
 
 
-@app.route("/reset2", methods=['GET','POST']) #error logico
-def reset2():
-	'''sql = """select email from token where token_id = '%s'"""%id #hacer funcion a parte, hacer validaciones
+@app.route("/reset2/<id>", methods=['GET','POST']) #error logico
+def reset2(id):
+	sql = """select email from token where token_id = '%s'"""%id 
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	print(id)
-	#correo = validate_token(id)'''
-	correo = 'mringeling1@gmail.com'
 	if request.method == 'POST':
+		'''if request.form["password"] != request.form["password2"]:
+			print("las contraseñas no coinciden") #flash
+		if request.form["password"] < 8:
+			print("la contraseña debe tener un minimo de 8 caracteres")'''
 		pwd = request.form["password"]
 		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
 		try:
