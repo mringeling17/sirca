@@ -315,10 +315,11 @@ def confirmation(asunto,mensaje,correo):
 		
 '''@app.route("/forgot",methods=["GET","POST"])
 def forgot():
-
 	if request.method == 'POST':
 		correo = request.form('email')
 		sql ="select email from usuarios where email = '%s' " %correo
+		correo = request.form.get('email')
+		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
 		if(correo == correo2):
@@ -334,6 +335,10 @@ def forgot():
 	else:
 		print("Hubo un error cono su solicitud")
 	return render_template("reset1.html")
+			return render_template("/login")
+	else:
+		print("Hubo un error con su solicitud")
+	return render_template("forgot.html")
 
 @app.route("/recover/<id>")
 def recover(id):
