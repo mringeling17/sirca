@@ -422,7 +422,7 @@ def reset2(id):
 		conn.commit()
 
 		print("Contraseña actualizada con exito")
-		return 	render_template("/login")
+		return 	render_template("login.html")
 	else:
 		#if validate_token(id):
 		return render_template("reset2.html")
