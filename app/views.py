@@ -337,8 +337,7 @@ def forgot():
 
 def validate_token(id):
 	print("0")
-	id2 = str(id)
-	validate = """select * from token where token = '%s'"""%id2
+	validate = """select * from token where token = '%s'"""%id
 	cur2.execute(validate)
 	validado = cur2.fetchone()
 	validation = True
@@ -348,7 +347,7 @@ def validate_token(id):
 		validation = False
 		return validation
 	print("2")
-	used = "select used from token where token_id = '%s'"%id2
+	used = "select used from token where token_id = '%s'"%id
 	if used:
 		print("token ya usado")
 		validation = False
