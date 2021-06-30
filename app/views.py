@@ -373,12 +373,12 @@ def forgot():
 
 def validate_token(id):
 	print("0")
-	validate = """select * from token where token = '%s'"""%id
+	validate = """select * from token where token_id = '%s'"""%id
 	cur2.execute(validate)
 	exists = cur2.fetchone()
 	validation = True
 	print("1")
-	if len(exists) == 0:
+	if len(exists) == 0: #or if exists != None
 		print("token invalido")
 		validation = False
 		return validation
@@ -411,23 +411,23 @@ def reset2(id):
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
-		#user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
-		#print(user_reset)
+
+		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
+		cur.execute(user_reset)
+		conn.commit()
+
 		token_used = """update token set used = True"""
-
-		#cur.execute(user_reset)
-		#conn.commit()
-
 		cur.execute(token_used)
 		conn.commit()
 
 		print("Contraseña actualizada con exito")
 		return 	render_template("login.html")
 	else:
-		#if validate_token(id):
-		return render_template("reset2.html")
-		#else:
-			#flash token invalido
+		if validate_token(id):
+			return render_template("reset2.html")
+		else:
+			print("flash token invalido")
+			return render_template("login.html")
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
