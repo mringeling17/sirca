@@ -490,6 +490,7 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 
 			confirmation(asunto, mensaje, correo)
 			return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+	return jsonify(payment_status)
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
