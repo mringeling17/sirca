@@ -1,7 +1,7 @@
 from os import abort
 import re
 
-from flask.helpers import flash
+from flask.helpers import print
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
 import psycopg2
@@ -323,9 +323,9 @@ def forgot():
 			confirmation("Restablecer contraseña",mensaje ,correo)
 			return render_template("login.html")
 		else:
-			flash("Correo electronico no registrado","error")
+			print("Correo electronico no registrado")
 	else:
-		flash("Hubo un error cono su solicitud","warning")
+		print("Hubo un error cono su solicitud")
 	return render_template("reset1.html")
 
 
@@ -335,12 +335,12 @@ def recover(id):
 	cur2.execute(validate)
 	validado = cur2.fetchone()
 	if len(validado) == 0:
-		flash("token invalido","warning")
+		print("token invalido")
 		return redirect(url_for('/'))
 
-	used = "select user from token where token_id = '%s'"%id
+	used = "select used from token where token_id = '%s'"%id
 	if used:
-		flash("token ya usado","warning")
+		print("token ya usado")
 		return redirect(url_for('/'))
 	return redirect('reset2.html', id = id)
 
@@ -350,18 +350,18 @@ def reset2(id):
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
-		flash("las contraseñas deben coincidir","warning")#-->hacer con un flash en todos los print
+		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
 	if len(request.form["password"])<8:
-		flash("la contraseña debe tener al menos 8 caracteres","warning")
+		print("la contraseña debe tener al menos 8 caracteres")
 	pwd = request.form["password"]
 	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
 	try:
 		cur.execute(user_reset)
 		conn.commit()
 	except:
-		flash("hubo un error al realizar la solicitud","error")
+		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
-	flash("Contraseña actualizada con exito","info")
+	print("Contraseña actualizada con exito")
 	return 	render_template("/")
 
 	
