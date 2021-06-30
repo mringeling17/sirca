@@ -382,8 +382,10 @@ def validate_token(id):
 		validation = False
 		return validation
 	print("2")
-	used = "select used from token where token_id = '%s'"%id
-	if used:
+	used = """select used from token where token_id = '%s'"""%id
+	cur2.execute(used)
+	usado = cur2.fetchone()
+	if usado:
 		print("token ya usado")
 		validation = False
 		return validation
@@ -395,11 +397,11 @@ def validate_token(id):
 @app.route("/reset2/<id>", methods=['GET','POST']) #error logico
 def reset2(id):
 	if id:
-		sql = "select email from token where '%s' = token_id"%id
+		sql = """select email from token where token_id = '%s'"""%id
 		cur2.execute(sql)
 		correo = cur2.fetchone()
 		print(id)
-		correo = validate_token(id)
+		#correo = validate_token(id)
 		a = True
 		if a: #correo
 			return render_template("/reset2")
