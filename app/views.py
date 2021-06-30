@@ -418,7 +418,7 @@ def reset2():
 				print("hubo un error al realizar la solicitud")
 				return redirect(url_for('/'))
 			print("Contraseña actualizada con exito")
-			return 	render_template("/login")
+			return 	render_template("/reset2")
 	else:
 		print("token invalido")
 		render_template("/login")
