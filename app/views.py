@@ -305,7 +305,7 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-@app.route("/forgot",methods=["POST"])
+@app.route("/forgot",methods=["GET","POST"])
 def forgot():
 
 	if request.form == 'POST':
