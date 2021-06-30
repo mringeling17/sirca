@@ -356,8 +356,9 @@ def validate_token(id):
 	return validation
 
 
-@app.route("/reset2/<id>", methods=["GET"])
+@app.route("/reset2/<id>", methods=['GET','POST'])
 def reset2(id):
+	id = str(id)
 	if id:
 		if validate_token(id):
 			sql = "select email from token where '%s' = token_id"%id
