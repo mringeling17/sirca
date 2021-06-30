@@ -402,9 +402,6 @@ def reset2(id):
 		correo = cur2.fetchone()
 		print(id)
 		#correo = validate_token(id)'''
-		a = True
-		if a: #correo
-			return render_template("/reset2")
 		if request.form["password"] != request.form["password2"]:
 			print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
 		if len(request.form["password"])<8:
