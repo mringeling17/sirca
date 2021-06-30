@@ -396,7 +396,8 @@ def reset2(id):
 	if id:
 		id2 = str(id)
 		print(id2)
-		if validate_token(id2):
+		a = True
+		if a: #validate_token(id)
 			sql = "select email from token where '%s' = token_id"%id2
 			cur2.execute(sql)
 			correo = cur2.fetchone()
