@@ -347,66 +347,80 @@ def confirmation(asunto,mensaje,correo):
 	
 
 
-@app.route("/reset1",methods=["GET","POST"])
-def reset1():
-	correo = request.form.get('email')
-	sql ="select email from usuarios where email = '%s' " %correo
-	cur2.execute(sql)
-	correo2 = cur2.fetchone()
+@app.route("/forgot",methods=["GET","POST"])
+def forgot():
 	if request.method == 'POST':
-		if(correo == correo2):
+		correo = request.form['email']
+		sql ="select email from usuarios where email = '%s'" %correo
+		cur2.execute(sql)
+		correo2 = cur2.fetchone()
+		if(correo2):
 			key = generator()
-			creacion = datetime.now()
-			user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
-			conn.add(user_reset)
+			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, str(key) ,'FALSE')
+			cur2.execute(user_reset)
 			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
-			return render_template("login-html")
+			print("Correo enviado")
+			return render_template("login.html")
 		else:
-			print( "Correo electronico no registrado") #hacer con un flash de js
-	return render_template("reset1.html")
+			print("Correo electronico no registrado")
+	else:
+		print("Hubo un error con su solicitud")
+		return render_template("forgot.html")
 
-
-@app.route("/recover/<id>", methods = ["GET"])
-def recover(id):
-	validate = "select * from token where token = '%s'"%id
+def validate_token(id):
+	print("0")
+	validate = """select * from token where token = '%s'"""%id
 	cur2.execute(validate)
-	validado = cur2.fetchone()
-	if len(validado) == 0:
+	exists = cur2.fetchone()
+	validation = True
+	print("1")
+	if len(exists) == 0:
 		print("token invalido")
-		return redirect(url_for('/'))
-
+		validation = False
+		return validation
+	print("2")
 	used = "select used from token where token_id = '%s'"%id
 	if used:
 		print("token ya usado")
-		return redirect(url_for('/'))
-	#if token expirado break //hacer diferencia de horas
-	return redirect('reset2.html', id = id)
+		validation = False
+		return validation
+	print("3")
+	return validation
 
-@app.route("/reset2/<id>", methods=["POST"])
+
+@app.route("/reset2/<id>", methods=['GET','POST'])
 def reset2(id):
-	sql = "select email from token where '%s' = token_id"%id
-	cur2.execute(sql)
-	correo = cur2.fetchone()
-	if request.form["password"] != request.form["password2"]:
-		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
-		return redirect(url_for('reset2', id=id))
-	if len(request.form["password"])<8:
-		print("la contraseña debe tener al menos 8 caracteres")
-		return redirect(url_for('reset2',id = id))
-	pwd = request.form["password"]
-	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
-	try:
-		cur.execute(user_reset)
-		conn.commit()
-	except:
-		print("hubo un error al realizar la solicitud")
-		return redirect(url_for('/'))
-	print("Contraseña actualizada con exito")
-	return 	render_template("reset2", id =id )
+	if id:
+		id2 = str(id)
+		print(id2)
+		if validate_token(id2):
+			sql = "select email from token where '%s' = token_id"%id2
+			cur2.execute(sql)
+			correo = cur2.fetchone()
+			if request.form["password"] != request.form["password2"]:
+				print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
+			if len(request.form["password"])<8:
+				print("la contraseña debe tener al menos 8 caracteres")
+			pwd = request.form["password"]
+			user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
+			try:
+				cur.execute(user_reset)
+				conn.commit()
+			except:
+				print("hubo un error al realizar la solicitud")
+				return redirect(url_for('/'))
+			print("Contraseña actualizada con exito")
+			return 	render_template("/login")
+		else:
+			print("token invalido")
+			render_template("/login")
+	else:
+		print("null token")
+		return "<h1>NULL TOKEN</h1>"
 
-	
+
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
 	if request.method == 'POST':
