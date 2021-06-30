@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 from os import abort
 import re
 from app import app
@@ -386,7 +385,7 @@ def validate_token(id):
 	validation = True
 	print(type(exists))
 	print("1")
-	if type(exists) != NoneType:
+	if type(exists) != None:
 		print("token invalido")
 		validation = False
 		return validation
