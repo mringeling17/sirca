@@ -397,11 +397,11 @@ def validate_token(id):
 @app.route("/reset2", methods=['GET','POST']) #error logico
 def reset2(id):
 	if id:
-		sql = """select email from token where token_id = '%s'"""%id
+		'''sql = """select email from token where token_id = '%s'"""%id
 		cur2.execute(sql)
 		correo = cur2.fetchone()
 		print(id)
-		#correo = validate_token(id)
+		#correo = validate_token(id)'''
 		a = True
 		if a: #correo
 			return render_template("/reset2")
