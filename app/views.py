@@ -1,7 +1,7 @@
 from os import abort
 import re
 from app import app
-from flask import render_template,request,redirect,session, jsonify, url_for
+from flask import render_template,request,redirect,session, jsonify, url_for, flash
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, datetime, timedelta
@@ -48,12 +48,18 @@ def login():
 			session['tipo']=array['tipo']
 			return redirect("/")
 		else:
+			flash('Los datos ingresados no son correctos', category='error')
 			return redirect("/login?error=1")
 	return render_template("login.html")
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
 	if request.method == 'POST':
+		if len(request.form['password']) <8:
+			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
+		if request.form['password'] != request.form['password2']:
+			flash('Las contraseñas no coinciden',category="error")
+	
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
@@ -405,10 +411,10 @@ def reset2(id):
 	print(correo)
 	print(id)
 	if request.method == 'POST':
-		'''if request.form["password"] != request.form["password2"]:
+		if request.form["password"] != request.form["password2"]:
 			print("las contraseñas no coinciden") #flash
 		if request.form["password"] < 8:
-			print("la contraseña debe tener un minimo de 8 caracteres")'''
+			print("la contraseña debe tener un minimo de 8 caracteres")
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
@@ -422,7 +428,7 @@ def reset2(id):
 		conn.commit()
 
 		print("Contraseña actualizada con exito")
-		return 	render_template("login.html")
+		return 	redirect("login.html")
 	else:
 		if validate_token(id):
 			return render_template("reset2.html")
