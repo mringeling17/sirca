@@ -411,12 +411,10 @@ def reset2(id):
 			print("la contraseña debe tener un minimo de 8 caracteres")'''
 		pwd = request.form["password"]
 		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo[0])
-		try:
-			cur.execute(user_reset)
-			conn.commit()
-		except:
-			print("hubo un error al realizar la solicitud")
-			return "<h1>error actualizando la contraseña</h1>"
+		
+		cur.execute(user_reset)
+		conn.commit()
+
 		print("Contraseña actualizada con exito")
 		return 	render_template("/login")
 	else:
