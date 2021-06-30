@@ -356,7 +356,7 @@ def validate_token(id):
 	return validation
 
 
-@app.route("/reset2/<id>", methods=["GET","POST"])
+@app.route("/reset2/<id>", methods=["GET"])
 def reset2(id):
 	if id:
 		if validate_token(id):
