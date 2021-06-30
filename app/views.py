@@ -381,6 +381,7 @@ def reset2(id):
 			print("token invalido")
 			render_template("/login")
 	else:
+		print("null token")
 		return "<h1>NULL TOKEN</h1>"
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
