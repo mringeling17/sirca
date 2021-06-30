@@ -230,9 +230,9 @@ def realizar_reserva():
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
 					cur2.execute(sql)
 					conn.commit() #reserva parcial jugador registrado
+
 					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
 					cur.execute(sql)
-
 					datos_reserva = cur.fetchone()
 					fecha = datos_reserva['fecha']
 					bloque = datos_reserva['bloque']
@@ -246,6 +246,9 @@ def realizar_reserva():
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
 					cur2.execute(sql)
 					conn.commit() #reserva completa jugador registrado
+
+					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+					cur.execute(sql)
 					datos_reserva = cur.fetchone()
 					fecha = datos_reserva['fecha']
 					bloque = datos_reserva['bloque']
