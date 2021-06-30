@@ -34,5 +34,5 @@ def flow_payment(id_interno,subject,monto,email_usuario,url_confirmation,url_ret
                 }
     variables["s"] = flow_signature(variables)
     r = post(url, data = variables).json()
+    
     return r
-
