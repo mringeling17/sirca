@@ -387,7 +387,7 @@ def validate_token(id):
 	cur2.execute(used)
 	usado = cur2.fetchone()
 	print(usado)
-	if usado:
+	if usado[0]:
 		print("token ya usado")
 		validation = False
 		return validation
