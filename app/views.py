@@ -413,7 +413,7 @@ def reset2(id):
 		print(pwd)
 		print(correo[0])
 
-		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
+		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,correo[0])
 		cur.execute(user_reset)
 		conn.commit()
 
