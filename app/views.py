@@ -325,7 +325,7 @@ def forgot():
 			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
 			cur2.execute(user_reset)
 			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
 			print("Correo enviado")
 			return render_template("login.html")
