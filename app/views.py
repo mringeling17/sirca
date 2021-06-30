@@ -302,12 +302,12 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-'''@app.route("/forgot",methods=["GET","POST"])
+@app.route("/forgot",methods=["GET","POST"])
 def forgot():
 
 	if request.method == 'POST':
 		correo = request.form('email')
-		sql ="select email from usuarios where email = '%s' " %correo
+		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
 		if(correo == correo2):
@@ -317,18 +317,20 @@ def forgot():
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
+			print("Revise su correo electronico para continuar")
 			return render_template("login.html")
 		else:
 			print("Correo electronico no registrado")
+			return render_template("/")
 	else:
 		print("Hubo un error cono su solicitud")
 	return render_template("reset1.html")
 
-@app.route("/recover/<id>")
+@app.route("/recover/<id>",methods=["GET"]) #se entra desde el link del correo
 def recover(id):
-	validate = "select * from token where token = '%s'"%id
+	validate = "select * from token where token = '%s'" %id
 	cur2.execute(validate)
-	validado = cur2.fetchone()
+	validado = cur2.fetchone() ###
 	if len(validado) == 0:
 		print("token invalido")
 		return redirect(url_for('/'))
@@ -339,15 +341,13 @@ def recover(id):
 		return redirect(url_for('/'))
 	return redirect('reset2.html', id = id)
 
-@app.route("/reset2/<id>", methods=["POST"])
+@app.route("/reset2/<id>", methods=["GET","POST"])
 def reset2(id):
 	sql = "select email from token where '%s' = token_id"%id
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
-		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
-	if len(request.form["password"])<8:
-		print("la contraseña debe tener al menos 8 caracteres")
+		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print	
 	pwd = request.form["password"]
 	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
 	try:
@@ -357,7 +357,7 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return 	render_template("/")'''
+	return 	render_template("/")
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
