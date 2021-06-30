@@ -322,7 +322,7 @@ def forgot():
 		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
-		if(correo == correo2):
+		if(correo2):
 			key = generator()
 			user_reset = "INSERT INTO token (email,token_id, used) values ('%s','%s','%s'"%(correo, key ,False)
 			conn.add(user_reset)
