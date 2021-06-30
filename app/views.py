@@ -355,6 +355,7 @@ def forgot():
 		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
+		print(correo2)
 		if(correo2):
 			key = secrets.token_hex(nbytes=16)
 			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
@@ -414,7 +415,7 @@ def reset2(id):
 			print("hubo un error al realizar la solicitud")
 			return "<h1>error actualizando la contraseña</h1>"
 		print("Contraseña actualizada con exito")
-		return 	render_template("/reset2")
+		return 	render_template("/login")
 	else:
 		return render_template("reset2.html")
 
