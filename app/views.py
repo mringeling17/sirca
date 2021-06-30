@@ -95,6 +95,34 @@ def admin1():
 		else:
 			return render_template("generarfecha.html")
 
+@app.route('/init_day1', methods=['POST','GET'])
+def init_day1():
+	if request.method == 'POST':
+		dia = int(request.form['diar'])
+		mes = int(request.form['mesr'])
+		anio = int(request.form['anior'])
+		date = anio+"-"+mes+"-"+dia
+		if not 'username' in session:
+			output = {"status": "-1", "msg": "No logged in"}
+			return jsonify(output)
+		else:
+			if session['tipo']!=2:
+				output = {"status": "-1", "msg": "Not admin"}
+				return jsonify(output)
+			else:
+				sql = """delete from reservas where fecha = '%s'"""%(date)
+				cur.execute(sql)
+				for i in range(1,7):
+					cancha = 1
+					sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
+					cur.execute(sql)
+				for i in range(1,7):
+					cancha = 2
+					sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
+					cur.execute(sql)
+				output = {"status": "1", "msg": "Executed"}
+				return jsonify(output)
+
 @app.route('/init_day/<date>/', methods=['GET'])
 def init_day(date):
 	if not 'username' in session:

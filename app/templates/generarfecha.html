@@ -2,7 +2,7 @@
 <!---formulario para completar por el admin--->
 {% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
 {% block content %}
-<form action = "{{ url_for('') }}" method="POST">
+<form action = "{{ url_for('init_day1') }}" method="POST">
   <h3 align="center">Hacer reserva para:</h3>
 
   <div class="form-group">
@@ -17,7 +17,7 @@
 
   <div class="form-group">
     <label for="anior">Correo Electronico</label>
-    <input type="number" min="2020" max="2040"class="form-control" id="email" name="email" placeholder="ejemplo@dominio.com">
+    <input type="number" min="2020" max="2040"class="form-control" id="anior" name="anior">
   </div>
 
 
