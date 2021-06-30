@@ -435,7 +435,7 @@ def reset2(id):
 			return render_template("reset2.html")
 		else:
 			print("flash token invalido")
-			return redirect("login.html")
+			return redirect(url_for("login.html"))
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
