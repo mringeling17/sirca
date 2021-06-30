@@ -98,9 +98,9 @@ def admin1():
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
-		dia = int(request.form['diar'])
-		mes = int(request.form['mesr'])
-		anio = int(request.form['anior'])
+		dia = request.form['diar']
+		mes = request.form['mesr']
+		anio = request.form['anior']
 		date = anio+"-"+mes+"-"+dia
 		if not 'username' in session:
 			output = {"status": "-1", "msg": "No logged in"}
