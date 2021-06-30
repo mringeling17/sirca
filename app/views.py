@@ -307,8 +307,7 @@ def confirmation(asunto,mensaje,correo):
 		
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
-
-	if request.form == 'POST':
+	if request.method == 'POST':
 		correo = request.form('email')
 		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
