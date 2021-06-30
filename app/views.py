@@ -410,7 +410,7 @@ def reset2():
 			conn.commit()
 		except:
 			print("hubo un error al realizar la solicitud")
-			return redirect(url_for('/'))
+			return "<h1>error actualizando la contraseña</h1>"
 		print("Contraseña actualizada con exito")
 		return 	render_template("/reset2")
 	else:
