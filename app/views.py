@@ -385,7 +385,7 @@ def validate_token(id):
 	validation = True
 	print(type(exists))
 	print("1")
-	if type(exists) != None:
+	if len(exists) == 0:
 		print("token invalido")
 		validation = False
 		return validation
