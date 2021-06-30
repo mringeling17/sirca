@@ -410,6 +410,7 @@ def reset2(id):
 			print("la contraseña debe tener un minimo de 8 caracteres")'''
 		pwd = request.form["password"]
 		print(pwd)
+		print(correo[0])
 		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo)
 		print(user_reset)
 		#token_used = """update token set used = True"""
