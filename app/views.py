@@ -413,7 +413,8 @@ def reset2():
 			return redirect(url_for('/'))
 		print("Contraseña actualizada con exito")
 		return 	render_template("/reset2")
-	
+	else:
+		return render_template("reset2.html")
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
