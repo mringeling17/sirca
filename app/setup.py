@@ -40,7 +40,7 @@ cur.execute(sql)
 
 sql = """
 CREATE TABLE token 
-            (email varchar(100), token_id varchar(50), used boolean)
+            (email varchar(100), token_id uuid, used boolean)
 """
 cur.execute(sql)
 
