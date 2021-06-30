@@ -242,7 +242,7 @@ def realizar_reserva():
 					asunto = "Reserva realizada con exito"
 					correo = session['username']
 
-					confirmation(asunto, mensaje)
+					confirmation(asunto, mensaje,correo)
 					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 				else: #reserva completa
 					sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
@@ -254,7 +254,7 @@ def realizar_reserva():
 					mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 					asunto = "Reserva realizada con exito"
 					correo = session['username']
-					confirmation(asunto, mensaje)
+					confirmation(asunto, mensaje,correo)
 					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
@@ -287,7 +287,7 @@ def realizar_reserva_parcial():
 				asunto = "Reserva realizada con exito"
 				correo = session['username']
 
-				confirmation(asunto, mensaje)
+				confirmation(asunto, mensaje,correo)
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
@@ -299,8 +299,8 @@ def realizar_reserva_parcial():
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 
-def confirmation(asunto,mensaje):
-	msg = Message(asunto, sender='sirca@cuy.cl', recipients=['cristobal.leon1@mail.udp.cl'])
+def confirmation(asunto,mensaje,correo):
+	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
 	
@@ -308,15 +308,15 @@ def confirmation(asunto,mensaje):
 
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
-	correo = request.form.get('email')
-	sql ="select email from usuarios where email = '%s' " %correo
-	cur2.execute(sql)
-	correo2 = cur2.fetchone()
+
 	if request.method == 'POST':
+		correo = request.form('email')
+		sql ="select email from usuarios where email = '%s' " %correo
+		cur2.execute(sql)
+		correo2 = cur2.fetchone()
 		if(correo == correo2):
 			key = generator()
-			creacion = datetime.now() 
-			user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
+			user_reset = "INSERT INTO token (email,token_id, used) values ('%s','%s','%s'"%(correo, key ,False)
 			conn.add(user_reset)
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
@@ -324,23 +324,24 @@ def forgot():
 			return render_template("login.html")
 		else:
 			flash("Correo electronico no registrado","error")
+	else:
+		flash("Hubo un error cono su solicitud","warning")
 	return render_template("reset1.html")
 
 
-@app.route("/recover/<id>", methods = ["GET"])
+@app.route("/recover/<id>")
 def recover(id):
 	validate = "select * from token where token = '%s'"%id
 	cur2.execute(validate)
 	validado = cur2.fetchone()
 	if len(validado) == 0:
-		print("token invalido")
+		flash("token invalido","warning")
 		return redirect(url_for('/'))
 
 	used = "select user from token where token_id = '%s'"%id
 	if used:
 		flash("token ya usado","warning")
 		return redirect(url_for('/'))
-	#if token expirado break //hacer diferencia de horas
 	return redirect('reset2.html', id = id)
 
 @app.route("/reset2/<id>", methods=["POST"])
