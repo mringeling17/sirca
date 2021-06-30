@@ -356,7 +356,7 @@ def forgot():
 		cur2.execute(sql)
 		correo2 = cur2.fetchone()
 		print(correo2)
-		print(correo2[0])
+		print(correo2[])
 		if(correo2):
 			key = secrets.token_hex(nbytes=16)
 			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
@@ -401,6 +401,7 @@ def reset2(id):
 	sql = """select email from token where token_id = '%s'"""%id 
 	cur2.execute(sql)
 	correo = cur2.fetchone()
+	print(correo)
 	print(id)
 	if request.method == 'POST':
 		'''if request.form["password"] != request.form["password2"]:
