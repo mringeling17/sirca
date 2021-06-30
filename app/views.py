@@ -395,13 +395,15 @@ def validate_token(id):
 
 
 @app.route("/reset2", methods=['GET','POST']) #error logico
-def reset2(id):
+def reset2():
+	id = True
 	if id:
 		'''sql = """select email from token where token_id = '%s'"""%id
 		cur2.execute(sql)
 		correo = cur2.fetchone()
 		print(id)
 		#correo = validate_token(id)'''
+		correo = 'mringeling1@gmail.com'
 		if request.form["password"] != request.form["password2"]:
 			print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
 		if len(request.form["password"])<8:
