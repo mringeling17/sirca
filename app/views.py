@@ -313,7 +313,7 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-@app.route("/forgot",methods=["GET","POST"])
+@app.route("/forgot",methods=["POST"])
 def forgot():
 	if request.method == 'POST':
 		correo = request.form.get('email')
@@ -359,7 +359,7 @@ def reset2(id):
 	if len(request.form["password"])<8:
 		print("la contraseña debe tener al menos 8 caracteres")
 	pwd = request.form["password"]
-	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
+	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
 	try:
 		cur.execute(user_reset)
 		conn.commit()
