@@ -429,13 +429,13 @@ def reset2(id):
 		conn.commit()
 
 		print("Contraseña actualizada con exito")
-		return 	redirect("login.html")
+		return 	redirect("/login")
 	else:
 		if validate_token(id):
 			return render_template("reset2.html")
 		else:
 			print("flash token invalido")
-			return redirect("login.html")
+			return redirect("/login")
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
