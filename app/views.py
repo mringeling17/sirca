@@ -327,6 +327,7 @@ def forgot():
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
+			print("Correo enviado")
 			return render_template("login.html")
 		else:
 			print("Correo electronico no registrado")
