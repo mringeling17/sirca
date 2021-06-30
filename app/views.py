@@ -442,6 +442,11 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 		idrec = int(id_reserva)
 		idusuario = int(user_id)
 		tipo = int(tipo_reserva)
+
+		sql = """SELECT email FROM usuarios WHERE id = '%s';"""%(idusuario)#datos del jugador con la reserva parcial
+		cur.execute(sql)
+		datos_usuario = cur.fetchone()
+		datos_usuario['email']
 		if int(tx12) == 1:
 			if tipo == 1: #reserva parcial
 				sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tx1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,token,idrec)
@@ -455,7 +460,7 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 				bloque = datos_reserva['bloque']
 				mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 				asunto = "Reserva realizada con exito"
-				correo = session['username']
+				correo = datos_usuario['email']
 
 				confirmation(asunto, mensaje,correo)
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
@@ -471,7 +476,7 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 				bloque = datos_reserva['bloque']
 				mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 				asunto = "Reserva realizada con exito"
-				correo = session['username']
+				correo = datos_usuario['email']
 				confirmation(asunto, mensaje,correo)
 				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 		else:
@@ -485,11 +490,11 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 			bloque = datos_reserva['bloque']
 			mensaje = "Su reserva parcial fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 			asunto = "Reserva realizada con exito"
-			correo = session['username']
+			correo = datos_usuario['email']
 
 			confirmation(asunto, mensaje, correo)
 			return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
-	return jsonify(payment_status)
+	return "Ok :)"
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
