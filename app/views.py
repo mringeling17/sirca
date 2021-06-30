@@ -1,9 +1,7 @@
 from os import abort
 import re
-
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
-#from flask.helpers import print
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, datetime, timedelta
@@ -14,7 +12,7 @@ from .keygen import generator
 from app import keygen
 from .flow import *
 
-sirca_url = "https://sirca.cuy.cl:5050"
+sirca_url = "http://sirca.cuy.cl:5050"
 
 conn = psycopg2.connect("dbname='%s' user='%s' password='%s' host='%s' port='%s'"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
@@ -33,6 +31,7 @@ def home():
 			return redirect("/admin")
 		else:
 			return render_template("home.html")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -60,6 +59,7 @@ def sign_up():
 		conn.commit()
 		return redirect("/login")
 	return render_template("sign_up.html")
+
 
 @app.route('/logout')
 def logout():
@@ -226,12 +226,28 @@ def realizar_reserva():
 			if session['tipo']!=2: #si es usuario normal
 				idrec = int(request.form.get("idreserva",""))
 				idusuario = int(session['user_id'])
-				pago = request.form['opcionespag']
+				pago = int(request.form['opcionespag'])
 				tipo = int(request.form.get("tipo_reserva"))
 
 				if pago == 1:
-					asdfasdf = 1321
-					#URL Confirmation: https://asdfasdf/
+					#URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
+					#URL Return: https://asdfasdf/payment_confirmation/id_reserva
+					url_confirmation = sirca_url + "/flow_callback/"+str(idrec)+"/"+str(idusuario)+"/"+str(tipo)+"/1"
+					url_return = sirca_url + "/payment_confirmation/"+str(idrec)
+					if tipo == 1:
+						flow = flow_payment(str(idrec)+"_1","Reserva cancha",5000,session['username'],url_confirmation,url_return)
+						print(flow)
+					else:
+						flow = flow_payment(idrec,"Reserva cancha",10000,session['username'],url_confirmation,url_return)
+						print(flow)
+
+					sql = """insert into transacciones (token,fecha,confirmed) values ('%s',now(),false);"""%(flow['token'])
+					cur.execute(sql)
+					conn.commit()
+
+					return redirect(flow['url']+"?token="+flow['token'])
+
+
 				else:
 					if tipo == 1: #reserva parcial
 						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
@@ -284,20 +300,36 @@ def realizar_reserva_parcial():
 			if session['tipo']!=2: #si es usuario normal
 				idrec = int(request.form.get("idreserva",""))
 				jugador2 = int(session['user_id']) #falta setear lo del pago
-				sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2 WHERE id = '%s'"""%(jugador2,idrec)
-				cur2.execute(sql)
-				conn.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
-				sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
-				cur.execute(sql)
-				datos_reserva = cur.fetchone()
-				fecha = datos_reserva['fecha']
-				bloque = datos_reserva['bloque']
-				mensaje = "Su reserva parcial fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
-				asunto = "Reserva realizada con exito"
-				correo = session['username']
+				pago = int(request.form['opcionespag'])
+				if pago == 1:
+					#URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
+					#URL Return: https://asdfasdf/payment_confirmation/id_reserva
+					url_confirmation = sirca_url + "/flow_callback/"+str(idrec)+"/"+str(jugador2)+"/2/2"
+					url_return = sirca_url + "/payment_confirmation/"+str(idrec)
+					flow = flow_payment(str(idrec)+"_2","Reserva cancha",5000,session['username'],url_confirmation,url_return)
 
-				confirmation(asunto, mensaje,correo)
-				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+					sql = """insert into transacciones (token,fecha,confirmed) values ('%s',now(),false);"""%(flow['token'])
+					cur.execute(sql)
+					conn.commit()
+
+					return redirect(flow['url']+"?token="+flow['token'])
+
+
+				else:
+					sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2 WHERE id = '%s'"""%(jugador2,idrec)
+					cur2.execute(sql)
+					conn.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+					sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+					cur.execute(sql)
+					datos_reserva = cur.fetchone()
+					fecha = datos_reserva['fecha']
+					bloque = datos_reserva['bloque']
+					mensaje = "Su reserva parcial fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+					asunto = "Reserva realizada con exito"
+					correo = session['username']
+
+					confirmation(asunto, mensaje, correo)
+					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -312,35 +344,31 @@ def confirmation(asunto,mensaje,correo):
 	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
-		
-@app.route("/forgot",methods=["GET","POST"])
-def forgot():
-	if request.method == 'POST':
-		correo = request.form('email')
-		sql ="select email from usuarios where email = '%s' " %correo
-		correo = request.form.get('email')
-		sql ="select email from usuarios where email = '%s'" %correo
-		cur2.execute(sql)
-		correo2 = cur2.fetchone()
-		if(correo2):
-			key = generator()
-			user_reset = "INSERT INTO token (email,token_id, used) values ('%s','%s','%s'"%(correo, key ,False)
-			conn.execute(user_reset)
-			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
-			confirmation("Restablecer contraseña",mensaje ,correo)
-			return render_template("login.html")
-		else:
-			print("Correo electronico no registrado")
-	else:
-		print("Hubo un error cono su solicitud")
-	return render_template("reset1.html")
-			return render_template("/login")
-	else:
-		print("Hubo un error con su solicitud")
-	return render_template("forgot.html")
+	
 
-@app.route("/recover/<id>")
+
+@app.route("/reset1",methods=["GET","POST"])
+def reset1():
+	correo = request.form.get('email')
+	sql ="select email from usuarios where email = '%s' " %correo
+	cur2.execute(sql)
+	correo2 = cur2.fetchone()
+	if request.method == 'POST':
+		if(correo == correo2):
+			key = generator()
+			creacion = datetime.now()
+			user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
+			conn.add(user_reset)
+			conn.commit()
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
+			confirmation("Restablecer contraseña",mensaje ,correo)
+			return render_template("login-html")
+		else:
+			print( "Correo electronico no registrado") #hacer con un flash de js
+	return render_template("reset1.html")
+
+
+@app.route("/recover/<id>", methods = ["GET"])
 def recover(id):
 	validate = "select * from token where token = '%s'"%id
 	cur2.execute(validate)
@@ -353,6 +381,7 @@ def recover(id):
 	if used:
 		print("token ya usado")
 		return redirect(url_for('/'))
+	#if token expirado break //hacer diferencia de horas
 	return redirect('reset2.html', id = id)
 
 @app.route("/reset2/<id>", methods=["POST"])
@@ -362,8 +391,10 @@ def reset2(id):
 	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
 		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
+		return redirect(url_for('reset2', id=id))
 	if len(request.form["password"])<8:
 		print("la contraseña debe tener al menos 8 caracteres")
+		return redirect(url_for('reset2',id = id))
 	pwd = request.form["password"]
 	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
 	try:
@@ -373,7 +404,8 @@ def reset2(id):
 		print("hubo un error al realizar la solicitud")
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
-	return 	render_template("/")
+	return 	render_template("reset2", id =id )
+
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
@@ -382,3 +414,68 @@ def myuser():
 		return render_template("profile.html")
 		
 	return render_template("home.html")
+
+
+@app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
+#URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
+def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
+	token = request.form['token']
+	payment_status = flow_getStatus(token)
+	if payment_status['status'] == 2:
+		sql = """UPDATE transacciones SET confirmed = true WHERE token = '%s'"""%(token)
+		cur.execute(sql)
+		conn.commit()
+		idrec = int(id_reserva)
+		idusuario = int(user_id)
+		tipo = int(tipo_reserva)
+		if int(tx12) == 1:
+			if tipo == 1: #reserva parcial
+				sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tx1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,token,idrec)
+				cur2.execute(sql)
+				conn.commit() #reserva parcial jugador registrado
+
+				sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+				cur.execute(sql)
+				datos_reserva = cur.fetchone()
+				fecha = datos_reserva['fecha']
+				bloque = datos_reserva['bloque']
+				mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+				asunto = "Reserva realizada con exito"
+				correo = session['username']
+
+				confirmation(asunto, mensaje,correo)
+				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+			else: #reserva completa
+				sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tx1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,token,idrec)
+				cur2.execute(sql)
+				conn.commit() #reserva completa jugador registrado
+
+				sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+				cur.execute(sql)
+				datos_reserva = cur.fetchone()
+				fecha = datos_reserva['fecha']
+				bloque = datos_reserva['bloque']
+				mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+				asunto = "Reserva realizada con exito"
+				correo = session['username']
+				confirmation(asunto, mensaje,correo)
+				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+		else:
+			sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2, tx2='%s' WHERE id = '%s'"""%(idusuario,token,idrec)
+			cur2.execute(sql)
+			conn.commit() #completar reserva parcial con otro jugador registrado, registrado/registrado
+			sql = """SELECT * FROM reservas WHERE id = %s"""%(idrec)
+			cur.execute(sql)
+			datos_reserva = cur.fetchone()
+			fecha = datos_reserva['fecha']
+			bloque = datos_reserva['bloque']
+			mensaje = "Su reserva parcial fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
+			asunto = "Reserva realizada con exito"
+			correo = session['username']
+
+			confirmation(asunto, mensaje, correo)
+			return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+
+@app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
+def payment_confirmation(id_reserva):
+	return render_template("reserva_confirmada.html")
