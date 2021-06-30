@@ -394,7 +394,7 @@ def validate_token(id):
 	return validation
 
 
-@app.route("/reset2/<id>", methods=['GET','POST']) #error logico
+@app.route("/reset2", methods=['GET','POST']) #error logico
 def reset2(id):
 	if id:
 		sql = """select email from token where token_id = '%s'"""%id
