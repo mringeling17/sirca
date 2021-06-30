@@ -32,7 +32,6 @@ def home():
 		else:
 			return render_template("home.html")
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'POST':
@@ -59,7 +58,6 @@ def sign_up():
 		conn.commit()
 		return redirect("/login")
 	return render_template("sign_up.html")
-
 
 @app.route('/logout')
 def logout():
@@ -303,9 +301,7 @@ def confirmation(asunto,mensaje,correo):
 	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
-	
-
-
+		
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
 
@@ -327,7 +323,6 @@ def forgot():
 	else:
 		print("Hubo un error cono su solicitud")
 	return render_template("reset1.html")
-
 
 @app.route("/recover/<id>")
 def recover(id):
@@ -363,7 +358,6 @@ def reset2(id):
 		return redirect(url_for('/'))
 	print("Contraseña actualizada con exito")
 	return 	render_template("/")
-
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
