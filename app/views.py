@@ -305,7 +305,7 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-@app.route("/forgot",methods=["GET","POST"])
+@app.route("/forgot",methods=["POST"])
 def forgot():
 
 	if request.form == 'POST':
@@ -326,7 +326,7 @@ def forgot():
 			print("Correo electronico no registrado")
 			return render_template("/")
 	else:
-		print("Hubo un error cono su solicitud")
+		print("Hubo un error con su solicitud")
 	return render_template("forgot.html")
 
 @app.route("/recover/<id>",methods=["GET"]) #se entra desde el link del correo
