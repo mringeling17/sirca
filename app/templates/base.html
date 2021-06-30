@@ -33,11 +33,18 @@
                     <a class="nav-link" href="/sign-up">Registrarse</a>
                     <a class="nav-link" href="/disponibilidad">Disponibilidad</a>
                     {% elif session['tipo']==2 %}
-                    <a class="nav-link" href="">Gen. Dia</a>
                     <a class="nav-link" href="/disponibilidad">Reservar cancha</a>
-                    <a class="nav-link" href="">Ver reservas</a>
-                    <a class="nav-link" href="">Eliminar reserva</a>
-                    <a class="nav-link" href="">Editar reserva</a>
+                    <div class="dropdown">
+                      <a class="nav-link dropdown-toggle" data-toggle="dropdown">Mi Usuario</a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="">Generar Dia</a>
+                        <a class="dropdown-item" href="">Ver reservas</a>
+                        <a class="dropdown-item" href="">Eliminar reserva</a>
+                        <a class="dropdown-item" href="">Editar reserva</a>
+                        <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+                      </div>
+                    </div>
+
                     {% else %}
                     <a class="nav-link" href="/disponibilidad">Reservar Cancha</a>
                     <div class="dropdown">
@@ -51,8 +58,8 @@
                   </div>
                 </div>
           </nav>
-    
-         
+
+
 
     <!-- Contenido -->
     <main role="main">
