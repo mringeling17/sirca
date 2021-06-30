@@ -122,7 +122,8 @@ def init_day1():
 					cur.execute(sql)
 				output = {"status": "1", "msg": "Executed"}
 				return jsonify(output)
-
+	else:
+		return redirect("/")
 @app.route('/init_day/<date>/', methods=['GET'])
 def init_day(date):
 	if not 'username' in session:
