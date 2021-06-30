@@ -1,9 +1,9 @@
 from os import abort
 import re
 
-from flask.helpers import print
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
+#from flask.helpers import print
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from datetime import date, datetime, timedelta
