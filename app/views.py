@@ -313,9 +313,9 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 		
-@app.route("/forgot",methods=["POST"])
+@app.route("/forgot",methods=["GET","POST"])
 def forgot():
-	if request.method == 'POST':
+	if request.method == 'GET':
 		correo = request.form.get('email')
 		sql ="select email from usuarios where email = '%s'" %correo
 		cur2.execute(sql)
