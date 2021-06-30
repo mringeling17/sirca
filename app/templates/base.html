@@ -22,7 +22,7 @@
             <!-- Header Navbar -->
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
               <a class="navbar-brand" href="./">SIRCA</a>
-              
+
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,6 +32,12 @@
                     <a class="nav-link" href="/login">Iniciar Sesión</a>
                     <a class="nav-link" href="/sign-up">Registrarse</a>
                     <a class="nav-link" href="/disponibilidad">Disponibilidad</a>
+                    {% elif session['tipo']==2 %}
+                    <a class="nav-link" href="">Gen. Dia</a>
+                    <a class="nav-link" href="/disponibilidad">Reservar cancha</a>
+                    <a class="nav-link" href="">Ver reservas</a>
+                    <a class="nav-link" href="">Eliminar reserva</a>
+                    <a class="nav-link" href="">Editar reserva</a>
                     {% else %}
                     <a class="nav-link" href="/disponibilidad">Reservar Cancha</a>
                     <div class="dropdown">
@@ -40,31 +46,19 @@
                         <a class="dropdown-item" href="/profile">Mi Perfil</a>
                         <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                       </div>
-                    </div> 
+                    </div>
                     {% endif %}
                   </div>
                 </div>
           </nav>
+<<<<<<< HEAD
     
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-            messages %} {% for category, message in messages %} {% if category ==
-            'error' %}
-            <div class="alert alert-danger alter-dismissable fade show" role="alert">
-              {{ message }}
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            {% else %}
-            <div class="alert alert-success alter-dismissable fade show" role="alert">
-              {{ message }}
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            {% endif %} {% endfor %} {% endif %} {% endwith %}
+         
+=======
+
+>>>>>>> 172b7c27ee2cc03d8941da9f2364291bf9d5e012
     <!-- Contenido -->
-    <main role="main">  
+    <main role="main">
 
     <div class="container">{% block content %} {% endblock %}</div>
 

@@ -83,7 +83,7 @@ def admin():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			return "<h1>Eres admin!!!</h1>"
+			return render_template("home.html")
 
 @app.route('/init_day/<date>/', methods=['GET'])
 def init_day(date):
@@ -287,7 +287,7 @@ def realizar_reserva():
 						correo = session['username']
 						confirmation(asunto, mensaje,correo)
 						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
-			
+
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -351,7 +351,7 @@ def confirmation(asunto,mensaje,correo):
 	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
 	msg.body = mensaje
 	mail.send(msg)
-	
+
 
 
 @app.route("/forgot",methods=["GET","POST"])
@@ -400,13 +400,13 @@ def validate_token(id):
 		return validation
 	print("3")
 
-	
+
 	return validation
 
 
 @app.route("/reset2/<id>", methods=['GET','POST']) #error logico
 def reset2(id):
-	sql = """select email from token where token_id = '%s'"""%id 
+	sql = """select email from token where token_id = '%s'"""%id
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	print(correo)
@@ -443,7 +443,7 @@ def myuser():
 	if request.method == 'POST':
 		#en proceso
 		return render_template("profile.html")
-		
+
 	return render_template("home.html")
 
 
