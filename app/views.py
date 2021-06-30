@@ -358,10 +358,11 @@ def validate_token(id):
 
 @app.route("/reset2/<id>", methods=['GET','POST'])
 def reset2(id):
-	id = str(id)
 	if id:
-		if validate_token(id):
-			sql = "select email from token where '%s' = token_id"%id
+		id2 = str(id)
+		print(id2)
+		if validate_token(id2):
+			sql = "select email from token where '%s' = token_id"%id2
 			cur2.execute(sql)
 			correo = cur2.fetchone()
 			if request.form["password"] != request.form["password2"]:
