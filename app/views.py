@@ -315,7 +315,7 @@ def forgot():
 		if(correo2):
 			key = generator()
 			user_reset = "INSERT INTO token (email,token_id, used) values ('%s','%s','%s'"%(correo, key ,False)
-			conn.add(user_reset)
+			conn.execute(user_reset)
 			conn.commit()
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
