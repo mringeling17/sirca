@@ -357,7 +357,7 @@ def forgot():
 		correo2 = cur2.fetchone()
 		print(correo2)
 		print(correo2[0])
-		if(correo2):
+		if(correo2): #!= None
 			key = secrets.token_hex(nbytes=16)
 			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
 			cur2.execute(user_reset)
@@ -369,7 +369,6 @@ def forgot():
 		else:
 			print("Correo electronico no registrado")
 	else:
-		print("Hubo un error con su solicitud")
 		return render_template("forgot.html")
 
 def validate_token(id):
@@ -411,20 +410,23 @@ def reset2(id):
 			print("la contraseña debe tener un minimo de 8 caracteres")'''
 		pwd = request.form["password"]
 		print(pwd)
-		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo[0])
-		
-		token_used = """update token set used = True"""
+		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s')"""%(pwd,correo)
+		print(user_reset)
+		#token_used = """update token set used = True"""
 
 		cur.execute(user_reset)
 		conn.commit()
 
-		cur.execute(token_used)
-		conn.commit()
+		#cur.execute(token_used)
+		#conn.commit()
 
 		print("Contraseña actualizada con exito")
 		return 	render_template("/login")
 	else:
+		#if validate_token(id):
 		return render_template("reset2.html")
+		#else:
+			#flash token invalido
 
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
