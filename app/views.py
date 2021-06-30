@@ -335,43 +335,50 @@ def forgot():
 		print("Hubo un error con su solicitud")
 		return render_template("forgot.html")
 
-@app.route("/recover/<id>")
-def recover(id):
+def validate_token(id):
 	print("0")
 	validate = "select * from token where token = '%s'"%id
 	cur2.execute(validate)
 	validado = cur2.fetchone()
+	validation = True
 	print("1")
 	if len(validado) == 0:
 		print("token invalido")
-		return redirect(url_for('/'))
+		validation = False
+		return validation
 	print("2")
 	used = "select used from token where token_id = '%s'"%id
 	if used:
 		print("token ya usado")
-		return redirect(url_for('/'))
+		validation = False
+		return validation
 	print("3")
+	return validation
 
-	return redirect('reset2.html', id = id)
-@app.route("/reset2/<id>", methods=["POST"])
+
+@app.route("/reset2/<id>", methods=["GET","POST"])
 def reset2(id):
-	sql = "select email from token where '%s' = token_id"%id
-	cur2.execute(sql)
-	correo = cur2.fetchone()
-	if request.form["password"] != request.form["password2"]:
-		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
-	if len(request.form["password"])<8:
-		print("la contraseña debe tener al menos 8 caracteres")
-	pwd = request.form["password"]
-	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
-	try:
-		cur.execute(user_reset)
-		conn.commit()
-	except:
-		print("hubo un error al realizar la solicitud")
-		return redirect(url_for('/'))
-	print("Contraseña actualizada con exito")
-	return 	render_template("/")
+	if validate_token(id):
+		sql = "select email from token where '%s' = token_id"%id
+		cur2.execute(sql)
+		correo = cur2.fetchone()
+		if request.form["password"] != request.form["password2"]:
+			print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
+		if len(request.form["password"])<8:
+			print("la contraseña debe tener al menos 8 caracteres")
+		pwd = request.form["password"]
+		user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s'), used = TRUE "%(pwd,correo)
+		try:
+			cur.execute(user_reset)
+			conn.commit()
+		except:
+			print("hubo un error al realizar la solicitud")
+			return redirect(url_for('/'))
+		print("Contraseña actualizada con exito")
+		return 	render_template("/login")
+	else:
+		print("token invalido")
+		render_template("/login")
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
