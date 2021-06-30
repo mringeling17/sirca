@@ -1,5 +1,7 @@
 from os import abort
 import re
+
+from flask.helpers import flash
 from app import app
 from flask import render_template,request,redirect,session, jsonify, url_for
 import psycopg2
@@ -304,8 +306,8 @@ def confirmation(asunto,mensaje):
 	
 
 
-@app.route("/reset1",methods=["GET","POST"])
-def reset1():
+@app.route("/forgot",methods=["GET","POST"])
+def forgot():
 	correo = request.form.get('email')
 	sql ="select email from usuarios where email = '%s' " %correo
 	cur2.execute(sql)
@@ -313,15 +315,15 @@ def reset1():
 	if request.method == 'POST':
 		if(correo == correo2):
 			key = generator()
-			creacion = datetime.now()
+			creacion = datetime.now() 
 			user_reset = "INSERT INTO token (email,token_id,creacion, used) values ('%s','%s','%s','%s'"%(correo, key,creacion ,False)
 			conn.add(user_reset)
 			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover" + str(key)
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/recover/" + str(key)
 			confirmation("Restablecer contraseña",mensaje ,correo)
-			return render_template("login-html")
+			return render_template("login.html")
 		else:
-			print( "Correo electronico no registrado") #hacer con un flash de js
+			flash("Correo electronico no registrado","error")
 	return render_template("reset1.html")
 
 
@@ -334,9 +336,9 @@ def recover(id):
 		print("token invalido")
 		return redirect(url_for('/'))
 
-	used = "select used from token where token_id = '%s'"%id
+	used = "select user from token where token_id = '%s'"%id
 	if used:
-		print("token ya usado")
+		flash("token ya usado","warning")
 		return redirect(url_for('/'))
 	#if token expirado break //hacer diferencia de horas
 	return redirect('reset2.html', id = id)
@@ -347,21 +349,19 @@ def reset2(id):
 	cur2.execute(sql)
 	correo = cur2.fetchone()
 	if request.form["password"] != request.form["password2"]:
-		print("las contraseñas deben coincidir")#-->hacer con un flash en todos los print
-		return redirect(url_for('reset2', id=id))
+		flash("las contraseñas deben coincidir","warning")#-->hacer con un flash en todos los print
 	if len(request.form["password"])<8:
-		print("la contraseña debe tener al menos 8 caracteres")
-		return redirect(url_for('reset2',id = id))
+		flash("la contraseña debe tener al menos 8 caracteres","warning")
 	pwd = request.form["password"]
 	user_reset = "update usuarios set password =crypt('%s', gen_salt('bf') where email = '%s') "%(pwd,correo)
 	try:
 		cur.execute(user_reset)
 		conn.commit()
 	except:
-		print("hubo un error al realizar la solicitud")
+		flash("hubo un error al realizar la solicitud","error")
 		return redirect(url_for('/'))
-	print("Contraseña actualizada con exito")
-	return 	render_template("reset2", id =id )
+	flash("Contraseña actualizada con exito","info")
+	return 	render_template("/")
 
 	
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
