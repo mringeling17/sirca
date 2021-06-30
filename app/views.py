@@ -386,6 +386,7 @@ def validate_token(id):
 	used = """select used from token where token_id = '%s'"""%id
 	cur2.execute(used)
 	usado = cur2.fetchone()
+	print(usado)
 	if usado:
 		print("token ya usado")
 		validation = False
