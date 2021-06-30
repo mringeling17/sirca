@@ -383,6 +383,7 @@ def validate_token(id):
 	cur2.execute(validate)
 	exists = cur2.fetchone()
 	validation = True
+	print(type(exists))
 	print("1")
 	if len(exists) == 0: #or if exists != None
 		print("token invalido")
