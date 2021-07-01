@@ -60,7 +60,7 @@ def sign_up():
 			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
 		if request.form['password'] != request.form['password2']:
 			flash('Las contraseñas no coinciden',category="error")
-
+			#return render para que se ingrese denuevo
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
@@ -449,8 +449,6 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 
-
-
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
 	if request.method == 'POST':
@@ -512,8 +510,11 @@ def reset2(id):
 	if request.method == 'POST':
 		if request.form["password"] != request.form["password2"]:
 			flash("las contraseñas no coinciden",category='error') 
+			return render_template("reset2/<id>", id = id)
 		if len(request.form["password"]) < 8:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+			return render_template("reset2/<id>", id = id)
+
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
