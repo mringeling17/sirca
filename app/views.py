@@ -146,9 +146,9 @@ def eliminar_reserva():
 				if dato == None and nombre == None:
 					return render_template("noexiste.html")
 				elif dato == None and nombre != None:
-					sql="""select * from reservas where invitado1 = '%s' and jugador1 = NULL and jugador2 = NULL"""%(nombre)
-					return render_template("noexiste.html")
-				else: #eliminar reserva completa
+					sql="""select * from reservas where invitado1 = '%s'"""%(nombre)
+					return render_template("tabla_eliminar1.html")
+				else: #eliminar reserva completa hecha por usuario
 					idjugador = int(dato[0])
 					sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
 					cur2.execute(sql)
@@ -183,11 +183,11 @@ def init_day1():
 		date = anio+"-"+mes+"-"+dia
 		if not 'username' in session:
 			output = {"status": "-1", "msg": "No logged in"}
-			return jsonify(output)
+			return redirect("/login")
 		else:
 			if session['tipo']!=2:
 				output = {"status": "-1", "msg": "Not admin"}
-				return jsonify(output)
+				return redirect("/")
 			else:
 				sql = """delete from reservas where fecha = '%s'"""%(date)
 				cur.execute(sql)
@@ -200,7 +200,7 @@ def init_day1():
 					sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
 					cur.execute(sql)
 				output = {"status": "1", "msg": "Executed"}
-				return jsonify(output)
+				return render_template("realizado.html")
 	else:
 		return redirect("/")
 
