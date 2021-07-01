@@ -39,7 +39,7 @@
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="/admin1">Generar Dia</a>
                         <a class="dropdown-item" href="">Ver reservas</a>
-                        <a class="dropdown-item" href="">Eliminar reserva</a>
+                        <a class="dropdown-item" href="/buscar_reserva">Eliminar reserva</a>
                         <a class="dropdown-item" href="">Editar reserva</a>
                         <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                       </div>
@@ -58,9 +58,9 @@
                   </div>
                 </div>
           </nav>
-          {% with messages = get_flashed_messages(with_categories=true) %} 
-            {% if messages %} 
-              {% for category, message in messages %} 
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
                 {% if category =='error' %}
                   <div class="alert alert-danger alter-dismissable fade show" role="alert">
                     {{ message }}
@@ -75,9 +75,9 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                {% endif %} 
-              {% endfor %} 
-            {% endif %} 
+                {% endif %}
+              {% endfor %}
+            {% endif %}
           {% endwith %}
 
 

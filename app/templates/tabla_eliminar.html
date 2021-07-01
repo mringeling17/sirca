@@ -3,8 +3,11 @@
 {% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
 {% block content %}
   <h3 align="center">Buscar Reserva:</h3>
+  <div class="container">
+    <div class="card">
+      <div class="card-body mx-auto text-center">
 
- <table cellspacing="0" cellpadding="3" border="1" >
+ <table class="table table-responsive table-bordered">
     <thead>
        <th>Fecha</th>
        <th>Bloque</th>
@@ -14,7 +17,7 @@
     </thead>
 
     {% for dato in datos %}
-        {% if dato[5]== None and dato[6]== None %}
+        {% if dato[5]== None %}
         <tr>
           <td>{{dato[2]}}</td>
           <td>{{dato[3]}}</td>
@@ -25,4 +28,7 @@
        {% endif %}
     {% endfor %}
  </table>
+</div>
+</div>
+</div>
 {% endblock %}

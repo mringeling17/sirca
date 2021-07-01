@@ -139,14 +139,16 @@ def eliminar_reserva():
 				return redirect("/")
 			else:
 				mail = str(request.form['mailr'])
+				nombre = str(request.form['nombrer'])
 				sql="""select id from usuarios where email = '%s'"""%(mail)
 				cur2.execute(sql)
 				dato = cur2.fetchone()
-				if dato == None:
+				if dato == None and nombre != None:
+					sql="""select * from reservas where invitado1 = '%s and jugador1 = NULL and jugador2 = NULL'"""%(nombre)
 					return render_template("noexiste.html")
-				else:
+				else: #eliminar reserva completa
 					idjugador = int(dato[0])
-					sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
+					sql="""select * from reservas where jugador1 = '%s' and jugador2 = NULL and invito1 = NULL"""%(idjugador)
 					cur2.execute(sql)
 					datos = cur2.fetchall()
 					return render_template("tabla_eliminar.html",datos=datos)
