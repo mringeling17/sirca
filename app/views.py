@@ -130,7 +130,7 @@ def eliminar_reserva():
 				cur2.execute(sql)
 				dato = cur2.fetchone()
 				idjugador = int(dato[0])
-				sql="""select * from reservas where jugador1 = '%s' and jugador2 = null and invitado1 = null"""%(idjugador)
+				sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
 				cur2.execute(sql)
 				datos = cur2.fetchall()
 				return render_template("tabla_eliminar.html",datos=datos)
