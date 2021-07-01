@@ -145,19 +145,19 @@ def eliminar_reserva():
 				sql="""select id from usuarios where email = '%s'"""%(mail)
 				cur2.execute(sql)
 				dato = cur2.fetchone()
-				if dato == None and nombre == "":
+				if dato == None and nombre == None:
 					return render_template("noexiste.html")
-				elif dato == None and nombre != "":
-					sql="""select * from reservas where invitado1 = '%s' order by fecha desc"""%(nombre)
+				elif dato == None and nombre != None:
+					sql="""select * from reservas where invitado1 = '%s'"""%(nombre)
 					cur2.execute(sql)
 					datos=cur2.fetchall()
-					return render_template("tabla_eliminar1.html",datos=datos,nombre=nombre)
+					return render_template("tabla_eliminar1.html",datos=datos)
 				else: #eliminar reserva completa hecha por usuario
 					idjugador = int(dato[0])
-					sql="""select * from reservas where jugador1 = '%s' order by fecha desc"""%(idjugador)
+					sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
 					cur2.execute(sql)
 					datos = cur2.fetchall()
-					return render_template("tabla_eliminar.html",datos=datos,mail = mail)
+					return render_template("tabla_eliminar.html",datos=datos)
 	else:
 		return redirect("/")
 
@@ -172,64 +172,6 @@ def conf_elim():
 			else:
 				idrecibida = int(request.form.get("idrec",""))
 				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idrecibida)
-				cur2.execute(sql)
-				conn.commit()
-				return render_template("elim_confirmada.html")
-	else:
-		return redirect("/")
-
-@app.route('/editar_res',methods=['POST','GET'])
-def editar_res():
-	if request.method == 'POST':
-		if not 'username' in session:
-			return redirect("/login")
-		else:
-			if session['tipo']!=2:
-				return redirect("/")
-			else:
-				idrecibida = int(request.form.get("idrec",""))
-				sql = """select * from reservas where id = '%s'"""%(idrecibida)
-				cur2.execute(sql)
-				datos = cur2.fetchall()
-				sql = """select * from reservas where disponible = True order by fecha desc"""
-				cur2.execute(sql)
-				datos1 = cur2.fetchall()
-				return render_template("editar.html",datos=datos, datos1=datos1,idrecibida=idrecibida)
-	else:
-		return redirect("/")
-
-@app.route('/conf_edit',methods=['POST','GET'])
-def conf_edit():
-	if request.method == 'POST':
-		if not 'username' in session:
-			return redirect("/login")
-		else:
-			if session['tipo']!=2:
-				return redirect("/")
-			else:
-				idrecibidas = request.form.get("idrec","")
-				idnueva = int(idrecibidas)
-				idvieja = int(request.form.get("idvieja",""))
-				sql = """select * from reservas where id = '%s'"""%(idvieja)
-				cur2.execute(sql)
-				datos1 = cur2.fetchone()
-				datos = list(datos1)
-				for i in datos:
-					if i == None:
-						datos[i] = 'NULL'
-				jugador1 = datos[4]
-				jugador2 = datos[5]
-				invitado1= datos[6]
-				invitado2= datos[7]
-				tx1 = datos[9]
-				tx2 = datos[10]
-				tipo_reserva = datos[11]
-				pago = datos[12]
-				fecha_reserva = datos[13]
-				sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = '%s',invitado1='%s',invitado2='%s',tx1 = '%s',tx2='%s',tipo_reserva='%s',pago='%s',fecha_reserva='%s' where id='%s'"""%(jugador1,jugador2,invitado1,invitado2,tx1,tx2,tipo_reserva,pago,fecha_reserva,idnueva)
-				cur2.execute(sql)
-				conn.commit()
-				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 				cur2.execute(sql)
 				conn.commit()
 				return render_template("elim_confirmada.html")
@@ -547,7 +489,7 @@ def forgot():
 			user_reset = """INSERT INTO token (email,token_id, used) values ('%s','%s','%s')"""%(correo, key ,'FALSE')
 			cur2.execute(user_reset)
 			conn.commit()
-			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: "+sirca_url+"/reset2/" + key
+			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + key
 			confirmation("Restablecer contraseña",mensaje ,correo)
 			print("Correo enviado")
 			flash('Revise su correo electronico para continuar')
@@ -617,51 +559,74 @@ def reset2(id):
 			return redirect("/login")
 
 @app.route('/profile', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
-def myuser():
+def profile():
 	if request.method == 'POST':
-		sql = """SELECT email, nivel FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-		cur2.execute(sql)
+    	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+		cur.execute(sql)
 		datosusuario = cur2.fetchall()
-		correo = datosusuario[0][0]
-		nivelactual = int(datosusuario[0][1])
+		nombre = datosusuario[0][0]
+		apellido = datosusuario[0][1]
+		nivelactual = int(datosusuario[0][2])
+		email = datosusuario[0][3]
+
 		if request.form['nivelfinal'] == nivelactual:
+			
 			if request.form["password"] != request.form["password2"]:
-				flash("las contraseñas no coinciden",category='error')
+    				flash("las contraseñas no coinciden",category='error')
 			if len(request.form["password"]) == 0:
 				flash("debe modificar algun campo",category='error')
 			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
     				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 			pwd = request.form["password"]
 			print(pwd)
-			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,correo[0])
+			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
 			cur.execute(user_reset)
 			conn.commit()
 			flash("Contraseña actualizada con exito",category='success')
-			return 	redirect("/login")
-		else:
-			if request.form["password"] != request.form["password2"]:
-				flash("las contraseñas no coinciden",category='error')
-			if len(request.form["password"]) == 0:
-				nuevolevel = request.form["nivelfinal"]
-				print(nuevolevel)
-				user_reset = """update usuarios set nivel =crypt('%s', gen_salt('bf')) where email = '%s'"""%(nuevolevel,correo[0])
-				cur.execute(user_reset)
-				conn.commit()
-				flash("Nivel actualizado con exito",category='success')
-				return 	redirect("/home")
-			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
-    				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
-			pwd = request.form["password"]
+			nivelfinal = request.form["nivelfinal"]
+			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+			
+	    
+		if request.form["password"] != request.form["password2"]:
+			flash("las contraseñas no coinciden",category='error')
+		if len(request.form["password"]) == 0:
 			nuevolevel = request.form["nivelfinal"]
-			print(pwd)
 			print(nuevolevel)
-			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,correo[0])#falta setear bien
+			user_reset = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
 			cur.execute(user_reset)
 			conn.commit()
-			flash("Datos actualizados con exito",category='success')
-			return 	redirect("/login")
-
-
+			flash("Nivel actualizado con exito",category='success')
+			nivelfinal = request.form["nivelfinal"]
+			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:	
+			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+		
+		pwd = request.form["password"]
+		nuevolevel = request.form["nivelfinal"]
+		print(pwd)
+		print(nuevolevel)
+		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
+		cur.execute(user_reset)
+		conn.commit()
+		flash("Datos actualizados con exito",category='success')
+		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nuevolevel)#se autocompleta
+	
+	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+	cur2.execute(sql)
+	datosusuario = cur2.fetchall()
+	nombre = datosusuario[0][0]
+	apellido = datosusuario[0][1]
+	nivelint = int(datosusuario[0][2])
+	email = datosusuario[0][3]
+	if nivelint == 1:
+		nivelfinal = "Nivel básico"
+	elif nivelint == 2:
+		nivelfinal = "Nivel Intermedio"
+	else:
+		nivelfinal = "Nivel Alto"
+	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+	
+	
 
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
@@ -732,10 +697,4 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
-	token = request.form['token']
-	payment_status = flow_getStatus(token)
-	if payment_status['status'] == 2:
-		status_string = "Se ha confirmado el pago, reserva realizada"
-	else:
-		status_string = "Error con el pago, su reserva no se ha realizado :("
-	return render_template("reserva_pagada.html",status_string=status_string)
+	return render_template("reserva_confirmada.html")
