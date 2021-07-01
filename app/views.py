@@ -191,7 +191,7 @@ def editar_res():
 				sql = """select * from reservas where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				datos = cur2.fetchall()
-				sql = """select * from reservas where disponible = True order by fecha"""
+				sql = """select * from reservas where disponible = True order by fecha desc"""
 				cur2.execute(sql)
 				datos1 = cur2.fetchall()
 				return render_template("editar.html",datos=datos, datos1=datos1,idrecibida=idrecibida)
@@ -213,15 +213,15 @@ def conf_edit():
 				sql = """select * from reservas where id = '%s'"""%(idvieja)
 				cur2.execute(sql)
 				datos = cur2.fetchone()
-				jugador1 = datos[4]
-				jugador2 = datos[5]
-				invitado1= datos[6]
-				invitado2= datos[7]
-				tx1 = datos[9]
-				tx2 = datos[10]
-				tipo_reserva = datos[11]
-				pago = datos[12]
-				fecha_reserva = datos[13]
+				jugador1 = datos[0][4]
+				jugador2 = datos[0][5]
+				invitado1= datos[0][6]
+				invitado2= datos[0][7]
+				tx1 = datos[0][9]
+				tx2 = datos[0][10]
+				tipo_reserva = datos[0][11]
+				pago = datos[0][12]
+				fecha_reserva = datos[0][13]
 				sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = '%s',invitado1='%s',invitado2='%s',tx1 = '%s',tx2='%s',tipo_reserva='%s',pago='%s',fecha_reserva='%s' where id='%s'"""%(jugador1,jugador2,invitado1,invitado2,tx1,tx2,tipo_reserva,pago,fecha_reserva,idnueva)
 				cur2.execute(sql)
 				conn.commit()
