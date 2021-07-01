@@ -148,13 +148,14 @@ def conf_elim():
 			if session['tipo']!=2:
 				return redirect("/")
 			else:
-				idrec = int(request.form.get("idreserva",""))
-				sql = """update reservas set disponible = true, jugador1 = None, tx1 = None, tipo_reserva = None, pago = None, fecha_reserva = None where id = '%s'"""%(idrec)
+				idrecibida = int(request.form.get("idrec",""))
+				sql = """update reservas set disponible = true, jugador1 = None, tx1 = None, tipo_reserva = None, pago = None, fecha_reserva = None where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				conn.commit()
 				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
+
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
