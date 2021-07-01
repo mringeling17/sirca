@@ -58,8 +58,8 @@ def sign_up():
 	if request.method == 'POST':
 		email = request.form['email']
 		sql = """select count(*) from usuarios where email = '%s'"""%(email)
-		cur.execute(sql)
-		count = cur.fetchone()
+		cur2.execute(sql)
+		count = cur2.fetchone()
 		print(count[1])
 		if count[1] != 0:
 			flash('Correo electronico ya registrado', category='error')
