@@ -568,7 +568,7 @@ def myuser():
 		nivelactual = int(datosusuario[0][1])
 		if request.form['nivelfinal'] == nivelactual:
 			if request.form["password"] != request.form["password2"]:
-    			flash("las contraseñas no coinciden",category='error')
+				flash("las contraseñas no coinciden",category='error')
 			if len(request.form["password"]) == 0:
 				flash("debe modificar algun campo",category='error')
 			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
