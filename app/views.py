@@ -190,7 +190,26 @@ def editar_res():
 				idrecibida = int(request.form.get("idrec",""))
 				sql = """select * from reservas where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
-				return render_template("realizado.html")
+				datos = cur2.fetchall()
+				sql = """select * from reservas where disponible = True order by fecha"""
+				cur2.execute(sql)
+				datos1 = cur2.fetchall()
+				return render_template("editar.html",datos=datos, datos1=datos1,idrecibida=idrecibida)
+	else:
+		return redirect("/")
+
+@app.route('/conf_edit',methods=['POST','GET'])
+def conf_edit():
+	if request.method == 'POST':
+		if not 'username' in session:
+			return redirect("/login")
+		else:
+			if session['tipo']!=2:
+				return redirect("/")
+			else:
+				idrecibida = int(request.form.get("idrec",""))
+
+				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
 

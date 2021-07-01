@@ -24,7 +24,8 @@
           <td>{{dato[8]}}</td>
           <td>{{nombre}}</td>
           <td>{{dato[5]}}</td>
-          <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
+          <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
+          <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Editar</button></form></td>
        </tr>
        {% endif %}
     {% endfor %}
