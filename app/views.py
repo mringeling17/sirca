@@ -212,16 +212,19 @@ def conf_edit():
 				idvieja = int(request.form.get("idvieja",""))
 				sql = """select * from reservas where id = '%s'"""%(idvieja)
 				cur2.execute(sql)
-				datos = cur2.fetchall()
-				jugador1 = datos[0][4]
-				jugador2 = datos[0][5]
-				invitado1= datos[0][6]
-				invitado2= datos[0][7]
-				tx1 = datos[0][9]
-				tx2 = datos[0][10]
-				tipo_reserva = datos[0][11]
-				pago = datos[0][12]
-				fecha_reserva = datos[0][13]
+				datos = cur2.fetchone()
+				for i in datos:
+					if i == None:
+						i = 'NULL'
+				jugador1 = datos[4]
+				jugador2 = datos[5]
+				invitado1= datos[6]
+				invitado2= datos[7]
+				tx1 = datos[9]
+				tx2 = datos[10]
+				tipo_reserva = datos[11]
+				pago = datos[12]
+				fecha_reserva = datos[13]
 				sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = '%s',invitado1='%s',invitado2='%s',tx1 = '%s',tx2='%s',tipo_reserva='%s',pago='%s',fecha_reserva='%s' where id='%s'"""%(jugador1,jugador2,invitado1,invitado2,tx1,tx2,tipo_reserva,pago,fecha_reserva,idnueva)
 				cur2.execute(sql)
 				conn.commit()
