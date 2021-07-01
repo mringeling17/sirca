@@ -207,8 +207,9 @@ def conf_edit():
 			if session['tipo']!=2:
 				return redirect("/")
 			else:
-				idrecibida = int(request.form.get("idrec",""))
-
+				idrecibidas = request.form.get("idrec","")
+				idnueva = idrecibidas[0]
+				idvieja = idrecibidas[1]
 				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
