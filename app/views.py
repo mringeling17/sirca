@@ -161,7 +161,7 @@ def conf_elim():
 				return redirect("/")
 			else:
 				idrecibida = int(request.form.get("idrec",""))
-				sql = """update reservas set disponible = true, jugador1 = '%s', tx1 = '%s', tipo_reserva = '%s', pago = '%s', fecha_reserva = '%s' where id = '%s'"""%(None,None,None,None,None,idrecibida)
+				sql = """update reservas set disponible = true, jugador1 = NULL, tx1 = NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				conn.commit()
 				return render_template("elim_confirmada.html")
