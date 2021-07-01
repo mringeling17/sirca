@@ -191,7 +191,7 @@ def editar_res():
 				sql = """select * from reservas where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				datos = cur2.fetchall()
-				sql = """select * from reservas where disponible = True order by fecha desc"""
+				sql = """select * from reservas where disponible = True order by fecha desc, bloque, cancha"""
 				cur2.execute(sql)
 				datos1 = cur2.fetchall()
 				return render_template("editar.html",datos=datos, datos1=datos1,idrecibida=idrecibida)
