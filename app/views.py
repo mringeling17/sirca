@@ -214,9 +214,11 @@ def conf_edit():
 				cur2.execute(sql)
 				datos1 = cur2.fetchone()
 				datos = list(datos1)
+				print(datos)
 				for i in datos:
 					if i == None:
-						datos[i] = 'NULL'
+						i = 'NULL'
+				print(datos)
 				jugador1 = datos[4]
 				jugador2 = datos[5]
 				invitado1= datos[6]
