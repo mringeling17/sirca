@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<!---formulario para completar por el admin--->
+{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+{% block content %}
+  <h3 align="center">Buscar Reserva:</h3>
+<form action = "{{ url_for('eliminar_reserva') }}" method="POST">
+  <div class="form-group">
+    <label for="mailr">Nombre</label>
+    <input type="email" class="form-control" id="mailr" name="mailr" placeholder="Mail">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Buscar</button>
+ </form>
+{% endblock %}

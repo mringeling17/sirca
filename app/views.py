@@ -97,6 +97,61 @@ def admin1():
 		else:
 			return render_template("generarfecha.html")
 
+@app.route('/ver_reserva')
+def ver_reserva():
+	if not 'username' in session:
+		return redirect("/login")
+	else:
+		if session['tipo']!=2:
+			return redirect("/")
+		else:
+			sql="""select from reservas where"""%()
+			return render_template(".html")
+
+@app.route('/buscar_reserva')
+def buscar_reserva():
+	if not 'username' in session:
+		return redirect("/login")
+	else:
+		if session['tipo']!=2:
+			return redirect("/")
+		else:
+			return render_template("buscar.html")
+
+@app.route('/elminar_reserva',methods=['POST','GET'])
+def eliminar_reserva():
+	if request.method == 'POST':
+		if not 'username' in session:
+			return redirect("/login")
+		else:
+			if session['tipo']!=2:
+				return redirect("/")
+			else:
+				mail = str(request.form['mailr'])
+				sql="""select id from usuarios where email = '%s'"""%(mail)
+				cur2.execute(sql)
+				dato = cur2.fetchone()
+				idjugador = int(dato[0])
+				sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
+				cur2.execute(sql)
+				datos = cur2.fetchall()
+				return render_template("tabla_eliminar.html",datos=datos)
+	else:
+		return redirect("/")
+
+@app.route('/conf_elim',methods=['POST','GET'])
+def conf_elim():
+	if request.method == 'POST':
+		if not 'username' in session:
+			return redirect("/login")
+		else:
+			if session['tipo']!=2:
+				return redirect("/")
+			else:
+
+				return render_template("reserva_confirmada.html")
+	else:
+		return redirect("/")
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
@@ -124,6 +179,8 @@ def init_day1():
 					cur.execute(sql)
 				output = {"status": "1", "msg": "Executed"}
 				return jsonify(output)
+	else:
+		return redirect("/")
 
 @app.route('/init_day/<date>/', methods=['GET'])
 def init_day(date):
