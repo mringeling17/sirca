@@ -161,7 +161,7 @@ def conf_elim():
 				return redirect("/")
 			else:
 				idrecibida = int(request.form.get("idrec",""))
-				sql = """update reservas set disponible = true, jugador1 = None, tx1 = None, tipo_reserva = None, pago = None, fecha_reserva = None where id = '%s'"""%(idrecibida)
+				sql = """update reservas set disponible = true, jugador1 = '%s', tx1 = '%s', tipo_reserva = '%s', pago = '%s', fecha_reserva = '%s' where id = '%s'"""%(None,None,None,None,None,idrecibida)
 				cur2.execute(sql)
 				conn.commit()
 				return render_template("elim_confirmada.html")
@@ -465,6 +465,8 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 
+
+
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
 	if request.method == 'POST':
@@ -525,12 +527,9 @@ def reset2(id):
 	print(id)
 	if request.method == 'POST':
 		if request.form["password"] != request.form["password2"]:
-			flash("las contraseñas no coinciden",category='error') 
-			return render_template("reset2/<id>", id = id)
+			flash("las contraseñas no coinciden",category='error')
 		if len(request.form["password"]) < 8:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
-			return render_template("reset2/<id>", id = id)
-
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
