@@ -554,13 +554,52 @@ def reset2(id):
 			flash('Solicite un nuevo enlace para restablecer la contraseña', category='error')
 			return redirect("/login")
 
-@app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
+@app.route('/profile', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
 	if request.method == 'POST':
-		#en proceso
-		return render_template("profile.html")
+    	sql = """SELECT email, nivel FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+    	cur2.execute(sql)
+		datosusuario = cur2.fetchall()
+		correo = datosusuario[0][0]
+		nivelactual = int(datosusuario[0][1])
+		if request.form['nivelfinal'] == nivelactual
+			if request.form["password"] != request.form["password2"]:
+    			flash("las contraseñas no coinciden",category='error')
+			if len(request.form["password"]) == 0:
+				flash("debe modificar algun campo",category='error')
+			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
+    				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+			pwd = request.form["password"]
+			print(pwd)
+			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,correo[0])
+			cur.execute(user_reset)
+			conn.commit()
+			flash("Contraseña actualizada con exito",category='success')
+			return 	redirect("/login")
+		else:
+    		if request.form["password"] != request.form["password2"]:
+        		flash("las contraseñas no coinciden",category='error')
+			if len(request.form["password"]) == 0:
+				nuevolevel = request.form["nivelfinal"]
+				print(nuevolevel)
+				user_reset = """update usuarios set nivel =crypt('%s', gen_salt('bf')) where email = '%s'"""%(nuevolevel,correo[0])
+				cur.execute(user_reset)
+				conn.commit()
+				flash("Nivel actualizado con exito",category='success')
+				return 	redirect("/home")
+			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
+    				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+			pwd = request.form["password"]
+			nuevolevel = request.form["nivelfinal"]
+			print(pwd)
+			print(nuevolevel)
+			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,correo[0])#falta setear bien
+			cur.execute(user_reset)
+			conn.commit()
+			flash("Datos actualizados con exito",category='success')
+			return 	redirect("/login")
 
-	return render_template("home.html")
+	
 
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
