@@ -562,7 +562,7 @@ def reset2(id):
 def myuser():
 	if request.method == 'POST':
     	sql = """SELECT email, nivel FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-    	cur2.execute(sql)
+		cur2.execute(sql)
 		datosusuario = cur2.fetchall()
 		correo = datosusuario[0][0]
 		nivelactual = int(datosusuario[0][1])
