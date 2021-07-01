@@ -11,6 +11,7 @@
        <th>Fecha</th>
        <th>Bloque</th>
        <th>Cancha</th>
+       <th>Usuario</th>
        <th>Fecha reserva</th>
        <th></th>
     </thead>
@@ -21,6 +22,7 @@
           <td>{{dato[2]}}</td>
           <td>{{dato[3]}}</td>
           <td> {{dato[8]}}</td>
+          <td>{{mail}}</td>
           <td>{{dato[5]}}</td>
           <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
           <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Editar</button></form></td>
