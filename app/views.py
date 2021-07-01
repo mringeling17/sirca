@@ -116,7 +116,7 @@ def ver_reserva():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			sql="""select *,(select usuarios.email from usuarios,reservas where usuarios.id = reservas.jugador1) as mail1, (select usuarios.email from usuarios,reservas where usuarios.id = reservas.jugador2)as mail2 from reservas where disponible = False order by fecha desc"""
+			sql="""select * from reservas where disponible = False order by fecha desc"""
 			cur2.execute(sql)
 			datos = cur2.fetchall()
 			return render_template("vistareservas.html",datos=datos)
