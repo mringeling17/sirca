@@ -215,26 +215,39 @@ def conf_edit():
 				datos1 = cur2.fetchone()
 				datos = list(datos1)
 				print(datos)
-				#for i in range(0,len(datos)):
-				#	if datos[i] == None:
-				#		datos[i] = NULL
-				print(datos)
 				jugador1 = datos[4]
 				#jugador2 = datos[5]
 				#invitado1= datos[6]
 				#invitado2= datos[7]
 				tipo_reserva = datos[9]
-				#tx1 = datos[10]
+				tx1 = datos[10]
 				#tx2 = datos[11]
-				#pago = datos[12]
+				pago = datos[12]
 				#fecha_reserva = datos[13]
-				sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,idnueva)
-				cur2.execute(sql)
-				conn.commit()
-				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
-				cur2.execute(sql)
-				conn.commit()
-				return render_template("elim_confirmada.html")
+				if pago != None and tx1 != None:
+					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = '%s',tx2=NULL,tipo_reserva='%s',pago='%s',fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,tx1,pago,idnueva)
+					cur2.execute(sql)
+					conn.commit()
+					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
+					cur2.execute(sql)
+					conn.commit()
+					return render_template("elim_confirmada.html")
+				elif pago != None and tx1 == None:
+					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,pago,idnueva)
+					cur2.execute(sql)
+					conn.commit()
+					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
+					cur2.execute(sql)
+					conn.commit()
+					return render_template("elim_confirmada.html")
+				else:
+					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,idnueva)
+					cur2.execute(sql)
+					conn.commit()
+					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
+					cur2.execute(sql)
+					conn.commit()
+					return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
 
