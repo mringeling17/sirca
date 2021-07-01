@@ -212,7 +212,8 @@ def conf_edit():
 				idvieja = int(request.form.get("idvieja",""))
 				sql = """select * from reservas where id = '%s'"""%(idvieja)
 				cur2.execute(sql)
-				datos = cur2.fetchone()
+				datos1 = cur2.fetchone()
+				datos = list(datos1)
 				for i in datos:
 					if i == None:
 						datos[i] = 'NULL'
