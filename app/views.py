@@ -33,7 +33,6 @@ def home():
 		else:
 			return render_template("home.html")
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'POST':
@@ -81,12 +80,12 @@ def sign_up():
 		return redirect("/login")
 	return render_template("sign_up.html")
 
-
 @app.route('/logout')
 def logout():
 	session.pop('username', None)
 	session.pop('user_id', None)
 	session.pop('tipo', None)
+	flash('Sesion Cerrada Correctamente',category='success')
 	return redirect("/login")
 
 @app.route('/admin')
@@ -468,8 +467,6 @@ def confirmation(asunto,mensaje,correo):
 	msg.body = mensaje
 	mail.send(msg)
 
-
-
 @app.route("/forgot",methods=["GET","POST"])
 def forgot():
 	if request.method == 'POST':
@@ -520,7 +517,6 @@ def validate_token(id):
 
 	return validation
 
-
 @app.route("/reset2/<id>", methods=['GET','POST'])
 def reset2(id):
 	sql = """select email from token where token_id = '%s'"""%id
@@ -553,7 +549,6 @@ def reset2(id):
 		else:
 			flash('Solicite un nuevo enlace para restablecer la contraseña', category='error')
 			return redirect("/login")
-
 
 @app.route('/myuser', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
