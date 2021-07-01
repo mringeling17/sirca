@@ -61,7 +61,7 @@ def sign_up():
 		cur2.execute(sql)
 		count = cur2.fetchone()
 		print(count)
-		if count[1] != 0:
+		if count[0] != 0:
 			flash('Correo electronico ya registrado', category='error')
 			return render_template("sign_up.html")
 
