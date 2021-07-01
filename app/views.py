@@ -215,7 +215,7 @@ def conf_edit():
 				datos = cur2.fetchone()
 				for i in datos:
 					if i == None:
-						i = 'NULL'
+						datos[i] = 'NULL'
 				jugador1 = datos[4]
 				jugador2 = datos[5]
 				invitado1= datos[6]
