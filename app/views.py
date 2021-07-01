@@ -56,12 +56,23 @@ def login():
 @app.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
 	if request.method == 'POST':
+		email = request.form['email']
+		sql = """select count(*) from usuarios where email = '%s'"""%(email)
+		cur.execute(sql)
+		count = cur.fetchone()
+		print(count)
+		if count != 0:
+			flash('Correo electronico ya registrado', category='error')
+			return render_template("sign_up.html")
+
 		if len(request.form['password']) <8:
 			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
+			return render_template("sign_up.html")
+
 		if request.form['password'] != request.form['password2']:
 			flash('Las contraseñas no coinciden',category="error")
 			return render_template("sign_up.html")
-			
+
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
