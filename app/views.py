@@ -210,6 +210,24 @@ def conf_edit():
 				idrecibidas = request.form.get("idrec","")
 				idnueva = idrecibidas[0]
 				idvieja = idrecibidas[1]
+				sql = """select * from reservas where id = '%s'"""%(idvieja)
+				cur2.execute(sql)
+				datos = cur2.fetchone()
+				jugador1 = datos[4]
+				jugador2 = datos[5]
+				invitado1= datos[6]
+				invitado2= datos[7]
+				tx1 = datos[9]
+				tx2 = datos[10]
+				tipo_reserva = datos[11]
+				pago = datos[12]
+				fecha_reserva = datos[13]
+				sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = '%s',invitado1='%s',invitado2='%s',tx1 = '%s',tx2='%s',tipo_reserva='%s',pago='%s',fecha_reserva='%s' where id='%s'"""%(jugador1,jugador2,invitado1,invitado2,tx1,tx2,tipo_reserva,pago,fecha_reserva,idnueva)
+				cur2.execute(sql)
+				conn.commit()
+				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
+				cur2.execute(sql)
+				conn.commit()
 				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
