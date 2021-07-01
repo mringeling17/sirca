@@ -566,7 +566,7 @@ def myuser():
 		datosusuario = cur2.fetchall()
 		correo = datosusuario[0][0]
 		nivelactual = int(datosusuario[0][1])
-		if request.form['nivelfinal'] == nivelactual
+		if request.form['nivelfinal'] == nivelactual:
 			if request.form["password"] != request.form["password2"]:
     			flash("las contraseñas no coinciden",category='error')
 			if len(request.form["password"]) == 0:
