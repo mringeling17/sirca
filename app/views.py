@@ -148,8 +148,11 @@ def conf_elim():
 			if session['tipo']!=2:
 				return redirect("/")
 			else:
-
-				return render_template("reserva_confirmada.html")
+				idrec = int(request.form.get("idreserva",""))
+				sql = """update reservas set disponible = true, jugador1 = None, tx1 = None, tipo_reserva = None, pago = None, fecha_reserva = None where id = '%s'"""%(idrec)
+				cur2.execute(sql)
+				conn.commit()
+				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
 @app.route('/init_day1', methods=['POST','GET'])
@@ -511,7 +514,7 @@ def reset2(id):
 	print(id)
 	if request.method == 'POST':
 		if request.form["password"] != request.form["password2"]:
-			flash("las contraseñas no coinciden",category='error') 
+			flash("las contraseñas no coinciden",category='error')
 		if len(request.form["password"]) < 8:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 		pwd = request.form["password"]
