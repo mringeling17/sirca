@@ -217,7 +217,7 @@ def conf_edit():
 				print(datos)
 				for i in range(0,len(datos)):
 					if datos[i] == None:
-						datos[i] = 'NULL'
+						datos[i] = NULL
 				print(datos)
 				jugador1 = datos[4]
 				jugador2 = datos[5]
