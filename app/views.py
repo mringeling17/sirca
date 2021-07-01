@@ -116,8 +116,10 @@ def ver_reserva():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			sql="""select from reservas where"""%()
-			return render_template(".html")
+			sql="""select * from reservas where disponible = False order by fecha desc"""
+			cur2.execute(sql)
+			datos = cur2.fetchall()
+			return render_template("vistareservas.html",datos=datos)
 
 @app.route('/buscar_reserva')
 def buscar_reserva():
@@ -147,7 +149,9 @@ def eliminar_reserva():
 					return render_template("noexiste.html")
 				elif dato == None and nombre != None:
 					sql="""select * from reservas where invitado1 = '%s'"""%(nombre)
-					return render_template("tabla_eliminar1.html")
+					cur2.execute(sql)
+					datos=cur2.fetchall()
+					return render_template("tabla_eliminar1.html",datos=datos)
 				else: #eliminar reserva completa hecha por usuario
 					idjugador = int(dato[0])
 					sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
@@ -167,7 +171,7 @@ def conf_elim():
 				return redirect("/")
 			else:
 				idrecibida = int(request.form.get("idrec",""))
-				sql = """update reservas set disponible = true, jugador1 = NULL, tx1 = NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idrecibida)
+				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				conn.commit()
 				return render_template("elim_confirmada.html")
