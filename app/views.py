@@ -125,12 +125,12 @@ def eliminar_reserva():
 			if session['tipo']!=2:
 				return redirect("/")
 			else:
-				mail = request.form['mailr']
+				mail = str(request.form['mailr'])
 				sql="""select id from usuarios where email = '%s'"""%(mail)
 				cur2.execute(sql)
 				dato = cur2.fetchone()
 				idjugador = int(dato[0])
-				sql="""select * from reservas where jugador1 = '%s' and jugador2 = NULL and invitado1 = NULL"""%(idjugador)
+				sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
 				cur2.execute(sql)
 				datos = cur2.fetchall()
 				return render_template("tabla_eliminar.html",datos=datos)
