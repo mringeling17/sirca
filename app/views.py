@@ -60,7 +60,8 @@ def sign_up():
 			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
 		if request.form['password'] != request.form['password2']:
 			flash('Las contraseñas no coinciden',category="error")
-			return render_template("sign-up.html")
+			return render_template("sign_up.html")
+			
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
