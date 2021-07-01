@@ -116,8 +116,10 @@ def ver_reserva():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			sql="""select from reservas where"""%()
-			return render_template(".html")
+			sql="""select * from reservas where disponible = False order by fecha desc"""
+			cur2.execute(sql)
+			datos = cur2.fetchall()
+			return render_template("vistareservas.html",datos=datos)
 
 @app.route('/buscar_reserva')
 def buscar_reserva():

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!---formulario para completar por el admin--->
+{% extends "base.html" %} {% block title %}Ver reserva{% endblock %}
+{% block content %}
+  <h3 align="center">Ver Reserva:</h3>
+  <div class="container">
+    <div class="card">
+      <div class="card-body mx-auto text-center">
+
+ <table class="table table-responsive table-bordered">
+    <thead>
+       <th>Fecha</th>
+       <th>Bloque</th>
+       <th>Cancha</th>
+       <th>Jugador 1</th>
+       <th>Jugador 2</th>
+       <th>Invitado 1</th>
+       <th>Fecha reserva</th>
+    </thead>
+
+    {% for dato in datos %}
+        <tr>
+          <td>{{dato[2]}}</td>
+          <td>{{dato[3]}}</td>
+          <td>{{dato[8]}}</td>
+          <td>{{dato[4]}}</td>
+          <td>{{dato[5]}}</td>
+          <td>{{dato[6]}}</td>
+          <td>{{dato[13]}}</td>
+         <!--- <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
+         --->
+       </tr>
+    {% endfor %}
+ </table>
+</div>
+</div>
+</div>
+{% endblock %}
