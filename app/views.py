@@ -142,7 +142,7 @@ def eliminar_reserva():
 				sql="""select id from usuarios where email = '%s'"""%(mail)
 				cur2.execute(sql)
 				dato = cur2.fetchone()
-				if dato[0] == None:
+				if dato == None:
 					return render_template("noexiste.html")
 				else:
 					idjugador = int(dato[0])
