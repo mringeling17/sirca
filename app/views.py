@@ -561,7 +561,7 @@ def reset2(id):
 @app.route('/profile', methods = ['POST','GET']) #ver/actualizar datos del usuario y gurdar en la base
 def myuser():
 	if request.method == 'POST':
-    	sql = """SELECT email, nivel FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+		sql = """SELECT email, nivel FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 		cur2.execute(sql)
 		datosusuario = cur2.fetchall()
 		correo = datosusuario[0][0]
