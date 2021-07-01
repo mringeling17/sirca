@@ -178,6 +178,22 @@ def conf_elim():
 	else:
 		return redirect("/")
 
+@app.route('/editar_res',methods=['POST','GET'])
+def editar_res():
+	if request.method == 'POST':
+		if not 'username' in session:
+			return redirect("/login")
+		else:
+			if session['tipo']!=2:
+				return redirect("/")
+			else:
+				idrecibida = int(request.form.get("idrec",""))
+				sql = """select * from reservas where id = '%s'"""%(idrecibida)
+				cur2.execute(sql)
+				return render_template("realizado.html")
+	else:
+		return redirect("/")
+
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
