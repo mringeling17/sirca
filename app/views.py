@@ -60,7 +60,7 @@ def sign_up():
 		sql = """select count(*) from usuarios where email = '%s'"""%(email)
 		cur2.execute(sql)
 		count = cur2.fetchone()
-		print(count[1])
+		print(count)
 		if count[1] != 0:
 			flash('Correo electronico ya registrado', category='error')
 			return render_template("sign_up.html")
