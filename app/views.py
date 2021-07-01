@@ -155,6 +155,7 @@ def conf_elim():
 				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
+		
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
