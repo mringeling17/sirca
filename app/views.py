@@ -60,7 +60,7 @@ def sign_up():
 			flash('La contraseña debe tener un minimo de 8 caracteres', category="error")
 		if request.form['password'] != request.form['password2']:
 			flash('Las contraseñas no coinciden',category="error")
-			#return render para que se ingrese denuevo
+			return render_template("sign-up.html")
 		sql = """insert into usuarios (email,password,nombre,apellido,tipo,nivel,fecha_registro) values ('%s',crypt('%s', gen_salt('bf')),'%s','%s',1,'%s',now());"""%(request.form['email'],request.form['password'],request.form['nombre'],request.form['apellido'],request.form['nivel'])
 
 		cur.execute(sql)
@@ -148,8 +148,11 @@ def conf_elim():
 			if session['tipo']!=2:
 				return redirect("/")
 			else:
-
-				return render_template("reserva_confirmada.html")
+				idrec = int(request.form.get("idreserva",""))
+				sql = """update reservas set disponible = true, jugador1 = None, tx1 = None, tipo_reserva = None, pago = None, fecha_reserva = None where id = '%s'"""%(idrec)
+				cur2.execute(sql)
+				conn.commit()
+				return render_template("elim_confirmada.html")
 	else:
 		return redirect("/")
 @app.route('/init_day1', methods=['POST','GET'])
