@@ -581,8 +581,8 @@ def myuser():
 			flash("Contraseña actualizada con exito",category='success')
 			return 	redirect("/login")
 		else:
-    		if request.form["password"] != request.form["password2"]:
-        		flash("las contraseñas no coinciden",category='error')
+			if request.form["password"] != request.form["password2"]:
+				flash("las contraseñas no coinciden",category='error')
 			if len(request.form["password"]) == 0:
 				nuevolevel = request.form["nivelfinal"]
 				print(nuevolevel)
