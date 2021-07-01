@@ -46,6 +46,7 @@ def login():
 			session['username']=array['email']
 			session['user_id']=array['id']
 			session['tipo']=array['tipo']
+			flash('Sesion Iniciada Correctamente',category='success')
 			return redirect("/")
 		else:
 			flash('Los datos ingresados no son correctos', category='error')
@@ -64,6 +65,7 @@ def sign_up():
 
 		cur.execute(sql)
 		conn.commit()
+		flash('Cuenta creada exitosamente', category='success')
 		return redirect("/login")
 	return render_template("sign_up.html")
 
@@ -409,9 +411,10 @@ def forgot():
 			mensaje = "Para reestablecer su contraseña ingrese al siguiente link: www.sirca.cuy.cl/reset2/" + key
 			confirmation("Restablecer contraseña",mensaje ,correo)
 			print("Correo enviado")
+			flash('Revise su correo electronico para continuar')
 			return render_template("login.html")
 		else:
-			print("Correo electronico no registrado")
+			flash("Correo electronico no registrado",category="error")
 	else:
 		return render_template("forgot.html")
 
@@ -442,7 +445,7 @@ def validate_token(id):
 	return validation
 
 
-@app.route("/reset2/<id>", methods=['GET','POST']) #error logico
+@app.route("/reset2/<id>", methods=['GET','POST'])
 def reset2(id):
 	sql = """select email from token where token_id = '%s'"""%id
 	cur2.execute(sql)
@@ -451,9 +454,9 @@ def reset2(id):
 	print(id)
 	if request.method == 'POST':
 		if request.form["password"] != request.form["password2"]:
-			print("las contraseñas no coinciden") #flash
+			flash("las contraseñas no coinciden",category='error') 
 		if len(request.form["password"]) < 8:
-			print("la contraseña debe tener un minimo de 8 caracteres")
+			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
@@ -466,13 +469,13 @@ def reset2(id):
 		cur.execute(token_used)
 		conn.commit()
 
-		print("Contraseña actualizada con exito")
+		flash("Contraseña actualizada con exito",category='success')
 		return 	redirect("/login")
 	else:
 		if validate_token(id):
 			return render_template("reset2.html")
 		else:
-			print("flash token invalido")
+			flash('Solicite un nuevo enlace para restablecer la contraseña', category='error')
 			return redirect("/login")
 
 
