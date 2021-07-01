@@ -208,8 +208,8 @@ def conf_edit():
 				return redirect("/")
 			else:
 				idrecibidas = request.form.get("idrec","")
-				idnueva = int(idrecibidas[0])
-				idvieja = int(idrecibidas[1])
+				idnueva = int(idrecibidas)
+				idvieja = int(request.form.get("idvieja",""))
 				sql = """select * from reservas where id = '%s'"""%(idvieja)
 				cur2.execute(sql)
 				datos = cur2.fetchall()

@@ -44,11 +44,12 @@
               <td>{{dato[2]}}</td>
               <td>{{dato[3]}}</td>
               <td> {{dato[8]}}</td>
-              <td><button type="submit" class="btn btn-success" name="idrec" value={{[dato[0],idrecibida]}}>Mover</button></td>
+              <td><button type="submit" class="btn btn-success" name="idrec" value={{dato[0]}}>Mover</button></td>
            </tr>
            {% endif %}
         {% endfor %}
      </table>
+     <input type="hidden" class="form-control" id="idvieja" name="idvieja" value={{idrecibida}}>
  </form>
 </div>
 </div>
