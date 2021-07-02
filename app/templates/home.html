@@ -11,7 +11,6 @@
               <th>Bloque</th>
               <th>Cancha</th>
             </thead>
-          </table>
 
           {% for dato in data %}
             <tr>
@@ -19,9 +18,12 @@
               <td>{{dato[0][1]}}</td>
               <td>{{dato[0][2]}}</td>
             </tr>
+
+          {% endfor %}
+        </table>
+        {% endif %}
+
         </div>
       </div>
     </div>
-    {% endfor %}
-    {% endif %}
     {% endblock %}
