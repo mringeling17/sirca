@@ -139,7 +139,7 @@ def admin():
 			#email2 = cur2.fetchone()
 			print(datos)
 			print(datos2)
-			return render_template("homeadmin.html",datos=datos)
+			return render_template("homeadmin.html",datos2=datos2)
 
 @app.route('/admin1')
 def admin1():
