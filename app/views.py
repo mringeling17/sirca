@@ -808,8 +808,6 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 				asunto = "Reserva realizada con exito"
 				correo = datos_usuario['email']
 				confirmation(asunto, mensaje,correo)
-				flash('Reserva realizada con exito',category='success')
-				return redirect('/')
 		else:
 			sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2, tx2='%s' WHERE id = '%s'"""%(idusuario,token,idrec)
 			cur2.execute(sql)
@@ -824,8 +822,6 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 			correo = datos_usuario['email']
 
 			confirmation(asunto, mensaje, correo)
-			flash('Reserva realizada con exito',category='success')
-			return redirect('/')
 	return "Ok :)"
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
