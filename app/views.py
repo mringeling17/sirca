@@ -110,9 +110,10 @@ def admin():
 			return redirect("/")
 		else:
 			diaactual = date.today().strftime("%Y-%m-%d")
-			sql = """select * from reservas where fecha = '%s' and disponible = False"""%(diaactual)
+			sql = """select reservas.fecha, reservas.bloque, usuarios.email as player1, usuarios.email as player2, reservas.invitado1, reservas.fecha_reserva from reservas, usuarios where disponible = false and fecha='%s' and (reservas.jugador1 = usuarios.id or reservas.jugador2 = usuarios.id)"""%(diaactual)
 			cur2.execute(sql)
 			datos = cur2.fetchall()
+			print(datos)
 			return render_template("homeadmin.html",datos=datos)
 
 @app.route('/admin1')
@@ -484,7 +485,7 @@ def realizar_reserva():
 
 						confirmation(asunto, mensaje,correo)
 						flash('Reserva realizada con exito', category='success')
-						return redirect('/') 
+						return redirect('/')
 					else: #reserva completa
 						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
 						cur2.execute(sql)
@@ -499,7 +500,7 @@ def realizar_reserva():
 						asunto = "Reserva realizada con exito"
 						correo = session['username']
 						flash('Reserva realizada con exito', category='success')
-						return redirect('/') 
+						return redirect('/')
 
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
@@ -551,7 +552,7 @@ def realizar_reserva_parcial():
 
 					confirmation(asunto, mensaje, correo)
 					flash('Reserva realizada con exito', category='success')
-					return redirect('/') 
+					return redirect('/')
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -561,7 +562,7 @@ def realizar_reserva_parcial():
 				cur2.execute(sql)
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
 				flash('Reserva realizada con exito', category='success')
-				return redirect('/') 
+				return redirect('/')
 
 def confirmation(asunto,mensaje,correo):
 	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
@@ -756,7 +757,7 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 
 				confirmation(asunto, mensaje,correo)
 				flash('Reserva realizada con exito', category='success')
-				return redirect('/') 
+				return redirect('/')
 			else: #reserva completa
 				sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tx1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,token,idrec)
 				cur2.execute(sql)
@@ -788,10 +789,10 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 
 			confirmation(asunto, mensaje, correo)
 			flash('Reserva realizada con exito',category='success')
-			return redirect('/') 
+			return redirect('/')
 	return "Ok :)"
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
 	flash('Reserva realizada con exito', category='success')
-	return redirect('/') 
+	return redirect('/')
