@@ -712,9 +712,6 @@ def profile():
 		nivelfinal = "Nivel Alto"
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-
-
-
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
 #URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
 def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
@@ -784,3 +781,19 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
 	return render_template("reserva_confirmada.html")
+
+@app.route('/home')
+def home():
+	user = session['user']
+	user_type = session['tipo']
+	if user_type == 1: #usuario
+		sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+		cur.execute(sql)
+		data = cur.fetchall()
+
+	else: #admin
+		sql = """select usuario,fecha, bloque, cancha from reservas order by fecha desc, bloque desc"""
+		cur.execute(sql)
+		data = cur.fetchall()
+
+	return render_template('home.html',data = data)
