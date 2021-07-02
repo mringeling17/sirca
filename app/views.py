@@ -699,7 +699,7 @@ def profile():
 			nuevolevel = request.form["nivelfinal"]
 			print(nuevolevel)
 			if nuevolevel == "Nivel básico":
-    			nivelfinal = 1
+				nivelfinal = 1
 			elif nuevolevel == "Nivel Intermedio":
 				nivelfinal = 2
 			else:
