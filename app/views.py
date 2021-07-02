@@ -26,7 +26,7 @@ app.secret_key = configuraciones.session_key
 @app.route('/')
 def home():
 	if not 'username' in session:
-		return redirect("/login")
+		return redirect("/disponibilidad")
 	else:
 		if session['tipo']==2:
 			return redirect("/admin")
