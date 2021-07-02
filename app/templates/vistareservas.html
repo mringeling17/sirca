@@ -17,15 +17,15 @@
        <th>Fecha reserva</th>
     </thead>
 
-    {% for dato in datos %}
+    {% for dato in datos2 %}
         <tr>
+          <td>{{dato[0]}}</td>
+          <td>{{dato[1]}}</td>
           <td>{{dato[2]}}</td>
           <td>{{dato[3]}}</td>
-          <td>{{dato[8]}}</td>
           <td>{{dato[4]}}</td>
           <td>{{dato[5]}}</td>
           <td>{{dato[6]}}</td>
-          <td>{{dato[13]}}</td>
          <!--- <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
          --->
        </tr>

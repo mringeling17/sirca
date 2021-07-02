@@ -114,8 +114,6 @@ def admin():
 			cur2.execute(sql)
 			datos1 = cur2.fetchall()
 			datos = list(datos1)
-			print(datos[3])
-			print(datos[4])
 			datos2 = []
 			for i in datos:
 				i=list(i)
@@ -159,10 +157,27 @@ def ver_reserva():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			sql="""select * from reservas where disponible = False order by fecha desc"""
+			sql="""select fecha, bloque,cancha ,jugador1, jugador2, invitado1, fecha_reserva from reservas where disponible = false order by fecha desc """
 			cur2.execute(sql)
-			datos = cur2.fetchall()
-			return render_template("vistareservas.html",datos=datos)
+			datos1 = cur2.fetchall()
+			datos = list(datos1)
+			datos2=[]
+			for i in datos:
+				i=list(i)
+				if i[3] != None:
+					sql = """select email from usuarios where id = '%s'"""%(int(i[3]))
+					cur2.execute(sql)
+					email1 = cur2.fetchone()
+					i[3] = email1[0]
+				if i[4] != None:
+					sql = """select email from usuarios where id = '%s'"""%(int(i[4]))
+					cur2.execute(sql)
+					email2 = cur2.fetchone()
+					i[4] = (email2[0])
+				datos2.append(i)
+				print(i)
+
+			return render_template("vistareservas.html",datos2=datos2)
 
 @app.route('/buscar_reserva')
 def buscar_reserva():
