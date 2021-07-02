@@ -484,7 +484,7 @@ def realizar_reserva():
 
 						confirmation(asunto, mensaje,correo)
 						flash('Reserva realizada con exito', category='success')
-						return redirect('/') #falta html para confirmar que se hizo la reserva
+						return redirect('/') 
 					else: #reserva completa
 						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
 						cur2.execute(sql)
@@ -498,8 +498,8 @@ def realizar_reserva():
 						mensaje = "Su reserva fue realizada con exito para el dia %s en el bloque %s."%(fecha,bloque)
 						asunto = "Reserva realizada con exito"
 						correo = session['username']
-						confirmation(asunto, mensaje,correo)
-						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+						flash('Reserva realizada con exito', category='success')
+						return redirect('/') 
 
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
@@ -549,7 +549,8 @@ def realizar_reserva_parcial():
 					correo = session['username']
 
 					confirmation(asunto, mensaje, correo)
-					return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+					flash('Reserva realizada con exito', category='success')
+					return redirect('/') 
 			else: #admin
 				idrec = int(request.form.get("idreserva",""))
 				nombre = request.form['nombrer']
@@ -752,7 +753,8 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 				correo = datos_usuario['email']
 
 				confirmation(asunto, mensaje,correo)
-				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+				flash('Reserva realizada con exito', category='success')
+				return redirect('/') 
 			else: #reserva completa
 				sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tx1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,token,idrec)
 				cur2.execute(sql)
@@ -767,7 +769,8 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 				asunto = "Reserva realizada con exito"
 				correo = datos_usuario['email']
 				confirmation(asunto, mensaje,correo)
-				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+				flash('Reserva realizada con exito',category='success')
+				return redirect('/')
 		else:
 			sql = """UPDATE reservas SET jugador2 = '%s',tipo_reserva = 2, tx2='%s' WHERE id = '%s'"""%(idusuario,token,idrec)
 			cur2.execute(sql)
@@ -782,9 +785,11 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 			correo = datos_usuario['email']
 
 			confirmation(asunto, mensaje, correo)
-			return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+			flash('Reserva realizada con exito',category='success')
+			return redirect('/') 
 	return "Ok :)"
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
-	return render_template("reserva_confirmada.html")
+	flash('Reserva realizada con exito', category='success')
+	return redirect('/') 
