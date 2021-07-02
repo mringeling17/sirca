@@ -672,15 +672,15 @@ def profile():
 			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
     				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 
-			else:
-				pwd = request.form["password"]
-				print(pwd)
-				sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
-				cur.execute(sql)
-				conn.commit()
-				flash("Contraseña actualizada con exito",category='success')
-				nivelfinal = nivelactual
-				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+			
+			pwd = request.form["password"]
+			print(pwd)
+			sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
+			cur.execute(sql)
+			conn.commit()
+			flash("Contraseña actualizada con exito",category='success')
+			nivelfinal = nivelactual
+			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
 		if request.form["password"] != request.form["password2"]:
@@ -697,18 +697,17 @@ def profile():
 		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 
-		else:
     		
-			nuevolevel = int(request.form["nivelfinal"])
-			print(nuevolevel)
-			pwd = request.form["password"]
-			print(pwd)	
-			sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
-			cur.execute(sql)
-			conn.commit()
-			nivelfinal = nuevolevel
-			flash("Datos actualizados con exito",category='success')
-			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+		nuevolevel = int(request.form["nivelfinal"])
+		print(nuevolevel)
+		pwd = request.form["password"]
+		print(pwd)	
+		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
+		cur.execute(sql)
+		conn.commit()
+		nivelfinal = nuevolevel
+		flash("Datos actualizados con exito",category='success')
+		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 	cur2.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
 	datosusuario = cur2.fetchone()
