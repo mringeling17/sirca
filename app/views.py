@@ -188,7 +188,8 @@ def conf_elim():
 				sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idrecibida)
 				cur2.execute(sql)
 				conn.commit()
-				return render_template("elim_confirmada.html")
+				flash('Reserva eliminada correctamente',category='success')
+				return redirect("/")
 	else:
 		return redirect("/")
 
@@ -245,7 +246,8 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("realizado.html")
+					flash('El cambio de reserva se realizó correctamente',category='success')
+					return redirect("/")
 				elif pago != None and tx1 == None:
 					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,pago,idnueva)
 					cur2.execute(sql)
@@ -253,7 +255,8 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("realizado.html")
+					flash('El cambio de reserva se realizó correctamente',category='success')
+					return redirect("/")
 				else:
 					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,idnueva)
 					cur2.execute(sql)
@@ -261,7 +264,8 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("realizado.html")
+					flash('El cambio de reserva se realizó correctamente',category='success')
+					return redirect("/")
 	else:
 		return redirect("/")
 
@@ -304,7 +308,8 @@ def init_day1():
 					sql = """insert into reservas (disponible,fecha,bloque,cancha) values (true,'%s','%s','%s');"""%(date,i,cancha)
 					cur.execute(sql)
 				output = {"status": "1", "msg": "Executed"}
-				return render_template("realizado.html")
+				flash('Dia generado correctamente',category='success')
+				return redirect("/")
 	else:
 		return redirect("/")
 
@@ -670,7 +675,7 @@ def profile():
 		apellido = datosusuario['apellido']
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
-		
+
 		if int(request.form['nivelfinal']) == nivelactual:
 			nivelfinal = request.form['nivelfinal']
 			if request.form["password"] != request.form["password2"]:
@@ -683,7 +688,7 @@ def profile():
 				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-			
+
 			pwd = request.form["password"]
 			print(pwd)
 			sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
@@ -709,11 +714,11 @@ def profile():
 		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
-    		
+
 		nuevolevel = int(request.form["nivelfinal"])
 		print(nuevolevel)
 		pwd = request.form["password"]
-		print(pwd)	
+		print(pwd)
 		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
 		cur.execute(sql)
 		conn.commit()
