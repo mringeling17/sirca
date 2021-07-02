@@ -703,14 +703,8 @@ def profile():
 	datosusuario = cur2.fetchone()
 	nombre = datosusuario['nombre']
 	apellido = datosusuario['apellido']
-	nivelactual = int(datosusuario['nivel'])
+	nivelfinal = int(datosusuario['nivel'])
 	email = datosusuario['email']
-	if nivelactual == 1:
-		nivelfinal = "Nivel básico"
-	elif nivelactual == 2:
-		nivelfinal = "Nivel Intermedio"
-	else:
-		nivelfinal = "Nivel Alto"
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
