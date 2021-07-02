@@ -648,12 +648,12 @@ def reset2(id):
 def profile():
 	if request.method == 'POST':
 		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-		cur.execute(sql)
-		datosusuario = cur2.fetchall()
-		nombre = datosusuario[0][0]
-		apellido = datosusuario[0][1]
-		nivelactual = int(datosusuario[0][2])
-		email = datosusuario[0][3]
+		cur2.execute(sql)
+		datosusuario = cur2.fetchone()
+		nombre = datosusuario['nombre']
+		apellido = datosusuario['apellido']
+		nivelactual = int(datosusuario['nivel'])
+		email = datosusuario['email']
 
 		if request.form['nivelfinal'] == nivelactual:
 
@@ -665,8 +665,8 @@ def profile():
     				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 			pwd = request.form["password"]
 			print(pwd)
-			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
-			cur.execute(user_reset)
+			sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
+			cur.execute(sql)
 			conn.commit()
 			flash("Contraseña actualizada con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
@@ -678,8 +678,8 @@ def profile():
 		if len(request.form["password"]) == 0:
 			nuevolevel = request.form["nivelfinal"]
 			print(nuevolevel)
-			user_reset = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
-			cur.execute(user_reset)
+			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
+			cur.execute(sql)
 			conn.commit()
 			flash("Nivel actualizado con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
@@ -691,25 +691,20 @@ def profile():
 		nuevolevel = request.form["nivelfinal"]
 		print(pwd)
 		print(nuevolevel)
-		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
-		cur.execute(user_reset)
+		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
+		cur.execute(sql)
 		conn.commit()
+		nivelfinal = nuevolevel
 		flash("Datos actualizados con exito",category='success')
-		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nuevolevel)#se autocompleta
+		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 	cur2.execute(sql)
-	datosusuario = cur2.fetchall()
-	nombre = datosusuario[0][0]
-	apellido = datosusuario[0][1]
-	nivelint = int(datosusuario[0][2])
-	email = datosusuario[0][3]
-	if nivelint == 1:
-		nivelfinal = "Nivel básico"
-	elif nivelint == 2:
-		nivelfinal = "Nivel Intermedio"
-	else:
-		nivelfinal = "Nivel Alto"
+	datosusuario = cur2.fetchone()
+	nombre = datosusuario['nombre']
+	apellido = datosusuario['apellido']
+	nivelfinal = int(datosusuario['nivel'])
+	email = datosusuario['email']
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
