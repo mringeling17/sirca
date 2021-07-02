@@ -128,15 +128,12 @@ def admin():
 					email2 = cur2.fetchone()
 					i[4] = (email2[0])
 				datos2.append(i)
-				print(i)
 			#email_j1 = """select email from usuarios where id = '%s'"""(datos[3][4])
 			#email_j2 = """select email from usuarios where id = '%s'"""(datos[4][4])
 			#cur2.execute(email_j1)
 			#email1 = cur2.fetchone()
 			#cur2.execute(email_j2)
 			#email2 = cur2.fetchone()
-			print(datos)
-			print(datos2)
 			return render_template("homeadmin.html",datos2=datos2)
 
 @app.route('/admin1')
@@ -175,8 +172,6 @@ def ver_reserva():
 					email2 = cur2.fetchone()
 					i[4] = (email2[0])
 				datos2.append(i)
-				print(i)
-
 			return render_template("vistareservas.html",datos2=datos2)
 
 @app.route('/buscar_reserva')
