@@ -14,6 +14,7 @@ from .flow import *
 import secrets
 
 sirca_url = "https://sirca.cuy.cl"
+bloques_arr = ["12:00-12:40", "12:40-13:20", "13:20-14:00", "14:00-14:40", "14:40-15:20", "15:20-16:00"]
 
 conn = psycopg2.connect("dbname='%s' user='%s' password='%s' host='%s' port='%s'"%(configuraciones.db_database,configuraciones.db_user,configuraciones.db_passwd,configuraciones.db_host,configuraciones.db_port))
 conn.autocommit = True
@@ -412,7 +413,7 @@ def disponibilidad():
 	cur.execute(sql)
 	cancha2 = cur.fetchall()
 
-	return render_template("tabla_reserva.html", dia_id=dia_id, dias=dias,cancha1=cancha1, cancha2=cancha2)
+	return render_template("tabla_reserva.html", dia_id=dia_id, dias=dias,cancha1=cancha1, cancha2=cancha2, bloques_arr=bloques_arr)
 
 @app.route('/add_reserva', methods = ['POST','GET'])
 def add_reserva():
