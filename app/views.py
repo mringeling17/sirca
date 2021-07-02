@@ -467,8 +467,7 @@ def realizar_reserva():
 
 					return redirect(flow['url']+"?token="+flow['token'])
 
-
-				else:
+				elif pago == 2:
 					if tipo == 1: #reserva parcial
 						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s' , tipo_reserva = 1 WHERE id = '%s'"""%(idusuario,idrec)
 						cur2.execute(sql)
@@ -500,6 +499,8 @@ def realizar_reserva():
 						correo = session['username']
 						confirmation(asunto, mensaje,correo)
 						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+				else:
+					flash('Dia generado correctamente',category='error')
 
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
