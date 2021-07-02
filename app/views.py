@@ -32,7 +32,10 @@ def home():
 			return redirect("/admin")
 		else:
 			user = session['username']
-			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+			sql1 = """select id from usuarios where email = '%s'"""%(user)
+			cur2.execute(sql1)
+			id = cur2.fetchone()
+			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(id[0],id[0])
 			cur2.execute(sql)
 			data = cur2.fetchall()
 	return render_template('home.html',data = data)
@@ -656,8 +659,8 @@ def reset2(id):
 def profile():
 	if request.method == 'POST':
 		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-		cur2.execute(sql)
-		datosusuario = cur2.fetchone()
+		cur.execute(sql)
+		datosusuario = cur.fetchone()
 		nombre = datosusuario['nombre']
 		apellido = datosusuario['apellido']
 		nivelactual = int(datosusuario['nivel'])
@@ -710,8 +713,8 @@ def profile():
 		flash("Datos actualizados con exito",category='success')
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-	cur2.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
-	datosusuario = cur2.fetchone()
+	cur.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
+	datosusuario = cur.fetchone()
 	nombre = datosusuario['nombre']
 	apellido = datosusuario['apellido']
 	nivelfinal = datosusuario['nivel']
