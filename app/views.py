@@ -783,7 +783,7 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 def payment_confirmation(id_reserva):
 	return render_template("reserva_confirmada.html")
 
-@app.route('/home')
+@app.route('/')
 def home():
 	user = session['user']
 	user_type = session['tipo']
