@@ -451,6 +451,7 @@ def realizar_reserva():
 					pago = int(pago)
 				else:
 					flash('Seleccionar metodo de pago', category='error')
+					return redirect("/add_reserva")
 				tipo = int(request.form.get("tipo_reserva"))
 
 				if pago == 1:
