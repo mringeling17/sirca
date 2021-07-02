@@ -830,5 +830,10 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
-	flash('Reserva realizada con exito', category='success')
-	return redirect('/')
+	token = request.form['token']
+	payment_status = flow_getStatus(token)
+	if payment_status['status'] == 2:
+		status_string = "Se ha confirmado el pago, reserva realizada"
+	else:
+		status_string = "Error con el pago, su reserva no se ha realizado :("
+	return render_template("reserva_pagada.html",status_string=status_string)
