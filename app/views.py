@@ -38,8 +38,8 @@ def home():
 			print(id)
 			print(id[0])
 			sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(id[0],id[0])
-			cur2.execute(sql)
-			data = cur2.fetchall()
+			cur.execute(sql)
+			data = cur.fetchall()
 			print(data)
 	return render_template('home.html',data = data)
 
