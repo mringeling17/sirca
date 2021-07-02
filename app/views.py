@@ -669,7 +669,7 @@ def profile():
 			cur.execute(sql)
 			conn.commit()
 			flash("Contraseña actualizada con exito",category='success')
-			nivelfinal = request.form["nivelfinal"]
+			nivelfinal = nivelactual
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
@@ -682,7 +682,7 @@ def profile():
 			cur.execute(sql)
 			conn.commit()
 			flash("Nivel actualizado con exito",category='success')
-			nivelfinal = request.form["nivelfinal"]
+			nivelfinal = int(request.form["nivelfinal"])
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
@@ -694,7 +694,7 @@ def profile():
 		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
 		cur.execute(sql)
 		conn.commit()
-		nivelfinal = nuevolevel
+		nivelfinal = int(nuevolevel)
 		flash("Datos actualizados con exito",category='success')
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
@@ -703,8 +703,14 @@ def profile():
 	datosusuario = cur2.fetchone()
 	nombre = datosusuario['nombre']
 	apellido = datosusuario['apellido']
-	nivelfinal = int(datosusuario['nivel'])
+	nivelactual = int(datosusuario['nivel'])
 	email = datosusuario['email']
+	if nivelactual == 1:
+    		nivelfinal = "Nivel básico"
+	elif nivelactual == 2:
+		nivelfinal = "Nivel Intermedio"
+	else:
+		nivelfinal = "Nivel Alto"
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
