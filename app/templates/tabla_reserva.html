@@ -27,7 +27,7 @@
                     
                     {% for n in range(cancha1| length) %}
                     <tr>
-                        <td class="text-center">Bloque {{n+1}}</td>
+                        <td class="text-center">{{bloques_arr[n]}}</td>
                         {% if cancha1[n]["disponible"] == true %}
                         <td><button type="submit" class="btn btn-success btn-block" name="idreserva" value={{cancha1[n]["id"]}}>Disponible</button></td>
                         {% elif cancha1[n]["disponible"] == false and cancha1[n]["tipo_reserva"] == 1 %}
