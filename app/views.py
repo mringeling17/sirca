@@ -663,7 +663,7 @@ def profile():
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
 		if nivelactual == 1:
-    		nivelfinal = "Nivel básico"
+    		nivelfinal = 'Nivel básico'
 		elif nivelactual == 2:
 			nivelfinal = "Nivel Intermedio"
 		else:
@@ -698,9 +698,9 @@ def profile():
 		if len(request.form["password"]) == 0:
 			nuevolevel = request.form["nivelfinal"]
 			print(nuevolevel)
-			if nuevolevel == "Nivel básico":
+			if nuevolevel == 'Nivel básico':
     			nivelfinal = 1
-			elif nuevolevel == "Nivel Intermedio":
+			elif nuevolevel == 'Nivel Intermedio':
 				nivelfinal = 2
 			else:
 				nivelfinal = 3
@@ -714,9 +714,8 @@ def profile():
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 
 		else:
-    		pwd = request.form["password"]
+    		
 			nuevolevel = request.form["nivelfinal"]
-			print(pwd)
 			print(nuevolevel)
 			if nuevolevel == "Nivel básico":
 					nivelfinal = 1
@@ -724,6 +723,8 @@ def profile():
 				nivelfinal = 2
 			else:
 				nivelfinal = 3
+			pwd = request.form["password"]
+			print(pwd)	
 			sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
 			cur.execute(sql)
 			conn.commit()
@@ -740,7 +741,7 @@ def profile():
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
 		if nivelactual == 1:
-				nivelfinal = "Nivel básico"
+			nivelfinal = "Nivel básico"
 		elif nivelactual == 2:
 			nivelfinal = "Nivel Intermedio"
 		else:
