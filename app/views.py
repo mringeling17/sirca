@@ -117,7 +117,7 @@ def admin():
 			print(datos[3])
 			print(datos[4])
 			for i in datos:
-				list(i)
+				i=list(i)
 				if i[3] != None:
 					sql = """select email from usuarios where id = '%s'"""%(int(i[3]))
 					cur2.execute(sql)
