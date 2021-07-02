@@ -31,7 +31,7 @@ def home():
 		if session['tipo']==2:
 			return redirect("/admin")
 		else:
-			user = session['user']
+			user = session['username']
 			sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
 			cur2.execute(sql)
 			data = cur2.fetchall()
