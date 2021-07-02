@@ -663,7 +663,7 @@ def profile():
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
 		if nivelactual == 1:
-    		nivelfinal = "Nivel básico"
+			nivelfinal = "Nivel básico"
 		elif nivelactual == 2:
 			nivelfinal = "Nivel Intermedio"
 		else:
