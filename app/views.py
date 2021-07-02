@@ -677,7 +677,7 @@ def profile():
 				flash("debe modificar algun campo",category='error')
 				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
-    				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 			
