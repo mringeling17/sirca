@@ -41,7 +41,7 @@ def home():
 			cur2.execute(sql)
 			data = cur2.fetchall()
 			print(data)
-	return render_template('home.html',data = data)
+			return render_template('home.html',data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
