@@ -509,7 +509,8 @@ def realizar_reserva():
 				sql = """UPDATE reservas SET disponible = False, invitado1 = '%s',tipo_reserva = 2,pago = 3 WHERE id = '%s'"""%(invitado1,idrec)
 				cur2.execute(sql)
 				conn.commit() #reserva completa invitado1
-				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+				flash('Reserva realizada con exito',category='success')
+				return redirect('/') #falta html para confirmar que se hizo la reserva
 
 @app.route('/realizar_reserva_parcial', methods = ['POST','GET']) #completar la reserva parcial y guardarla en la base
 def realizar_reserva_parcial():
@@ -559,7 +560,8 @@ def realizar_reserva_parcial():
 				sql = """UPDATE reservas SET invitado1 = '%s',tipo_reserva = 2 WHERE id = '%s'"""%(invitado1,idrec)
 				cur2.execute(sql)
 				conn.commit() #completar reserva parcial con un invitado, registrado/invitado
-				return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+				flash('Reserva realizada con exito', category='success')
+				return redirect('/') 
 
 def confirmation(asunto,mensaje,correo):
 	msg = Message(asunto, sender='sirca@cuy.cl', recipients=[correo])
