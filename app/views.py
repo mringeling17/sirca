@@ -251,6 +251,19 @@ def conf_edit():
 	else:
 		return redirect("/")
 
+@app.route('/ver_usuarios')
+def ver_usuarios():
+	if not 'username' in session:
+		return redirect("/login")
+	else:
+		if session['tipo']!=2:
+			return redirect("/")
+		else:
+			sql="""select * from usuarios order by fecha_registro"""
+			cur2.execute(sql)
+			datos = cur2.fetchall()
+			return render_template("vistausuarios.html",datos=datos)
+
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
