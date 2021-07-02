@@ -834,6 +834,8 @@ def payment_confirmation(id_reserva):
 	payment_status = flow_getStatus(token)
 	if payment_status['status'] == 2:
 		status_string = "Se ha confirmado el pago, reserva realizada"
+		flash('Reserva realizada con exito',category='success')
 	else:
 		status_string = "Error con el pago, su reserva no se ha realizado :("
+		flash('Ha ocurrido un error con su reserva',category='error')
 	return render_template("reserva_pagada.html",status_string=status_string)
