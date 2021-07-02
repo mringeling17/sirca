@@ -1,8 +1,26 @@
 {% extends "base.html" %} {% block title %}Mis Reservas{% endblock %} {% block content
     %}
+    <h3 align="center">Reservas</h3>
     <div class="container">
       <div class="card">
-        <div class="card-body">
-          <h1>En desarrollo</h1>
-      </div></div></div>
+        <div class="card-body mx-auto text-center">
+          {% if session['tipo'] == 1 %}
+          <table class="table table-responsive table-bordered">
+            <thead>
+              <th>Fecha</th>
+              <th>Bloque</th>
+              <th>Cancha</th>
+            </thead>
+          </table>
+
+          {% for dato in data %}
+            <tr>
+              <td>{{data[0]}}</td>
+              <td>{{data[1]}}</td>
+              <td>{{data[2]}}</td>
+            </tr>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
     {% endblock %}

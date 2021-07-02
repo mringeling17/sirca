@@ -31,7 +31,11 @@ def home():
 		if session['tipo']==2:
 			return redirect("/admin")
 		else:
-			return render_template("home.html")
+			user = session['username']
+			sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+			cur2.execute(sql)
+			data = cur2.fetchall()
+	return render_template('home.html',data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -96,7 +100,11 @@ def admin():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			return render_template("home.html")
+			diaactual = date.today().strftime("%Y-%m-%d")
+			sql = """select * from reservas where fecha = '%s' and disponible = False"""%(diaactual)
+			cur2.execute(sql)
+			datos = cur2.fetchall()
+			return render_template("homeadmin.html",datos=datos)
 
 @app.route('/admin1')
 def admin1():
@@ -738,9 +746,6 @@ def profile():
 		else:
 			nivelfinal = "Nivel Alto"
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
-
-
-
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
 #URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
