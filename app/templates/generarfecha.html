@@ -3,25 +3,20 @@
 {% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
 {% block content %}
 <h3 align="center">Hacer reserva para:</h3>
+<div class="text-center">
 <form class = "form-inline"action = "{{ url_for('init_day1') }}" method="POST">
 
-  <div class="form-group">
-    <label for="diar">Dia</label>
+    <label for="diar">Dia: </label>
     <input type="number" min="0" max="32"class="form-control" id="diar" name="diar">
-  </div>
 
-  <div class="form-group">
-    <label for="mesr">Mes</label>
+    <label for="mesr">Mes: </label>
     <input type="number" min="0" max="12" class="form-control" id="mesr" name="mesr">
-  </div>
 
-  <div class="form-group">
-    <label for="anior">Año</label>
+    <label for="anior">Año: </label>
     <input type="number" min="2020" max="2040"class="form-control" id="anior" name="anior">
-  </div>
-
 
   <br/>
   <button type="submit" class="btn btn-primary" name="idreserva">Generar Dia</button>
 </form>
+</div>
 {% endblock %}
