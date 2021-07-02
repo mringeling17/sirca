@@ -110,7 +110,7 @@ def admin():
 			return redirect("/")
 		else:
 			diaactual = date.today().strftime("%Y-%m-%d")
-			sql = """select reservas.fecha, reservas.bloque,reservas.cancha ,reservas.jugador1, reservas.jugador2, reservas.invitado1, reservas.fecha_reserva from reservas, usuarios where disponible = false and fecha='%s' """%(diaactual)
+			sql = """select fecha, bloque,cancha ,jugador1, jugador2, invitado1, fecha_reserva from reservas where disponible = false and fecha='%s' """%(diaactual)
 			cur2.execute(sql)
 			datos = cur2.fetchall()
 			print(datos)
