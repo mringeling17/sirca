@@ -3,6 +3,7 @@
 {% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
 {% block content %}
 <h3 align="center">Hacer reserva para:</h3>
+<div class="text-center">
 <form class = "form-inline"action = "{{ url_for('init_day1') }}" method="POST">
 
     <label for="diar">Dia: </label>
@@ -17,4 +18,5 @@
   <br/>
   <button type="submit" class="btn btn-primary" name="idreserva">Generar Dia</button>
 </form>
+</div>
 {% endblock %}
