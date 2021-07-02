@@ -714,7 +714,7 @@ def profile():
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 
 		else:
-    		pwd = request.form["password"]
+			pwd = request.form["password"]
 			nuevolevel = request.form["nivelfinal"]
 			print(pwd)
 			print(nuevolevel)
