@@ -483,7 +483,8 @@ def realizar_reserva():
 						correo = session['username']
 
 						confirmation(asunto, mensaje,correo)
-						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
+						flash('Reserva realizada con exito', category='success')
+						return redirect('/') #falta html para confirmar que se hizo la reserva
 					else: #reserva completa
 						sql = """UPDATE reservas SET disponible = False, jugador1 = '%s', tipo_reserva = 2 WHERE id = '%s'"""%(idusuario,idrec)
 						cur2.execute(sql)
