@@ -694,8 +694,9 @@ def profile():
 		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
 		cur.execute(user_reset)
 		conn.commit()
+		nivelfinal = nuevolevel
 		flash("Datos actualizados con exito",category='success')
-		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nuevolevel)#se autocompleta
+		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 	cur2.execute(sql)
@@ -709,8 +710,8 @@ def profile():
 	elif nivelactual == 2:
 		nivelfinal = "Nivel Intermedio"
 	else:
-		nivelactual = "Nivel Alto"
-	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelactual)#se autocompleta
+		nivelfinal = "Nivel Alto"
+	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
 
