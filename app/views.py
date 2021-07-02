@@ -32,7 +32,10 @@ def home():
 			return redirect("/admin")
 		else:
 			user = session['username']
-			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+			sql1 = """select id from usuarios where email = '%s'"""%(user)
+			cur2.execute(sql1)
+			id = cur2.fetchone()
+			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(id[0],id[0])
 			cur2.execute(sql)
 			data = cur2.fetchall()
 	return render_template('home.html',data = data)
