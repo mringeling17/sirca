@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!---formulario para completar por el admin--->
-{% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
+{% extends "base.html" %} {% block title %}Dia{% endblock %}
 {% block content %}
-<h3 align="center">Hacer reserva para:</h3>
+<h3 align="center">Generar Dia:</h3>
 <div class="text-center">
-<form class = "form-inline"action = "{{ url_for('init_day1') }}" method="POST">
+<form class = "form-inline justify-content-center" action = "{{ url_for('init_day1') }}" method="POST">
 
     <label for="diar">Dia: </label>
     <input type="number" min="0" max="32"class="form-control" id="diar" name="diar">
