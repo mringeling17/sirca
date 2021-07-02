@@ -31,7 +31,11 @@ def home():
 		if session['tipo']==2:
 			return redirect("/admin")
 		else:
-			return render_template("home.html")
+			user = session['user']
+			sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+			cur2.execute(sql)
+			data = cur2.fetchall()
+	return render_template('home.html',data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -782,13 +786,3 @@ def flow_callback(id_reserva,user_id,tipo_reserva,tx12):
 @app.route('/payment_confirmation/<id_reserva>', methods = ['POST'])
 def payment_confirmation(id_reserva):
 	return render_template("reserva_confirmada.html")
-
-@app.route('/')
-def home():
-	user = session['user']
-	user_type = session['tipo']
-	if user_type == 1: #usuario
-		sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
-		cur.execute(sql)
-		data = cur.fetchall()
-	return render_template('home.html',data = data)
