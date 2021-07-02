@@ -233,7 +233,7 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("elim_confirmada.html")
+					return render_template("realizado.html")
 				elif pago != None and tx1 == None:
 					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,pago,idnueva)
 					cur2.execute(sql)
@@ -241,7 +241,7 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("elim_confirmada.html")
+					return render_template("realizado.html")
 				else:
 					sql = """update reservas set disponible=False,jugador1 = '%s',jugador2 = NULL,invitado1=NULL,invitado2=NULL,tx1 = NULL,tx2=NULL,tipo_reserva='%s',pago=NULL,fecha_reserva=NULL where id='%s'"""%(jugador1,tipo_reserva,idnueva)
 					cur2.execute(sql)
@@ -249,7 +249,7 @@ def conf_edit():
 					sql = """update reservas set disponible = true, jugador1 = NULL, jugador2 = NULL, invitado1 = NULL ,tx1 = NULL,tx2= NULL , tipo_reserva = NULL, pago = NULL, fecha_reserva = NULL where id = '%s'"""%(idvieja)
 					cur2.execute(sql)
 					conn.commit()
-					return render_template("elim_confirmada.html")
+					return render_template("realizado.html")
 	else:
 		return redirect("/")
 
@@ -646,7 +646,7 @@ def profile():
 		email = datosusuario[0][3]
 
 		if request.form['nivelfinal'] == nivelactual:
-			
+
 			if request.form["password"] != request.form["password2"]:
     				flash("las contraseñas no coinciden",category='error')
 			if len(request.form["password"]) == 0:
@@ -661,8 +661,8 @@ def profile():
 			flash("Contraseña actualizada con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
-			
-	    
+
+
 		if request.form["password"] != request.form["password2"]:
 			flash("las contraseñas no coinciden",category='error')
 		if len(request.form["password"]) == 0:
@@ -674,9 +674,9 @@ def profile():
 			flash("Nivel actualizado con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
-		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:	
+		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
-		
+
 		pwd = request.form["password"]
 		nuevolevel = request.form["nivelfinal"]
 		print(pwd)
@@ -686,7 +686,7 @@ def profile():
 		conn.commit()
 		flash("Datos actualizados con exito",category='success')
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nuevolevel)#se autocompleta
-	
+
 	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 	cur2.execute(sql)
 	datosusuario = cur2.fetchall()
@@ -701,8 +701,8 @@ def profile():
 	else:
 		nivelfinal = "Nivel Alto"
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
-	
-	
+
+
 
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
