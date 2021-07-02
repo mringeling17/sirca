@@ -151,13 +151,13 @@ def eliminar_reserva():
 					sql="""select * from reservas where invitado1 = '%s'"""%(nombre)
 					cur2.execute(sql)
 					datos=cur2.fetchall()
-					return render_template("tabla_eliminar1.html",datos=datos)
+					return render_template("tabla_eliminar1.html",datos=datos,nombre=nombre)
 				else: #eliminar reserva completa hecha por usuario
 					idjugador = int(dato[0])
 					sql="""select * from reservas where jugador1 = '%s'"""%(idjugador)
 					cur2.execute(sql)
 					datos = cur2.fetchall()
-					return render_template("tabla_eliminar.html",datos=datos)
+					return render_template("tabla_eliminar.html",datos=datos,mail=mail)
 	else:
 		return redirect("/")
 
