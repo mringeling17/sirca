@@ -22,11 +22,25 @@
 
   <div class="form-group">
     <label for="nivelfinal">Nivel de juego</label>
+    {{if nivelfinal == 1:}}
     <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
+      <option value= "1" >1</option>
+      <option value= "2" >2</option>
       <option value= "3" >3</option>
+     </select>
+    {{elif nivelfinal == 2:}}
+    <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
       <option value= "2" >2</option>
       <option value= "1" >1</option>
+      <option value= "3" >3</option>
      </select>
+    {{elif nivelfinal == 3:}}
+    <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
+      <option value= "3" >3</option>
+      <option value= "1" >1</option>
+      <option value= "2" >2</option>
+     </select>
+    {{endif}}
   </div>
 
 
