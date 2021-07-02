@@ -632,8 +632,10 @@ def reset2(id):
 	if request.method == 'POST':
 		if request.form["password"] != request.form["password2"]:
 			flash("las contraseñas no coinciden",category='error')
+			return render_template('reset2')
 		if len(request.form["password"]) < 8:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
+			return render_template('reset2.html')
 		pwd = request.form["password"]
 		print(pwd)
 		print(correo[0])
