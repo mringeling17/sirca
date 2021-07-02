@@ -35,9 +35,12 @@ def home():
 			sql1 = """select id from usuarios where email = '%s'"""%(user)
 			cur2.execute(sql1)
 			id = cur2.fetchone()
+			print(id)
+			print(id[0])
 			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(id[0],id[0])
 			cur2.execute(sql)
 			data = cur2.fetchall()
+			print(data)
 	return render_template('home.html',data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
