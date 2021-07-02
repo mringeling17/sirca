@@ -2,8 +2,8 @@
 <!---formulario para completar por el admin--->
 {% extends "base.html" %} {% block title %}Datos reserva{% endblock %}
 {% block content %}
+<h3 align="center">Hacer reserva para:</h3>
 <form class = "form-inline"action = "{{ url_for('init_day1') }}" method="POST">
-  <h3 align="center">Hacer reserva para:</h3>
 
   <div class="form-group">
     <label for="diar">Dia</label>
