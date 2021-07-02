@@ -662,8 +662,13 @@ def profile():
 		apellido = datosusuario['apellido']
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
-
-		if request.form['nivelfinal'] == nivelactual:
+		if nivelactual == 1:
+    		nivelfinal = "Nivel básico"
+		elif nivelactual == 2:
+			nivelfinal = "Nivel Intermedio"
+		else:
+			nivelfinal = "Nivel Alto"
+		if request.form['nivelfinal'] == nivelfinal:
 
 			if request.form["password"] != request.form["password2"]:
     				flash("las contraseñas no coinciden",category='error')
@@ -671,14 +676,21 @@ def profile():
 				flash("debe modificar algun campo",category='error')
 			if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
     				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
-			pwd = request.form["password"]
-			print(pwd)
-			sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
-			cur.execute(sql)
-			conn.commit()
-			flash("Contraseña actualizada con exito",category='success')
-			nivelfinal = nivelactual
-			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+
+			else:
+				pwd = request.form["password"]
+				print(pwd)
+				sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
+				cur.execute(sql)
+				conn.commit()
+				flash("Contraseña actualizada con exito",category='success')
+				if nivelactual == 1:
+					nivelfinal = "Nivel básico"
+				elif nivelactual == 2:
+					nivelfinal = "Nivel Intermedio"
+				else:
+					nivelfinal = "Nivel Alto"
+				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
 		if request.form["password"] != request.form["password2"]:
@@ -686,40 +698,54 @@ def profile():
 		if len(request.form["password"]) == 0:
 			nuevolevel = request.form["nivelfinal"]
 			print(nuevolevel)
-			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
+			if nuevolevel == "Nivel básico":
+    			nivelfinal = 1
+			elif nuevolevel == "Nivel Intermedio":
+				nivelfinal = 2
+			else:
+				nivelfinal = 3
+			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nivelfinal,email)
 			cur.execute(sql)
 			conn.commit()
+			nivelfinal = nuevolevel
 			flash("Nivel actualizado con exito",category='success')
-			nivelfinal = int(request.form["nivelfinal"])
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 		if len(request.form["password"]) < 8 and len(request.form["password"]) > 0:
 			flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 
-		pwd = request.form["password"]
-		nuevolevel = request.form["nivelfinal"]
-		print(pwd)
-		print(nuevolevel)
-		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
-		cur.execute(sql)
-		conn.commit()
-		nivelfinal = int(nuevolevel)
-		flash("Datos actualizados con exito",category='success')
-		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+		else:
+    		pwd = request.form["password"]
+			nuevolevel = request.form["nivelfinal"]
+			print(pwd)
+			print(nuevolevel)
+			if nuevolevel == "Nivel básico":
+					nivelfinal = 1
+			elif nuevolevel == "Nivel Intermedio":
+				nivelfinal = 2
+			else:
+				nivelfinal = 3
+			sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
+			cur.execute(sql)
+			conn.commit()
+			nivelfinal = nuevolevel
+			flash("Datos actualizados con exito",category='success')
+			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-	cur2.execute(sql)
-	datosusuario = cur2.fetchone()
-	nombre = datosusuario['nombre']
-	apellido = datosusuario['apellido']
-	nivelactual = int(datosusuario['nivel'])
-	email = datosusuario['email']
-	if nivelactual == 1:
-    		nivelfinal = "Nivel básico"
-	elif nivelactual == 2:
-		nivelfinal = "Nivel Intermedio"
 	else:
-		nivelfinal = "Nivel Alto"
-	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+    	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+		cur2.execute(sql)
+		datosusuario = cur2.fetchone()
+		nombre = datosusuario['nombre']
+		apellido = datosusuario['apellido']
+		nivelactual = int(datosusuario['nivel'])
+		email = datosusuario['email']
+		if nivelactual == 1:
+				nivelfinal = "Nivel básico"
+		elif nivelactual == 2:
+			nivelfinal = "Nivel Intermedio"
+		else:
+			nivelfinal = "Nivel Alto"
+		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
 #URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
