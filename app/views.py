@@ -178,8 +178,6 @@ def conf_elim():
 	else:
 		return redirect("/")
 
-<<<<<<< HEAD
-=======
 @app.route('/editar_res',methods=['POST','GET'])
 def editar_res():
 	if request.method == 'POST':
@@ -253,7 +251,6 @@ def conf_edit():
 	else:
 		return redirect("/")
 
->>>>>>> 32482fc2b67256b0ad74f99e4a377f0f981e34af
 @app.route('/init_day1', methods=['POST','GET'])
 def init_day1():
 	if request.method == 'POST':
