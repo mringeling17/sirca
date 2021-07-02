@@ -710,14 +710,13 @@ def profile():
 			flash("Datos actualizados con exito",category='success')
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-	else:
-		cur2.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
-		datosusuario = cur2.fetchone()
-		nombre = datosusuario['nombre']
-		apellido = datosusuario['apellido']
-		nivelfinal = int(datosusuario['nivel'])
-		email = datosusuario['email']
-		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+	cur2.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
+	datosusuario = cur2.fetchone()
+	nombre = datosusuario['nombre']
+	apellido = datosusuario['apellido']
+	nivelfinal = int(datosusuario['nivel'])
+	email = datosusuario['email']
+	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
 #URL Confirmation: https://asdfasdf/flow_callback/id_reserva/user_id/tipo_reserva/tx12
