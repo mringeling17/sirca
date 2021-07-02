@@ -648,12 +648,12 @@ def reset2(id):
 def profile():
 	if request.method == 'POST':
 		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-		cur.execute(sql)
-		datosusuario = cur2.fetchall()
-		nombre = datosusuario[0][0]
-		apellido = datosusuario[0][1]
-		nivelactual = int(datosusuario[0][2])
-		email = datosusuario[0][3]
+		cur2.execute(sql)
+		datosusuario = cur2.fetchone()
+		nombre = datosusuario['nombre']
+		apellido = datosusuario['apellido']
+		nivelactual = int(datosusuario['nivel'])
+		email = datosusuario['email']
 
 		if request.form['nivelfinal'] == nivelactual:
 
@@ -699,18 +699,18 @@ def profile():
 
 	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 	cur2.execute(sql)
-	datosusuario = cur2.fetchall()
-	nombre = datosusuario[0][0]
-	apellido = datosusuario[0][1]
-	nivelint = int(datosusuario[0][2])
-	email = datosusuario[0][3]
-	if nivelint == 1:
+	datosusuario = cur2.fetchone()
+	nombre = datosusuario['nombre']
+	apellido = datosusuario['apellido']
+	nivelactual = int(datosusuario['nivel'])
+	email = datosusuario['email']
+	if nivelactual == 1:
 		nivelfinal = "Nivel básico"
-	elif nivelint == 2:
+	elif nivelactual == 2:
 		nivelfinal = "Nivel Intermedio"
 	else:
-		nivelfinal = "Nivel Alto"
-	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
+		nivelactual = "Nivel Alto"
+	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelactual)#se autocompleta
 
 
 
