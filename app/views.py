@@ -659,8 +659,8 @@ def reset2(id):
 def profile():
 	if request.method == 'POST':
 		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-		cur2.execute(sql)
-		datosusuario = cur2.fetchone()
+		cur.execute(sql)
+		datosusuario = cur.fetchone()
 		nombre = datosusuario['nombre']
 		apellido = datosusuario['apellido']
 		nivelactual = int(datosusuario['nivel'])
@@ -712,8 +712,8 @@ def profile():
 		flash("Datos actualizados con exito",category='success')
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
-	cur2.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
-	datosusuario = cur2.fetchone()
+	cur.execute("""SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id']))
+	datosusuario = cur.fetchone()
 	nombre = datosusuario['nombre']
 	apellido = datosusuario['apellido']
 	nivelfinal = int(datosusuario['nivel'])
