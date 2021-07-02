@@ -43,7 +43,7 @@ def home():
 			print(data[0][0])
 			print(data[0][1])
 			print(data[0][2])
-			
+
 			return render_template('home.html',data = data)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -397,14 +397,8 @@ def add_reserva():
 					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
-					nivelint = int(datosusuario[0][2])
+					nivelfinal = int(datosusuario[0][2])
 					email = session['username']
-					if nivelint == 1:
-						nivelfinal = "Nivel básico"
-					elif nivelint == 2:
-						nivelfinal = "Nivel Intermedio"
-					else:
-						nivelfinal = "Nivel Alto"
 					return render_template("datosuser.html",idrec=idrec,nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 				else: #si es admin
 					return render_template("datosres.html",idrec=idrec) #para completar
@@ -422,13 +416,7 @@ def add_reserva():
 					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
-					nivelint = int(datosusuario[0][2])
-					if nivelint == 1:
-						nivelfinal = "Nivel básico"
-					elif nivelint == 2:
-						nivelfinal = "Nivel Intermedio"
-					else:
-						nivelfinal = "Nivel Alto"
+					nivelfinal = int(datosusuario[0][2])
 					sql = """SELECT nombre, apellido FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 					cur2.execute(sql)
 					datosusuario = cur2.fetchall()
@@ -446,13 +434,7 @@ def add_reserva():
 					datosusuario = cur2.fetchall()
 					nombre = datosusuario[0][0]
 					apellido = datosusuario[0][1]
-					nivelint = int(datosusuario[0][2])
-					if nivelint == 1:
-						nivelfinal = "Nivel básico"
-					elif nivelint == 2:
-						nivelfinal = "Nivel Intermedio"
-					else:
-						nivelfinal = "Nivel Alto"
+					nivelfinal = int(datosusuario[0][2])
 					return render_template("datosres_p.html",idrec=idrec,nombre=nombre,apellido=apellido,nivelfinal=nivelfinal)
 
 @app.route('/realizar_reserva', methods = ['POST','GET']) #completar la reserva y gurdarla en la base
