@@ -113,7 +113,12 @@ def admin():
 			sql = """select * from reservas where fecha = '%s' and disponible = False"""%(diaactual)
 			cur2.execute(sql)
 			datos = cur2.fetchall()
-			return render_template("homeadmin.html",datos=datos)
+			getemail = """select email from usuarios where id = '%s' or id = '%s'"""%(datos[4],datos[5])
+			cur2.execute(getemail)
+			email = cur2.fetchone
+			print(email)
+
+			return render_template("homeadmin.html",datos=datos,email=email)
 
 @app.route('/admin1')
 def admin1():
