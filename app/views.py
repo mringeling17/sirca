@@ -32,7 +32,7 @@ def home():
 			return redirect("/admin")
 		else:
 			user = session['username']
-			sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
+			sql = """select * from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
 			cur2.execute(sql)
 			data = cur2.fetchall()
 	return render_template('home.html',data = data)
@@ -663,7 +663,11 @@ def profile():
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
 		if nivelactual == 1:
+<<<<<<< HEAD
     		nivelfinal = 'Nivel básico'
+=======
+			nivelfinal = "Nivel básico"
+>>>>>>> 6f1afa72de0c2fdab7619a70eec93cbba6628e46
 		elif nivelactual == 2:
 			nivelfinal = "Nivel Intermedio"
 		else:
