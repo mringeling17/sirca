@@ -128,7 +128,7 @@ def admin():
 					cur2.execute(sql)
 					email2 = cur2.fetchone()
 					i.append(email2[0])
-				print(data)
+				print(i)
 			#email_j1 = """select email from usuarios where id = '%s'"""(datos[3][4])
 			#email_j2 = """select email from usuarios where id = '%s'"""(datos[4][4])
 			#cur2.execute(email_j1)
