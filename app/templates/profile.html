@@ -42,6 +42,13 @@
       <option value= "1" >1</option>
       <option value= "2" >2</option>
      </select>
+     {% else %}
+     <label for="nivelfinal">Nivel de juego</label>
+     <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
+       <option value= "1" >1</option>
+       <option value= "2" >2</option>
+       <option value= "3" >3</option>
+      </select>
     {% endif %}
   </div>
 
