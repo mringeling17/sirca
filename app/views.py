@@ -711,11 +711,7 @@ def profile():
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 	else:
-<<<<<<< HEAD
     		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
-=======
-		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
->>>>>>> 0f2f35c2dbd8db207614a4ef09d4b4ec64dbbf30
 		cur2.execute(sql)
 		datosusuario = cur2.fetchone()
 		nombre = datosusuario['nombre']
