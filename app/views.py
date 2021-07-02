@@ -785,10 +785,4 @@ def home():
 		sql = """select fecha, bloque, cancha from reservas where jugador1 = '%s' or jugador2 = '%s' """%(user,user)
 		cur.execute(sql)
 		data = cur.fetchall()
-
-	else: #admin
-		sql = """select usuario,fecha, bloque, cancha from reservas order by fecha desc, bloque desc"""
-		cur.execute(sql)
-		data = cur.fetchall()
-
 	return render_template('home.html',data = data)
