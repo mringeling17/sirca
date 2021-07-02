@@ -662,17 +662,8 @@ def profile():
 		apellido = datosusuario['apellido']
 		nivelactual = int(datosusuario['nivel'])
 		email = datosusuario['email']
-		if nivelactual == 1:
-<<<<<<< HEAD
-    		nivelfinal = 'Nivel básico'
-=======
-			nivelfinal = "Nivel básico"
->>>>>>> 6f1afa72de0c2fdab7619a70eec93cbba6628e46
-		elif nivelactual == 2:
-			nivelfinal = "Nivel Intermedio"
-		else:
-			nivelfinal = "Nivel Alto"
-		if request.form['nivelfinal'] == nivelfinal:
+		
+		if int(request.form['nivelfinal']) == nivelactual:
 
 			if request.form["password"] != request.form["password2"]:
     				flash("las contraseñas no coinciden",category='error')
@@ -688,27 +679,16 @@ def profile():
 				cur.execute(sql)
 				conn.commit()
 				flash("Contraseña actualizada con exito",category='success')
-				if nivelactual == 1:
-					nivelfinal = "Nivel básico"
-				elif nivelactual == 2:
-					nivelfinal = "Nivel Intermedio"
-				else:
-					nivelfinal = "Nivel Alto"
+				nivelfinal = nivelactual
 				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 
 		if request.form["password"] != request.form["password2"]:
 			flash("las contraseñas no coinciden",category='error')
 		if len(request.form["password"]) == 0:
-			nuevolevel = request.form["nivelfinal"]
+			nuevolevel = int(request.form["nivelfinal"])
 			print(nuevolevel)
-			if nuevolevel == 'Nivel básico':
-    			nivelfinal = 1
-			elif nuevolevel == 'Nivel Intermedio':
-				nivelfinal = 2
-			else:
-				nivelfinal = 3
-			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nivelfinal,email)
+			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
 			cur.execute(sql)
 			conn.commit()
 			nivelfinal = nuevolevel
@@ -719,14 +699,8 @@ def profile():
 
 		else:
     		
-			nuevolevel = request.form["nivelfinal"]
+			nuevolevel = int(request.form["nivelfinal"])
 			print(nuevolevel)
-			if nuevolevel == "Nivel básico":
-					nivelfinal = 1
-			elif nuevolevel == "Nivel Intermedio":
-				nivelfinal = 2
-			else:
-				nivelfinal = 3
 			pwd = request.form["password"]
 			print(pwd)	
 			sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
@@ -737,19 +711,13 @@ def profile():
 			return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 	else:
-    	sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
+    		sql = """SELECT nombre, apellido, nivel, email FROM usuarios WHERE id = '%s';"""%(session['user_id'])
 		cur2.execute(sql)
 		datosusuario = cur2.fetchone()
 		nombre = datosusuario['nombre']
 		apellido = datosusuario['apellido']
-		nivelactual = int(datosusuario['nivel'])
+		nivelfinal = int(datosusuario['nivel'])
 		email = datosusuario['email']
-		if nivelactual == 1:
-			nivelfinal = "Nivel básico"
-		elif nivelactual == 2:
-			nivelfinal = "Nivel Intermedio"
-		else:
-			nivelfinal = "Nivel Alto"
 		return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
 @app.route('/flow_callback/<id_reserva>/<user_id>/<tipo_reserva>/<tx12>', methods = ['POST'])
