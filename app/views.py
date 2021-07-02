@@ -100,7 +100,11 @@ def admin():
 		if session['tipo']!=2:
 			return redirect("/")
 		else:
-			return render_template("home.html")
+			diaactual = date.today().strftime("%Y-%m-%d")
+			sql = """select * from reservas where fecha = '%s' and disponibilidad = False"""%(diaactual)
+			cur2.execute(sql)
+			datos = cur2.fetchall()
+			return render_template("homeadmin.html",datos=datos)
 
 @app.route('/admin1')
 def admin1():
