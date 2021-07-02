@@ -113,8 +113,14 @@ def admin():
 			sql = """select reservas.fecha, reservas.bloque,reservas.cancha ,reservas.jugador1, reservas.jugador2, reservas.invitado1, reservas.fecha_reserva from reservas, usuarios where disponible = false and fecha='%s' """%(diaactual)
 			cur2.execute(sql)
 			datos = cur2.fetchall()
+			email_j1 = """select email from usuarios where id = '%s'"""(datos[3])
+			email_j2 = """select email from usuarios where id = '%s'"""(datos[4])
+			cur2.execute(email_j1)
+			email1 = cur2.fetchone()
+			cur2.execute(email_j2)
+			email2 = cur2.fetchone()
 			print(datos)
-			return render_template("homeadmin.html",datos=datos)
+			return render_template("homeadmin.html",datos=datos, email1 = email1[0], email2 = email2[0])
 
 @app.route('/admin1')
 def admin1():
