@@ -21,28 +21,28 @@
   </div>
 
   <div class="form-group">
-    {if nivelfinal == 1}
+    {% if nivelfinal == 1 %}
     <label for="nivelfinal">Nivel de juego</label>
     <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
       <option value= "1" >1</option>
       <option value= "2" >2</option>
       <option value= "3" >3</option>
      </select>
-    {elif nivelfinal == 2}
+    {% elif nivelfinal == 2 %}
     <label for="nivelfinal">Nivel de juego</label>
     <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
       <option value= "2" >2</option>
       <option value= "1" >1</option>
       <option value= "3" >3</option>
      </select>
-    {elif nivelfinal == 3}
+    {% elif nivelfinal == 3 %}
     <label for="nivelfinal">Nivel de juego</label>
     <select type="text" class="form-control" id="nivelfinal" name="nivelfinal" value={{nivelfinal}}>
       <option value= "3" >3</option>
       <option value= "1" >1</option>
       <option value= "2" >2</option>
      </select>
-    {endif}
+    {% endif %}
   </div>
 
 
