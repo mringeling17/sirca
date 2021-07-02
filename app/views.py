@@ -685,6 +685,7 @@ def profile():
 
 		if request.form["password"] != request.form["password2"]:
 			flash("las contraseñas no coinciden",category='error')
+			
 		if len(request.form["password"]) == 0:
 			nuevolevel = int(request.form["nivelfinal"])
 			print(nuevolevel)
@@ -713,7 +714,7 @@ def profile():
 	datosusuario = cur2.fetchone()
 	nombre = datosusuario['nombre']
 	apellido = datosusuario['apellido']
-	nivelfinal = int(datosusuario['nivel'])
+	nivelfinal = datosusuario['nivel']
 	email = datosusuario['email']
 	return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 
