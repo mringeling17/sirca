@@ -665,8 +665,8 @@ def profile():
     				flash("la contraseña debe tener un minimo de 8 caracteres",category='error')
 			pwd = request.form["password"]
 			print(pwd)
-			user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
-			cur.execute(user_reset)
+			sql = """update usuarios set password =crypt('%s', gen_salt('bf')) where email = '%s'"""%(pwd,email)
+			cur.execute(sql)
 			conn.commit()
 			flash("Contraseña actualizada con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
@@ -678,8 +678,8 @@ def profile():
 		if len(request.form["password"]) == 0:
 			nuevolevel = request.form["nivelfinal"]
 			print(nuevolevel)
-			user_reset = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
-			cur.execute(user_reset)
+			sql = """update usuarios set nivel = '%s' where email = '%s'"""%(nuevolevel,email)
+			cur.execute(sql)
 			conn.commit()
 			flash("Nivel actualizado con exito",category='success')
 			nivelfinal = request.form["nivelfinal"]
@@ -691,8 +691,8 @@ def profile():
 		nuevolevel = request.form["nivelfinal"]
 		print(pwd)
 		print(nuevolevel)
-		user_reset = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
-		cur.execute(user_reset)
+		sql = """update usuarios set password =crypt('%s', gen_salt('bf')), nivel = '%s' where email = '%s'"""%(pwd, nuevolevel,email)
+		cur.execute(sql)
 		conn.commit()
 		nivelfinal = nuevolevel
 		flash("Datos actualizados con exito",category='success')
