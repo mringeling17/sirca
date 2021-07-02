@@ -117,17 +117,17 @@ def admin():
 			print(datos[3])
 			print(datos[4])
 			for i in datos:
-				data = list(i)
+				list(i)
 				if data[3] != None:
-					sql = """select email from usuarios where id = '%s'"""%(int(data[3]))
+					sql = """select email from usuarios where id = '%s'"""%(int(i[3]))
 					cur2.execute(sql)
 					email1 = cur2.fetchone()
-					data.append(email1)
+					i.append(email1)
 				if data[4] != None:
-					sql = """select email from usuarios where id = '%s'"""%(int(data[4]))
+					sql = """select email from usuarios where id = '%s'"""%(int(i[4]))
 					cur2.execute(sql)
 					email2 = cur2.fetchone()
-					data.append(email2)
+					i.append(email2)
 				print(data)
 			#email_j1 = """select email from usuarios where id = '%s'"""(datos[3][4])
 			#email_j2 = """select email from usuarios where id = '%s'"""(datos[4][4])
