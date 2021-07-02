@@ -116,6 +116,7 @@ def admin():
 			datos = list(datos1)
 			print(datos[3])
 			print(datos[4])
+			datos2 = []
 			for i in datos:
 				i=list(i)
 				if i[3] != None:
@@ -128,6 +129,7 @@ def admin():
 					cur2.execute(sql)
 					email2 = cur2.fetchone()
 					i[4] = (email2[0])
+				datos2.append(i)
 				print(i)
 			#email_j1 = """select email from usuarios where id = '%s'"""(datos[3][4])
 			#email_j2 = """select email from usuarios where id = '%s'"""(datos[4][4])
@@ -136,6 +138,7 @@ def admin():
 			#cur2.execute(email_j2)
 			#email2 = cur2.fetchone()
 			print(datos)
+			print(datos2)
 			return render_template("homeadmin.html",datos=datos)
 
 @app.route('/admin1')
