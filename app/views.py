@@ -113,6 +113,8 @@ def admin():
 			sql = """select fecha, bloque,cancha ,jugador1, jugador2, invitado1, fecha_reserva from reservas where disponible = false and fecha='%s' """%(diaactual)
 			cur2.execute(sql)
 			datos = cur2.fetchall()
+			print(datos[3])
+			print(datos[4])
 			email_j1 = """select email from usuarios where id = '%s'"""(datos[3])
 			email_j2 = """select email from usuarios where id = '%s'"""(datos[4])
 			cur2.execute(email_j1)
