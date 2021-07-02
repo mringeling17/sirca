@@ -446,7 +446,11 @@ def realizar_reserva():
 			if session['tipo']!=2: #si es usuario normal
 				idrec = int(request.form.get("idreserva",""))
 				idusuario = int(session['user_id'])
-				pago = int(request.form['opcionespag'])
+				pago = request.form['opcionespag']
+				if len(pago) != 0:
+					pago = int(pago)
+				else:
+					flash('Seleccionar metodo de pago', category='error')
 				tipo = int(request.form.get("tipo_reserva"))
 
 				if pago == 1:
@@ -500,7 +504,7 @@ def realizar_reserva():
 						confirmation(asunto, mensaje,correo)
 						return render_template("reserva_confirmada.html") #falta html para confirmar que se hizo la reserva
 				else:
-					flash('Dia generado correctamente',category='error')
+					flash('Seleccionar pago',category='error')
 
 			else: #admin, reserva completa
 				idrec = int(request.form.get("idreserva",""))
