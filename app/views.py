@@ -671,7 +671,7 @@ def profile():
 		if int(request.form['nivelfinal']) == nivelactual:
 			nivelfinal = request.form['nivelfinal']
 			if request.form["password"] != request.form["password2"]:
-    				flash("las contraseñas no coinciden",category='error')
+				flash("las contraseñas no coinciden",category='error')
 				return render_template("profile.html",nombre=nombre,apellido=apellido,email=email,nivelfinal=nivelfinal)#se autocompleta
 			if len(request.form["password"]) == 0:
 				flash("debe modificar algun campo",category='error')
