@@ -28,7 +28,7 @@
           <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
           <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Mover</button></form></td>
        </tr>
-       {% if dato[3] == 2 %}
+       {% elif dato[3] == 2 %}
        <tr>
          <td>{{dato[2]}}</td>
          <td>12:40-13:20</td>
@@ -38,7 +38,7 @@
          <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
          <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Mover</button></form></td>
       </tr>
-      {% if dato[3] == 3 %}
+      {% elif dato[3] == 3 %}
       <tr>
         <td>{{dato[2]}}</td>
         <td>13:20-14:00</td>
@@ -48,7 +48,7 @@
         <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
         <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Mover</button></form></td>
      </tr>
-     {% if dato[3] == 4 %}
+     {% elif dato[3] == 4 %}
      <tr>
        <td>{{dato[2]}}</td>
        <td>14:00-14:40</td>
@@ -58,7 +58,7 @@
        <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
        <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Mover</button></form></td>
     </tr>
-    {% if dato[3] == 5 %}
+    {% elif dato[3] == 5 %}
     <tr>
       <td>{{dato[2]}}</td>
       <td>14:40-15:20</td>
@@ -68,7 +68,7 @@
       <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-danger" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
       <td><form action = "{{ url_for('editar_res') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Mover</button></form></td>
    </tr>
-   {% if dato[3] == 6 %}
+   {% elif dato[3] == 6 %}
    <tr>
      <td>{{dato[2]}}</td>
      <td>15:20-16:00</td>
