@@ -9,7 +9,7 @@
  <table class="table table-responsive table-bordered">
     <thead>
        <th>Fecha</th>
-       <th>Bloque</th>
+       <th>Hora</th>
        <th>Cancha</th>
        <th>Jugador 1</th>
        <th>Jugador 2</th>
@@ -17,16 +17,61 @@
     </thead>
 
     {% for dato in datos2 %}
+    {% if dato[1] == 1 %}
         <tr>
           <td>{{dato[0]}}</td>
-          <td>{{dato[1]}}</td>
+          <td>12:00-12:40</td>
           <td>{{dato[2]}}</td>
           <td>{{dato[3]}}</td>
           <td>{{dato[4]}}</td>
           <td>{{dato[5]}}</td>
-         <!--- <td><form action = "{{ url_for('conf_elim') }}" method="POST"><button type="submit" class="btn btn-primary" name="idrec" value={{dato[0]}}>Eliminar</button></form></td>
-         --->
        </tr>
+    {% elif dato[1] == 2 %}
+        <tr>
+         <td>{{dato[0]}}</td>
+         <td>12:40-13:20</td>
+         <td>{{dato[2]}}</td>
+         <td>{{dato[3]}}</td>
+         <td>{{dato[4]}}</td>
+         <td>{{dato[5]}}</td>
+        </tr>
+    {% elif dato[1] == 3 %}
+        <tr>
+         <td>{{dato[0]}}</td>
+         <td>13:20-14:00</td>
+         <td>{{dato[2]}}</td>
+         <td>{{dato[3]}}</td>
+         <td>{{dato[4]}}</td>
+         <td>{{dato[5]}}</td>
+        </tr>
+    {% elif dato[1] == 4 %}
+        <tr>
+         <td>{{dato[0]}}</td>
+         <td>14:00-14:40</td>
+         <td>{{dato[2]}}</td>
+         <td>{{dato[3]}}</td>
+         <td>{{dato[4]}}</td>
+         <td>{{dato[5]}}</td>
+        </tr>
+    {% elif dato[1] == 5 %}
+        <tr>
+         <td>{{dato[0]}}</td>
+         <td>14:40-15:20</td>
+         <td>{{dato[2]}}</td>
+         <td>{{dato[3]}}</td>
+         <td>{{dato[4]}}</td>
+         <td>{{dato[5]}}</td>
+        </tr>
+    {% elif dato[1] == 6 %}
+        <tr>
+         <td>{{dato[0]}}</td>
+         <td>15:20-16:00</td>
+         <td>{{dato[2]}}</td>
+         <td>{{dato[3]}}</td>
+         <td>{{dato[4]}}</td>
+         <td>{{dato[5]}}</td>
+        </tr>
+    {% endif %}
     {% endfor %}
  </table>
 </div>
