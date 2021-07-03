@@ -11,19 +11,54 @@
        <th>Fecha</th>
        <th>Bloque</th>
        <th>Cancha</th>
-       <th>Usuario</th>
        <th>Fecha reserva</th>
     </thead>
 
     {% for dato in datos %}
         {% if dato[5]== None and dato[6]== None %}
+        {% if dato[3] == 1 %}
         <tr>
           <td>{{dato[2]}}</td>
-          <td>{{dato[3]}}</td>
-          <td> {{dato[8]}}</td>
-          <td>{{mail}}</td>
+          <td>12:00-12:40</td>
+          <td>{{dato[8]}}</td>
           <td>{{dato[5]}}</td>
        </tr>
+       {% elif dato[3] == 2 %}
+       <tr>
+         <td>{{dato[2]}}</td>
+         <td>12:40-13:20</td>
+         <td>{{dato[8]}}</td>
+         <td>{{dato[5]}}</td>
+      </tr>
+      {% elif dato[3] == 3 %}
+      <tr>
+        <td>{{dato[2]}}</td>
+        <td>13:20-14:00</td>
+        <td>{{dato[8]}}</td>
+        <td>{{dato[5]}}</td>
+     </tr>
+     {% elif dato[3] == 4 %}
+     <tr>
+       <td>{{dato[2]}}</td>
+       <td>14:00-14:40</td>
+       <td>{{dato[8]}}</td>
+       <td>{{dato[5]}}</td>
+    </tr>
+    {% elif dato[3] == 5 %}
+    <tr>
+      <td>{{dato[2]}}</td>
+      <td>14:40-15:20</td>
+      <td>{{dato[8]}}</td>
+      <td>{{dato[5]}}</td>
+   </tr>
+   {% elif dato[3] == 6 %}
+   <tr>
+     <td>{{dato[2]}}</td>
+     <td>15:20-16:00</td>
+     <td>{{dato[8]}}</td>
+     <td>{{dato[5]}}</td>
+  </tr>
+       {% endif %}
        {% endif %}
     {% endfor %}
  </table>
