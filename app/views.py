@@ -45,7 +45,7 @@ def home():
 			print(data[0][1])
 			print(data[0][2])
 
-			return render_template('home.html',data = data)
+			return render_template('home.html',data = data,bloques_arr=bloques_arr)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
